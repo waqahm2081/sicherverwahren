@@ -2,6 +2,9 @@
 <html lang="zxx">
 
 <head>
+
+    <title>Bitcoin FAQ – Häufige Fragen zur sicheren Verwahrung | Schweiz</title>
+    <meta name="description" content="Antworten zu den wichtigsten Fragen rund um Bitcoin Verwahrung: Hardware Wallets, Multisig, Backup, Sicherheit und Risiken. Schweizer Bitcoin Sicherheitsberatung.">
 	
     @include('includes.styles')
     
@@ -38,7 +41,8 @@
                         <div class="page-faqs-accordion" id="general_security">
                             <!-- Section Title Start -->
                             <div class="section-title text-center">
-                                <h2 class="wow fadeInUp" data-cursor="-opaque">Häufig gestellte Fragen (FAQ)</h2>
+                                <h2 class="wow fadeInUp" data-cursor="-opaque">Häufig gestellte Fragen zur Bitcoin Verwahrung</h2>
+                                <p>Here you will find the most important answers to safe Bitcoin self custody in Switzerland.</p>
                             </div>
                             <!-- Section Title End -->
 

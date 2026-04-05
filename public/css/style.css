@@ -929,7 +929,7 @@ header.main-header .header-sticky.active{
 .hero-content{
 	position: relative;
 	width: 100%;
-	max-width: 635px;
+	max-width: 950px;
 	z-index: 2;
 }
 
@@ -7501,4 +7501,9 @@ header.main-header .header-sticky.active{
 		top: 48px!important;
 		right: 110px!important;
 	}
+}
+
+.hero-content li {
+	color: #fff;
+	margin-top: 18px;
 }

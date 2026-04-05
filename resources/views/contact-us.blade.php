@@ -2,6 +2,9 @@
 <html lang="zxx">
 
 <head>
+
+    <title>Kontakt | Sicher Bitcoin Verwahren | Thun, Schweiz</title>
+    <meta name="description" content="Kontaktieren Sie uns für Bitcoin Self Custody Beratung, Multisig Setups und sichere Aufbewahrungslösungen. Standort Thun, Schweiz.">
 	
     @include('includes.styles')
     
@@ -18,7 +21,7 @@
                 <div class="col-lg-12">
                     <!-- Page Header Box Start -->
                     <div class="page-header-box">
-                        <h1 class="wow fadeInUp" data-cursor="-opaque">Kontaktieren Sie uns</h1>
+                        <h1 class="wow fadeInUp" data-cursor="-opaque">Kontakt – Sicher Bitcoin Verwahren</h1>
                     </div>
                     <!-- Page Header Box End -->
                 </div>

@@ -2,6 +2,10 @@
 <html lang="zxx">
 
 <head>
+
+    <title>Bitcoin Verwahrung: Leistungen & Preise | Privat & Unternehmen | Schweiz</title>
+    <meta name="description" content="Unsere Bitcoin Sicherheits Pakete für Privatpersonen und KMU: Hardware Wallet Einrichtung, Multisig Setups, Backups, Dokumentation und Schulungen in der Schweiz.">
+
     @include('includes.styles')
 
     <style>
@@ -405,7 +409,7 @@
                     <div class="section-title">
                         <h3 class="wow fadeInUp">Service-Pakete & Preise</h3>
                         <h2 class="wow fadeInUp" style="text-transform: initial;" data-wow-delay="0.2s" data-cursor="-opaque">
-                            Wir bieten maßgeschneiderte Lösungen für <span>Privatpersonen & Unternehmen</span>
+                            Bitcoin Verwahrung – Leistungen & Preise für Privatkunden & Unternehmen
                         </h2>
                         <p>Wir bieten maßgeschneiderte Lösungen für Privatpersonen und Unternehmen. Alle Pakete beinhalten eine persönliche Betreuung, die Einrichtung vor Ort oder in unseren Räumlichkeiten in Thun sowie eine umfassende Dokumentation.</p>
                     </div>

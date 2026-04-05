@@ -16,6 +16,7 @@ Route::get('/contact-us',  function () { return view('contact-us'); });
 Route::get('/impressum',   function () { return view('impressum'); });
 Route::get('/datenschutz', function () { return view('datenschutz'); });
 Route::get('/agb',         function () { return view('agb'); });
+Route::get('/legal-disclaimer', function () { return view('legal-disclaimer'); });
 
 
 Route::get('/login', fn () => view('login'))->name('login')->middleware('guest');

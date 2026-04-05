@@ -32,7 +32,7 @@
                             <li class="nav-item"><a class="nav-link" href="/pricing">Leistungen & Preise</a></li>
                             <li class="nav-item"><a class="nav-link" href="/workshops">Workshops</a></li>
                             <li class="nav-item"><a class="nav-link" href="/faqs">FAQs</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blogs">Blogs</a></li>
+                            <!-- <li class="nav-item"><a class="nav-link" href="/blogs">Blogs</a></li> -->
                             <li class="nav-item"><a class="nav-link" href="/contact-us" style="text-transform: inherit;">Kontaktieren Sie uns</a></li>
                         </ul>
                     </div>
@@ -80,21 +80,7 @@
                             </form>
                         @else
                             {{-- User not logged in → show Login + CTA --}}
-                            <a href="{{ route('login') }}" style="
-                                display: inline-flex;
-                                align-items: center;
-                                gap: 6px;
-                                border: 1.5px solid rgba(111,84,164,.35);
-                                border-radius: 100px;
-                                color: #6f54a4;
-                                font-size: 14px;
-                                font-weight: 600;
-                                padding: 10px 20px;
-                                text-decoration: none;
-                                font-family: 'Plus Jakarta Sans', sans-serif;
-                                transition: all 0.3s ease;
-                                background: transparent;
-                            " onmouseover="this.style.background='rgba(111,84,164,.08)'" onmouseout="this.style.background='transparent'">
+                            <a href="{{ route('login') }}" class="btn-default">
                                 <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
                                     <polyline points="10 17 15 12 10 7"/>
@@ -102,7 +88,7 @@
                                 </svg>
                                 Anmelden
                             </a>
-                            <a href="/contact-us" class="btn-default">Legen Sie los</a>
+                            <!-- <a href="/contact-us" class="btn-default">Legen Sie los</a> -->
                         @endauth
 
                     </div>

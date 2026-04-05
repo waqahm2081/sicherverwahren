@@ -2,6 +2,9 @@
 <html lang="de">
 
 <head>
+
+    <title>Sicher Bitcoin Verwahren</title>
+
     @include('includes.styles')
 
     <style>

@@ -9,7 +9,7 @@
                         <img src="/images/logo.jpg" style="width: 120px; border-radius: 8px; padding: 6px; background-color: #fff;" alt="">
                     </div>
                     <p class="mt-2">
-                        Ihre Bitcoin. Ihre Kontrolle. Unsere Expertise.
+                        Keine Anlageberatung. Wir bieten ausschliesslich technische Sicherheits‑ und Selbstverwahrungs‑Schulungen an.
                     </p>
                 </div>
                 <!-- Footer Newsletter Form End -->
@@ -25,7 +25,7 @@
                         <li><a href="/pricing">Leistungen & Preise</a></li>
 						<li><a href="/workshops">Workshops</a></li>
                         <li><a href="/faqs">FAQs</a></li>
-                        <li><a href="/blogs">Blogs</a></li>
+                        <!-- <li><a href="/blogs">Blogs</a></li> -->
                         <li><a href="/contact-us" style="text-transform: initial;">Kontaktieren Sie uns</a></li>
                     </ul>
                 </div>
@@ -57,7 +57,7 @@
                 <div class="col-md-8 text-start">
                     <!-- Footer Copyright Text Start -->
                     <div class="footer-copyright-text text-start">
-                        <p>Copyright © 2025 Alle Rechte vorbehalten.</p>
+                        <p>Copyright © 2026 Alle Rechte vorbehalten.</p>
                     </div>
                     <!-- Footer Copyright Text End -->
                 </div>
@@ -67,7 +67,8 @@
                         <p>
                             <a href="/impressum" class="text-white">Impressum</a> |
                             <a href="/datenschutz" class="text-white">Datenschutz</a> |
-                            <a href="/agb" class="text-white">AGB</a>
+                            <a href="/agb" class="text-white">AGB</a> |
+                            <a href="/legal-disclaimer" class="text-white">Haftungsausschluss</a>
                         </p>
                     </div>
                     <!-- Footer Copyright Text End -->

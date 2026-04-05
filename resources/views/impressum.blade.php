@@ -2,7 +2,9 @@
 <html lang="zxx">
 
 <head>
-	
+
+    <title>Sicher Bitcoin Verwahren</title>
+
     @include('includes.styles')
     
 
@@ -37,35 +39,40 @@
                         <!-- Section Title Start -->
                         <div class="section-title">
 
+                            <h2>IMPRESSUM</h2>
+
                             <ul>
-                                <li>Firmenname: Sicher Bitcoin verwahren</li>
+                                <li>Firmenname: Sicher Bitcoin Verwahren</li>
                                 <li>Inhaber: Alain Beguelin</li>
                                 <li>Adresse: Allmendingen-Allee 9, 3608 Thun, Schweiz</li>
                                 <li>E-Mail: info@sicher-bitcoin-verwahren.ch</li>
                             </ul>
 
-                            <h2>Haftungsausschluss:</h2>
-                            <p>
-                                Die auf dieser Website bereitgestellten Informationen sowie Inhalte unserer Workshops dienen ausschließlich Bildungs- und Informationszwecken. Sie stellen keine Finanz-, Rechts- oder Steuerberatung dar und sind nicht als Aufforderung zum Kauf oder Verkauf von Bitcoin oder anderen Finanzinstrumenten zu verstehen.
-                            </p>
-							<p>
-								Die Teilnahme an Workshops erfolgt auf eigene Verantwortung. Wir übernehmen keine Haftung für Verluste, Schäden oder Ansprüche, die aus der Umsetzung der vermittelten Inhalte oder der Nutzung von Produkten entstehen, außer bei grober Fahrlässigkeit oder Vorsatz.
-							</p>
-							
-							<p>
-								Investitionen in Bitcoin sind mit erheblichen Risiken verbunden. Hardware Wallets müssen korrekt eingerichtet und genutzt werden. Wir übernehmen keine Haftung für Anwenderfehler, vergessene Passwörter, verlorene Backups oder technische Defekte, die außerhalb unseres Einflussbereichs liegen.
-							</p>
-							
-							<p>
-								Für die Einhaltung steuerlicher Pflichten sind die Teilnehmer selbst verantwortlich.
-Wir übernehmen keine Gewähr für die Aktualität, Korrektheit, Vollständigkeit oder Qualität der bereitgestellten Informationen. Haftungsansprüche gegen den Autor, die sich auf Schäden materieller oder ideeller Art beziehen, welche durch die Nutzung oder Nichtnutzung der dargebotenen Informationen bzw. durch die Nutzung fehlerhafter und unvollständiger Informationen verursacht wurden, sind grundsätzlich ausgeschlossen, sofern seitens des Autors kein nachweislich vorsätzliches oder grob fahrlässiges Verschulden vorliegt.
+                            <h2>Haftungsausschluss</h2>
+                            <p>Die auf dieser Website bereitgestellten Informationen sowie alle digitalen Inhalte (Videos, KI‑Erklärungen, Schritt‑für‑Schritt‑Guides, Workshops) dienen ausschließlich Bildungs- und Informationszwecken. Sie stellen keine Finanzberatung, Anlageberatung, Steuerberatung oder Rechtsberatung dar.</p>
+                            <p>Die Nutzung aller Inhalte erfolgt auf eigene Verantwortung. Wir übernehmen keine Haftung für Verluste oder Fehlkonfigurationen aufgrund von:</p>
+                            <ul>
+                                <li>eigenständiger Umsetzung der vermittelten Schritte,</li>
+                                <li>Nutzung von Hardware‑Wallets oder Backups,</li>
+                                <li>Anwenderfehlern (z. B. falsches Backup, vergessene Passwörter),</li>
+                                <li>Verlust, Beschädigung oder Fehlbedienung von Geräten,</li>
+                                <li>Software-/Firmware‑Änderungen,</li>
+                                <li>Sicherheitsfehlern außerhalb unseres Einflussbereichs.</li>
+                            </ul>
+                            <p>Wir speichern keine Private Keys, Seed Phrases oder Wallet‑Backups. Die Verantwortung für die sichere Aufbewahrung liegt beim Nutzer.</p>
 
-							</p>
-							
-							<p>
-								Alle Angebote sind freibleibend und unverbindlich. Der Autor behält es sich ausdrücklich vor, Teile der Seiten oder das gesamte Angebot ohne gesonderte Ankündigung zu verändern, zu ergänzen, zu löschen oder die Veröffentlichung zeitweise oder endgültig einzustellen.
-Wir übernehmen keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
-							</p>
+                            <h2>Digitale Produkte & Zugriff</h2>
+                            <p>Der Zugriff auf digitale Inhalte ist zeitlich begrenzt (standardmäßig 60 Tage) und wird nach Ablauf deaktiviert. Digitale Produkte sind nach Aktivierung nicht erstattungsfähig.</p>
+
+                            <h2>KI‑gestützte Inhalte</h2>
+                            <p>Einige Inhalte (Videos, Übersetzungen, Chatbot‑Antworten) können KI‑gestützt sein. Es wird keine Gewähr für absolute Fehlerfreiheit übernommen.</p>
+
+                            <h2>Externe Links</h2>
+                            <p>Wir übernehmen keine Verantwortung für Inhalte externer Websites. Es haften ausschließlich deren Betreiber.</p>
+
+                            <h2>Änderungen</h2>
+                            <p>Alle Angebote sind freibleibend. Wir behalten uns vor, Inhalte jederzeit anzupassen, zu ergänzen oder zu löschen.</p>
+
                         </div>
                         
                     </div>
