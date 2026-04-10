@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
+use Stripe\Exception\ApiErrorException;
 
 class PricingController extends Controller
 {
@@ -23,6 +26,50 @@ class PricingController extends Controller
         return view('pricing', compact('packages'));
     }
 
+    /**
+     * Step 1: Create a Stripe PaymentIntent and return client_secret.
+     * Called before showing the card field — amount is derived from the selected option.
+     */
+    public function createPaymentIntent(Request $request)
+    {
+        $request->validate([
+            'selected_package'     => ['required', 'string', 'max:255'],
+            'selected_option_type' => ['required', 'string', 'in:digital,onsite'],
+            'option_id'            => ['required', 'integer'],
+        ]);
+
+        Stripe::setApiKey(env('STRIPE_SECRETKEY'));
+
+        try {
+            // Look up price from DB to prevent tampering
+            $option = \App\Models\PricingPackageOption::findOrFail($request->option_id);
+
+            $amountRappen = (int) round($option->price_chf * 100); // CHF → Rappen
+
+            $intent = PaymentIntent::create([
+                'amount'   => $amountRappen,
+                'currency' => 'chf',
+                'metadata' => [
+                    'package'     => $request->selected_package,
+                    'option_type' => $request->selected_option_type,
+                ],
+            ]);
+
+            return response()->json([
+                'client_secret' => $intent->client_secret,
+            ]);
+        } catch (ApiErrorException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Stripe-Fehler: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Step 2: After successful payment on the frontend, register the user.
+     * We verify the PaymentIntent server-side before creating the account.
+     */
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -32,7 +79,26 @@ class PricingController extends Controller
             'password'             => ['required', 'confirmed', Password::min(8)],
             'selected_package'     => ['required', 'string', 'max:255'],
             'selected_option_type' => ['required', 'string', 'in:digital,onsite'],
+            'payment_intent_id'    => ['required', 'string'],
         ]);
+
+        Stripe::setApiKey(env('STRIPE_SECRETKEY'));
+
+        try {
+            $intent = PaymentIntent::retrieve($validated['payment_intent_id']);
+
+            if ($intent->status !== 'succeeded') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Zahlung nicht abgeschlossen. Bitte versuchen Sie es erneut.',
+                ], 402);
+            }
+        } catch (ApiErrorException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Zahlungsverifizierung fehlgeschlagen: ' . $e->getMessage(),
+            ], 500);
+        }
 
         User::create([
             'name'                 => $validated['name'],

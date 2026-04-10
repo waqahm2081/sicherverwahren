@@ -14,7 +14,8 @@ use App\Http\Controllers\Admin\UsersController as AdminUsersController;
 Route::get('/', function () { return view('index'); });
 Route::get('/about-us', function () { return view('about-us'); });
 
-Route::get('/pricing',  [PricingController::class, 'index'])->name('pricing');
+Route::get('/pricing',  [PricingController::class, 'index'])->name('pricing.index');
+Route::post('/pricing/payment-intent', [PricingController::class, 'createPaymentIntent'])->name('pricing.paymentIntent');
 Route::post('/pricing/register', [PricingController::class, 'register'])->name('pricing.register');
 
 Route::get('/workshops',        function () { return view('workshops'); });
