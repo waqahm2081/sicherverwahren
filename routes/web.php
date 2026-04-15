@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PackagesController as AdminPackagesController;
 use App\Http\Controllers\Admin\OrdersController as AdminOrdersController;
 use App\Http\Controllers\Admin\UsersController as AdminUsersController;
+use App\Http\Controllers\Admin\VideosController as VideosController;
 
 /* ── Public pages ── */
 Route::get('/', function () { return view('index'); });
@@ -35,14 +36,26 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
         'password' => ['required'],
     ]);
 
-    if (Auth::attempt($credentials, $request->boolean('remember'))) {
-        $request->session()->regenerate();
-        return redirect()->intended('/user-dashboard');
+    // Check credentials first without logging in
+    if (! Auth::validate($credentials)) {
+        return back()->withErrors([
+            'email' => 'Die eingegebenen Zugangsdaten sind ungültig.',
+        ])->onlyInput('email');
     }
 
-    return back()->withErrors([
-        'email' => 'Die eingegebenen Zugangsdaten sind ungültig.',
-    ])->onlyInput('email');
+    $user = \App\Models\User::where('email', $credentials['email'])->first();
+
+    // Block unapproved non-admin users
+    if (! $user->isAdmin() && ! $user->is_approved) {
+        return back()->withErrors([
+            'email' => 'Ihr Konto wurde noch nicht freigeschaltet. Sobald ein Administrator Ihr Konto genehmigt hat, können Sie sich anmelden. Bei Fragen kontaktieren Sie bitte den Support.',
+        ])->onlyInput('email');
+    }
+
+    Auth::login($user, $request->boolean('remember'));
+    $request->session()->regenerate();
+
+    return redirect()->intended('/user-dashboard');
 })->name('login.post')->middleware('guest');
 
 Route::post('/logout', function (\Illuminate\Http\Request $request) {
@@ -80,6 +93,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('/packages/{package}/toggle', [AdminPackagesController::class, 'toggleActive'])->name('packages.toggle');
         Route::delete('/packages/{package}',       [AdminPackagesController::class, 'destroy'])->name('packages.destroy');
 
+        Route::get   ('videos',           [VideosController::class, 'index'])   ->name('videos.index');
+        Route::get   ('videos/create',    [VideosController::class, 'create'])  ->name('videos.create');
+        Route::post  ('videos',           [VideosController::class, 'store'])   ->name('videos.store');
+        Route::get   ('videos/{video}/edit', [VideosController::class, 'edit'])->name('videos.edit');
+        Route::put   ('videos/{video}',   [VideosController::class, 'update'])  ->name('videos.update');
+        Route::delete('videos/{video}',   [VideosController::class, 'destroy']) ->name('videos.destroy');
+        Route::post  ('videos/reorder',   [VideosController::class, 'reorder']) ->name('videos.reorder');
+
         // Orders
         Route::get('/orders',              [AdminOrdersController::class, 'index'])->name('orders.index');
         Route::get('/orders/{user}',       [AdminOrdersController::class, 'show'])->name('orders.show');
@@ -89,5 +110,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/users/{user}/edit',   [AdminUsersController::class, 'edit'])->name('users.edit');
         Route::put('/users/{user}',        [AdminUsersController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}',     [AdminUsersController::class, 'destroy'])->name('users.destroy');
+        Route::patch('/users/{user}/approve',     [AdminUsersController::class, 'approve'])->name('users.approve'); // NEW
     });
 });

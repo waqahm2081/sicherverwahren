@@ -43,15 +43,22 @@ class UsersController extends Controller
         $users = $query->latest()->paginate(20)->withQueryString();
 
         $stats = [
-            'total'    => User::where('role', 'user')->count(),
-            'ordered'  => User::where('role', 'user')->whereNotNull('selected_package')->count(),
-            'digital'  => User::where('role', 'user')->where('selected_option_type', 'digital')->count(),
-            'onsite'   => User::where('role', 'user')->where('selected_option_type', 'onsite')->count(),
+            'total'      => User::where('role', 'user')->count(),
+            'ordered'    => User::where('role', 'user')->whereNotNull('selected_package')->count(),
+            'digital'    => User::where('role', 'user')->where('selected_option_type', 'digital')->count(),
+            'onsite'     => User::where('role', 'user')->where('selected_option_type', 'onsite')->count(),
         ];
 
         $packages = PricingPackage::orderBy('sort_order')->pluck('name');
 
         return view('admin.users.index', compact('users', 'stats', 'packages'));
+    }
+
+    public function approve(User $user)
+    {
+        abort_if($user->role === 'admin', 403);
+        $user->update(['is_approved' => true]);
+        return back()->with('success', 'Benutzer „' . $user->name . '" wurde freigeschaltet.');
     }
 
     public function edit(User $user)

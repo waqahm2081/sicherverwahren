@@ -86,7 +86,6 @@
             margin-bottom: 20px;
         }
         @media (max-width: 800px) { .adm-mini-stats { grid-template-columns: repeat(2, 1fr); } }
-
         .adm-mini-stat {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -141,21 +140,31 @@
             font-size:12px;font-weight:700;color:white;flex-shrink:0;
         }
         .adm-tag { display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px; }
-        .adm-tag--digital { background:rgba(74,144,217,.1);color:#2d74be; }
-        .adm-tag--onsite  { background:rgba(46,158,107,.1);color:#1d7a53; }
-        .adm-tag--none    { background:var(--border);color:var(--muted); }
+        .adm-tag--digital  { background:rgba(74,144,217,.1);color:#2d74be; }
+        .adm-tag--onsite   { background:rgba(46,158,107,.1);color:#1d7a53; }
+        .adm-tag--none     { background:var(--border);color:var(--muted); }
+        .adm-tag--approved { background:rgba(46,158,107,.1);color:#1d7a53; }
+        .adm-tag--pending  { background:rgba(230,160,30,.1);color:#b57d0a; }
 
-        .adm-edit-btn {
-            display:inline-flex;align-items:center;gap:5px;
-            font-size:12.5px;font-weight:500;
-            color:var(--primary);text-decoration:none;
-            padding:5px 10px;border-radius:7px;
-            border:1px solid rgba(111,84,164,.2);
-            background:rgba(111,84,164,.05);
-            transition:background .15s;
+        /* Approve button */
+        .adm-approve-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11.5px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            color: #1d7a53;
+            background: rgba(46,158,107,.08);
+            border: 1.5px solid rgba(46,158,107,.25);
+            border-radius: 7px;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: background .15s;
+            white-space: nowrap;
         }
-        .adm-edit-btn:hover { background:rgba(111,84,164,.1); }
-        .adm-edit-btn svg { width:13px;height:13px;fill:currentColor; }
+        .adm-approve-btn:hover { background: rgba(46,158,107,.16); }
+        .adm-approve-btn svg  { width:12px;height:12px;fill:currentColor; }
     </style>
 </head>
 <body>
@@ -190,7 +199,7 @@
                 </div>
                 <div class="adm-mini-stat">
                     <div class="adm-mini-stat__icon adm-mini-stat__icon--pink">
-                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
                     </div>
                     <div>
                         <div class="adm-mini-stat__val">{{ $stats['ordered'] }}</div>
@@ -236,8 +245,8 @@
                 </select>
                 <select name="order_status" class="adm-filter-select">
                     <option value="">Alle Status</option>
-                    <option value="ordered"    {{ request('order_status') === 'ordered'    ? 'selected' : '' }}>Mit Bestellung</option>
-                    <option value="no_order"   {{ request('order_status') === 'no_order'   ? 'selected' : '' }}>Ohne Bestellung</option>
+                    <option value="ordered"  {{ request('order_status') === 'ordered'  ? 'selected' : '' }}>Mit Bestellung</option>
+                    <option value="no_order" {{ request('order_status') === 'no_order' ? 'selected' : '' }}>Ohne Bestellung</option>
                 </select>
                 <button type="submit" class="adm-filter-btn {{ request()->hasAny(['search','package','type','order_status']) ? 'adm-filter-btn--active' : '' }}">
                     Filtern
@@ -261,6 +270,7 @@
                                 <th>Telefon</th>
                                 <th>Paket</th>
                                 <th>Typ</th>
+                                <th>Status</th>
                                 <th>Registriert</th>
                                 <th style="text-align:right;">Aktionen</th>
                             </tr>
@@ -290,19 +300,40 @@
                                         <span class="adm-tag adm-tag--none">—</span>
                                     @endif
                                 </td>
+                                <td>
+                                    @if($user->is_approved)
+                                        <span class="adm-tag adm-tag--approved">✓ Freigegeben</span>
+                                    @else
+                                        <span class="adm-tag adm-tag--pending">⏳ Ausstehend</span>
+                                    @endif
+                                </td>
                                 <td style="font-size:12.5px;color:var(--muted);">
                                     {{ $user->created_at->format('d.m.Y') }}<br>
                                     <span style="font-size:11px;">{{ $user->created_at->format('H:i') }} Uhr</span>
                                 </td>
                                 <td>
                                     <div class="adm-actions">
-                                        <a href="{{ route('admin.users.edit', $user) }}" class="adm-action-btn adm-action-btn--edit" title="Bearbeiten">
+                                        {{-- Approve button — only shown if not yet approved --}}
+                                        @if(! $user->is_approved)
+                                            <form method="POST"
+                                                  action="{{ route('admin.users.approve', $user) }}"
+                                                  style="display:inline;">
+                                                @csrf @method('PATCH')
+                                                <button type="submit" class="adm-approve-btn" title="Freischalten">
+                                                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                                    Freischalten
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        <a href="{{ route('admin.users.edit', $user) }}"
+                                           class="adm-action-btn adm-action-btn--edit" title="Bearbeiten">
                                             <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                                         </a>
                                         <form method="POST" action="{{ route('admin.users.destroy', $user) }}"
-                                            data-confirm="true"
-                                            data-confirm-type="Benutzer"
-                                            data-confirm-name="{{ $user->name }}">
+                                              data-confirm="true"
+                                              data-confirm-type="Benutzer"
+                                              data-confirm-name="{{ $user->name }}">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="adm-action-btn adm-action-btn--delete" title="Löschen">
                                                 <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>

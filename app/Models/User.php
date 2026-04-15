@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'role',
+        'is_approved',
         'selected_package',
         'selected_option_type',
     ];
@@ -29,6 +30,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password'          => 'hashed',
+        'is_approved'       => 'boolean',
     ];
 
     public function isAdmin(): bool

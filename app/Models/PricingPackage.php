@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class PricingPackage extends Model
 {
@@ -20,6 +21,12 @@ class PricingPackage extends Model
         return $this->hasMany(PricingPackageOption::class)->orderBy('sort_order');
     }
 
+    public function videos(): BelongsToMany
+    {
+        return $this->belongsToMany(CourseVideo::class, 'course_video_package')
+                    ->orderBy('sort_order');
+    }
+
     public function digitalOption(): ?PricingPackageOption
     {
         return $this->options->firstWhere('type', 'digital');
@@ -30,16 +37,11 @@ class PricingPackage extends Model
         return $this->options->firstWhere('type', 'onsite');
     }
 
-    /** Returns CHF saving amount (onsite - digital), or null if no digital option */
     public function savings(): ?int
     {
         $digital = $this->digitalOption();
         $onsite  = $this->onsiteOption();
-
-        if (! $digital || ! $onsite) {
-            return null;
-        }
-
+        if (! $digital || ! $onsite) return null;
         return $onsite->price_chf - $digital->price_chf;
     }
 

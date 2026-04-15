@@ -29,6 +29,8 @@ class PackagesController extends Controller
             'category'        => 'required|in:private,business',
             'portfolio_label' => 'required|string|max:255',
             'sort_order'      => 'required|integer|min:0',
+            'videos.*.title'     => 'required_with:videos.*.video_url|string|max:255',
+            'videos.*.video_url' => 'required_with:videos.*.title|url|max:500',
         ]);
 
         $package = PricingPackage::create([
@@ -63,6 +65,23 @@ class PackagesController extends Controller
             }
         }
 
+        // Save videos
+        foreach ($request->input('videos', []) as $vi => $vidData) {
+            if (empty(trim($vidData['title'] ?? '')) || empty(trim($vidData['video_url'] ?? ''))) continue;
+
+            $video = \App\Models\CourseVideo::create([
+                'title'       => $vidData['title'],
+                'description' => $vidData['description'] ?? null,
+                'video_url'   => $vidData['video_url'],
+                'duration'    => $vidData['duration'] ?? null,
+                'tag'         => $vidData['tag'] ?? null,
+                'sort_order'  => $vi,
+                'is_active'   => isset($vidData['is_active']) ? 1 : 0,
+            ]);
+
+            $video->packages()->attach($package->id);
+        }
+
         return redirect()->route('admin.packages.index')
             ->with('success', 'Paket erfolgreich erstellt.');
     }
@@ -80,6 +99,8 @@ class PackagesController extends Controller
             'category'        => 'required|in:private,business',
             'portfolio_label' => 'required|string|max:255',
             'sort_order'      => 'required|integer|min:0',
+            'videos.*.title'     => 'required_with:videos.*.video_url|string|max:255',
+            'videos.*.video_url' => 'required_with:videos.*.title|url|max:500',
         ]);
 
         $package->update([
@@ -91,7 +112,7 @@ class PackagesController extends Controller
             'is_active'       => $request->boolean('is_active'),
         ]);
 
-        // Replace options and features
+        // Replace options
         foreach ($package->options as $opt) {
             $opt->features()->delete();
         }
@@ -119,9 +140,38 @@ class PackagesController extends Controller
             }
         }
 
+        // Replace videos — detach old ones that belong only to this package, then re-create
+        $oldVideoIds = $package->videos()->pluck('course_videos.id');
+        $package->videos()->detach();
+
+        // Delete videos that are exclusively used by this package
+        foreach ($oldVideoIds as $oldId) {
+            $video = \App\Models\CourseVideo::find($oldId);
+            if ($video && $video->packages()->count() === 0) {
+                $video->delete();
+            }
+        }
+
+        foreach ($request->input('videos', []) as $vi => $vidData) {
+            if (empty(trim($vidData['title'] ?? '')) || empty(trim($vidData['video_url'] ?? ''))) continue;
+
+            $video = \App\Models\CourseVideo::create([
+                'title'       => $vidData['title'],
+                'description' => $vidData['description'] ?? null,
+                'video_url'   => $vidData['video_url'],
+                'duration'    => $vidData['duration'] ?? null,
+                'tag'         => $vidData['tag'] ?? null,
+                'sort_order'  => $vi,
+                'is_active'   => isset($vidData['is_active']) ? 1 : 0,
+            ]);
+
+            $video->packages()->attach($package->id);
+        }
+
         return redirect()->route('admin.packages.index')
             ->with('success', 'Paket erfolgreich aktualisiert.');
     }
+
 
     public function toggleActive(PricingPackage $package)
     {
