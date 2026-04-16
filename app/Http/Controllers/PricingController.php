@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserRegistered;
+use App\Mail\UserWelcome;
 use App\Models\PricingPackage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
@@ -28,7 +31,6 @@ class PricingController extends Controller
 
     /**
      * Step 1: Create a Stripe PaymentIntent and return client_secret.
-     * Called before showing the card field — amount is derived from the selected option.
      */
     public function createPaymentIntent(Request $request)
     {
@@ -41,10 +43,9 @@ class PricingController extends Controller
         Stripe::setApiKey(env('STRIPE_SECRETKEY'));
 
         try {
-            // Look up price from DB to prevent tampering
             $option = \App\Models\PricingPackageOption::findOrFail($request->option_id);
 
-            $amountRappen = (int) round($option->price_chf * 100); // CHF → Rappen
+            $amountRappen = (int) round($option->price_chf * 100);
 
             $intent = PaymentIntent::create([
                 'amount'   => $amountRappen,
@@ -67,8 +68,7 @@ class PricingController extends Controller
     }
 
     /**
-     * Step 2: After successful payment on the frontend, register the user.
-     * We verify the PaymentIntent server-side before creating the account.
+     * Step 2: After successful payment, register the user and send emails.
      */
     public function register(Request $request)
     {
@@ -100,7 +100,7 @@ class PricingController extends Controller
             ], 500);
         }
 
-        User::create([
+        $user = User::create([
             'name'                 => $validated['name'],
             'email'                => $validated['email'],
             'phone'                => $validated['phone'],
@@ -108,6 +108,12 @@ class PricingController extends Controller
             'selected_package'     => $validated['selected_package'],
             'selected_option_type' => $validated['selected_option_type'],
         ]);
+
+        // Email to admin
+        Mail::to(config('mail.from.address'))->send(new UserRegistered($user));
+
+        // Email to user
+        Mail::to($user->email)->send(new UserWelcome($user));
 
         return response()->json([
             'success' => true,

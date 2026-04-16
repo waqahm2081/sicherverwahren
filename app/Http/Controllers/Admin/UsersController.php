@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\UserApproved;
 use App\Models\User;
 use App\Models\PricingPackage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
@@ -43,10 +45,10 @@ class UsersController extends Controller
         $users = $query->latest()->paginate(20)->withQueryString();
 
         $stats = [
-            'total'      => User::where('role', 'user')->count(),
-            'ordered'    => User::where('role', 'user')->whereNotNull('selected_package')->count(),
-            'digital'    => User::where('role', 'user')->where('selected_option_type', 'digital')->count(),
-            'onsite'     => User::where('role', 'user')->where('selected_option_type', 'onsite')->count(),
+            'total'   => User::where('role', 'user')->count(),
+            'ordered' => User::where('role', 'user')->whereNotNull('selected_package')->count(),
+            'digital' => User::where('role', 'user')->where('selected_option_type', 'digital')->count(),
+            'onsite'  => User::where('role', 'user')->where('selected_option_type', 'onsite')->count(),
         ];
 
         $packages = PricingPackage::orderBy('sort_order')->pluck('name');
@@ -57,7 +59,12 @@ class UsersController extends Controller
     public function approve(User $user)
     {
         abort_if($user->role === 'admin', 403);
+
         $user->update(['is_approved' => true]);
+
+        // Notify the user that their account is now active
+        Mail::to($user->email)->send(new UserApproved($user));
+
         return back()->with('success', 'Benutzer „' . $user->name . '" wurde freigeschaltet.');
     }
 
