@@ -17,15 +17,19 @@ class UserWelcome extends Mailable
 
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Your Registration is Being Reviewed',
-        );
+        $subject = $this->user->preferred_language === 'en'
+            ? 'Your registration at Sicher Bitcoin Verwahren'
+            : 'Deine Registrierung bei Sicher Bitcoin Verwahren';
+
+        return new Envelope(subject: $subject);
     }
 
     public function content(): Content
     {
-        return new Content(
-            view: 'emails.user-welcome',
-        );
+        $view = $this->user->preferred_language === 'en'
+            ? 'emails.user-welcome-en'
+            : 'emails.user-welcome-de';
+
+        return new Content(view: $view);
     }
 }

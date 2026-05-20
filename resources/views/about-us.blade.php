@@ -3,8 +3,8 @@
 
 <head>
 
-    <title>Über uns | Bitcoin Sicherheit aus Thun | Sicher Bitcoin Verwahren</title>
-    <meta name="description" content="Erfahren Sie mehr über Sicher Bitcoin Verwahren. Schweizer Bitcoin Sicherheitsexperten aus Thun mit über 5'000 Stunden Fachwissen.">
+    <title>Über uns | Bitcoin Sicherheit aus der Schweiz | Sicher Bitcoin Verwahren</title>
+    <meta name="description" content="Erfahren Sie mehr über Sicher Bitcoin Verwahren. Bitcoin Sicherheitsexperten aus der Schweiz mit über 5'000 Stunden Fachwissen – vertrauenswürdig für Kunden in Deutschland, Österreich und der Schweiz.">
 	
     @include('includes.styles')
     
@@ -77,12 +77,9 @@
                     <div class="about-us-content">
                         <!-- Section Title Start -->
                         <div class="section-title">
-                            <h3 class="wow fadeInUp" style="text-transform: initial!important;">Über mich</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">Über uns – Experten für Bitcoin Sicherheit</h2>
+                            <h3 class="wow fadeInUp" style="text-transform: initial!important;">Über uns</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">Experten für Bitcoin Sicherheit</h2>
                             <p class="wow fadeInUp" data-wow-delay="0.4s">Vor über sechs Jahren bin ich zum ersten Mal auf Bitcoin gestoßen – damals aus reiner Neugier. Was als kleines Interesse begann, entwickelte sich schnell zu einer Leidenschaft. Ich wollte verstehen, wie dieses neue Geld funktioniert, warum es so sicher ist und welche Chancen es für unsere Zukunft bietet.</p>
-                            <p>
-                                We help private clients and Swiss companies store their Bitcoin safely, independently and long term through professional self custody solutions.
-                            </p>
 							<p>
 								Aus dieser Neugier wurde ein tiefes Engagement: über 5.000 Stunden Selbststudium, unzählige Bücher, Podcasts, technische Tests und Diskussionen mit Experten weltweit. Bitcoin hat meine Sicht auf Geld, Sicherheit und Unabhängigkeit grundlegend verändert.
 							</p>

@@ -7507,3 +7507,12 @@ header.main-header .header-sticky.active{
 	color: #fff;
 	margin-top: 18px;
 }
+
+.teaservidsection {
+	padding: 60px 0;
+}
+
+.teaservidsection video {
+	width: 100%;
+	border-radius: 20px;
+}

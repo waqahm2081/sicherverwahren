@@ -20,6 +20,7 @@ class User extends Authenticatable
         'is_approved',
         'selected_package',
         'selected_option_type',
+        'preferred_language',  // ← added
     ];
 
     protected $hidden = [

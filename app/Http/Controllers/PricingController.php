@@ -80,6 +80,7 @@ class PricingController extends Controller
             'selected_package'     => ['required', 'string', 'max:255'],
             'selected_option_type' => ['required', 'string', 'in:digital,onsite'],
             'payment_intent_id'    => ['required', 'string'],
+            'preferred_language'   => ['required', 'string', 'in:de,en'],  // ← added
         ]);
 
         Stripe::setApiKey(env('STRIPE_SECRETKEY'));
@@ -107,6 +108,7 @@ class PricingController extends Controller
             'password'             => Hash::make($validated['password']),
             'selected_package'     => $validated['selected_package'],
             'selected_option_type' => $validated['selected_option_type'],
+            'preferred_language'   => $validated['preferred_language'],  // ← added
         ]);
 
         // Email to admin

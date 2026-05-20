@@ -3,8 +3,8 @@
 
 <head>
 
-    <title>Bitcoin FAQ – Häufige Fragen zur sicheren Verwahrung | Schweiz</title>
-    <meta name="description" content="Antworten zu den wichtigsten Fragen rund um Bitcoin Verwahrung: Hardware Wallets, Multisig, Backup, Sicherheit und Risiken. Schweizer Bitcoin Sicherheitsberatung.">
+    <title>Bitcoin FAQ – Häufige Fragen zur sicheren Verwahrung | DACH</title>
+    <meta name="description" content="Antworten zu den wichtigsten Fragen rund um Bitcoin Verwahrung: Hardware Wallets, Multisig, Backup, Sicherheit und Risiken. Bitcoin Sicherheitsberatung für Deutschland, Österreich und die Schweiz.">
 	
     @include('includes.styles')
     
@@ -42,7 +42,7 @@
                             <!-- Section Title Start -->
                             <div class="section-title text-center">
                                 <h2 class="wow fadeInUp" data-cursor="-opaque">Häufig gestellte Fragen zur Bitcoin Verwahrung</h2>
-                                <p>Here you will find the most important answers to safe Bitcoin self custody in Switzerland.</p>
+                                <p>Hier finden Sie die wichtigsten Antworten zur sicheren Bitcoin Selbstverwahrung in Deutschland, Österreich und der Schweiz.</p>
                             </div>
                             <!-- Section Title End -->
 
@@ -129,6 +129,38 @@
                                     </div>
                                 </div>
                                 <!-- FAQ Item End -->
+
+
+
+                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.8s">
+                                    <h2 class="accordion-header" id="heading6">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                                            Stellen Quantencomputer ein Risiko für Bitcoin dar – und wann?
+                                        </button>
+                                    </h2>
+                                    <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6" data-bs-parent="#accordion">
+                                        <div class="accordion-body">
+                                            <p>
+                                                <strong>Wer ist Adam Back?</strong><br/>
+                                                Adam Back ist ein britischer Kryptograf und CEO von Blockstream. Er ist eine der angesehensten Persönlichkeiten in der Bitcoin-Welt. Bereits 1997 erfand er Hashcash, das später als Grundlage für Bitcoins Mining-Algorithmus diente. Im Original-Bitcoin-Whitepaper von Satoshi Nakamoto wird Adam Back namentlich zitiert. Seine Einschätzung zur Quantencomputer-Bedrohung hat daher besonderes Gewicht.
+                                            </p>
+                                            <p>
+                                                <strong>Seine Aussage:</strong><br/>
+                                                Quantencomputer sind für Bitcoin "ridiculously early". Eine echte Bedrohung sieht er frühestens in 20–40 Jahren. Zudem betont er zwei entscheidende Punkte:
+                                                <br/>
+                                                Erstens: Quantencomputer werden zuerst leichtere Ziele angreifen – Banken, Militär, staatliche Kommunikation. Deren RSA- und Diffie-Hellman-Verschlüsselung ist weit verwundbarer als Bitcoins ECDSA. Diese Systeme sind das "niedrig hängende Obst".
+                                                <br/>
+                                                Zweitens: Selbst wenn Quantencomputer leistungsfähig genug sind, ist Mining ökonomisch attraktiver als ein Angriff. Die akademische Forschung zeigt: Ein Quanten-Miner, der 16 Minuten Grover-Iterationen fährt und dann misst, kann effizienter minen als klassische Rechner – mit besseren Energiekosten pro Block. Warum das Netzwerk angreifen, wenn man es profitabler nutzen kann?
+                                            </p>
+                                            <p>
+                                                <strong>Fazit:</strong><br/>
+                                                Kein Grund zur Sorge. Das Fenster für ein geordnetes Upgrade ist groß, und die Ökonomie spricht gegen einen Angriff.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
                             <!-- FAQ Accordion End -->
                         </div>

@@ -17,15 +17,19 @@ class UserApproved extends Mailable
 
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Your Account Has Been Approved',
-        );
+        $subject = $this->user->preferred_language === 'en'
+            ? 'Your account has been approved'
+            : 'Ihr Konto wurde freigeschaltet';
+
+        return new Envelope(subject: $subject);
     }
 
     public function content(): Content
     {
-        return new Content(
-            view: 'emails.user-approved',
-        );
+        $view = $this->user->preferred_language === 'en'
+            ? 'emails.user-approved-en'
+            : 'emails.user-approved-de';
+
+        return new Content(view: $view);
     }
 }

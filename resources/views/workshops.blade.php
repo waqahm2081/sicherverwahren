@@ -161,7 +161,7 @@
                 </div>
 				
 				<div class="pricing-btn text-center">
-					<a href="/wp-content/uploads/2025/11/german.pdf" target="_blank" style="text-transform: initial;" class="btn-default">Buche deinen Workshop</a>
+					<a href="/contact-us" style="text-transform: initial;" class="btn-default">Buche deinen Workshop</a>
 				</div>
                 
             </div>

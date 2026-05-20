@@ -2,8 +2,8 @@
 <html lang="zxx">
 
 <head>
-    <title>Bitcoin Verwahrung: Leistungen & Preise | Privat & Unternehmen | Schweiz</title>
-    <meta name="description" content="Unsere Bitcoin Sicherheits Pakete für Privatpersonen und KMU: Hardware Wallet Einrichtung, Multisig Setups, Backups, Dokumentation und Schulungen in der Schweiz.">
+    <title>Bitcoin Verwahrung: Leistungen & Preise | Privat & Unternehmen | DACH</title>
+    <meta name="description" content="Unsere Bitcoin Sicherheits Pakete für Privatpersonen und KMU in Deutschland, Österreich und der Schweiz: Hardware Wallet Einrichtung, Multisig Setups, Backups, Dokumentation und Schulungen.">
 
     @include('includes.styles')
     <link rel="stylesheet" href="/css/pricing.css">
@@ -38,7 +38,7 @@
                         <h2 class="wow fadeInUp" style="text-transform: initial;" data-wow-delay="0.2s" data-cursor="-opaque">
                             Bitcoin Verwahrung – Leistungen & Preise für Privatkunden & Unternehmen
                         </h2>
-                        <p>Wir bieten maßgeschneiderte Lösungen für Privatpersonen und Unternehmen. Alle Pakete beinhalten eine persönliche Betreuung, die Einrichtung vor Ort oder in unseren Räumlichkeiten in Thun sowie eine umfassende Dokumentation.</p>
+                        <p>Wir bieten massgeschneiderte Lösungen für Privatpersonen und Unternehmen. Wählen Sie zwischen persönlicher Betreuung mit Einrichtung vor Ort (inkl. Dokumentation) oder der kostengünstigeren eigenständigen Einrichtung über unsere interne Videoplattform.</p>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                                             aria-selected="false"
                                             data-target="panel-onsite-{{ $pkg->id }}"
                                             onclick="switchTab(this, 'panel-onsite-{{ $pkg->id }}', '{{ $pkg->id }}')"
-                                        >📍 On-Site</button>
+                                        >📍 Vor-Ort-Service</button>
                                     </div>
                                 @endif
 
@@ -161,6 +161,12 @@
             </div>
         </div>
     </div>
+
+    <section class="teaservidsection">
+        <div class="container">
+            <video src="https://sicher-bitcoin-videos.s3.ap-southeast-1.amazonaws.com/homepage/teaser.mp4" controls></video>
+        </div>
+    </section>
 
     {{-- JSON DATA ISLAND --}}
     <script id="pricing-data" type="application/json">
@@ -316,7 +322,7 @@
             const opt  = pkg.options.find(o => o.type === type) ?? pkg.options[0];
             if (!opt) return;
 
-            const typeLbl = opt.type === 'digital' ? '⚡ Digital Package' : '📍 On-Site Service';
+            const typeLbl = opt.type === 'digital' ? '⚡ Digital Package' : '📍 Vor-Ort-Service Service';
 
             document.getElementById('pkgModalContent').innerHTML = `
             <div class="pkg-modal__header">
@@ -353,6 +359,16 @@
                         <label class="pkg-form__label" for="pf_email">E-Mail-Adresse *</label>
                         <input class="pkg-form__input" id="pf_email" type="email" placeholder="max@example.com" autocomplete="email">
                         <div class="pkg-form__error" id="err_email"></div>
+                    </div>
+
+                    {{-- After the name/phone row, before email --}}
+                    <div class="pkg-form__group">
+                        <label class="pkg-form__label" for="pf_language">Bevorzugte Sprache *</label>
+                        <select class="pkg-form__input" id="pf_language">
+                            <option value="de">🇩🇪 Deutsch</option>
+                            <option value="en">🇬🇧 English</option>
+                        </select>
+                        <div class="pkg-form__error" id="err_language"></div>
                     </div>
 
                     <div class="pkg-form__row">
@@ -455,6 +471,7 @@
             const email    = (document.getElementById('pf_email')?.value || '').trim();
             const password = (document.getElementById('pf_password')?.value || '');
             const confirm  = (document.getElementById('pf_password_confirm')?.value || '');
+            const language = document.getElementById('pf_language')?.value || 'de';
 
             let hasError = false;
             if (!name)  { setError('err_name', 'Bitte geben Sie Ihren Namen ein.'); hasError = true; }
@@ -535,6 +552,7 @@
                         selected_package:      pkgName,
                         selected_option_type:  optType,
                         payment_intent_id:     paymentIntent.id,
+                        preferred_language: language,
                     }),
                 });
 

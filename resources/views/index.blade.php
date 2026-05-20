@@ -2,8 +2,8 @@
 <html lang="zxx">
 
 <head>
-    <title>Bitcoin sicher verwahren in der Schweiz | Privat & Unternehmen | Sicher Bitcoin Verwahren</title>
-    <meta name="description" content="Bitcoin sicher verwahren – für Privatpersonen und KMU in der Schweiz. Hardware Wallets, Multisig, sichere Backup Strategien und klare Video Anleitungen. Einfach, sicher, unabhängig.">
+    <title>Bitcoin sicher verwahren in Deutschland, Österreich & Schweiz | Privat & Unternehmen | Sicher Bitcoin Verwahren</title>
+    <meta name="description" content="Bitcoin sicher verwahren – für Privatpersonen und KMU in Deutschland, Österreich und der Schweiz. Hardware Wallets, Multisig, sichere Backup Strategien und klare Video Anleitungen. Einfach, sicher, unabhängig.">
 	
     @include('includes.styles')
     
@@ -29,12 +29,12 @@
                     <div class="hero-content">
                         <div class="section-title dark-section">
                             <h3 class="wow fadeInUp">Sichere Bitcoin‑Selbstverwahrung. Lokal vertraut, weltweit verfügbar.</h3>
-                            <h1 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">Bitcoin sicher verwahren – für Privatpersonen & KMU in der Schweiz</h1>
+                            <h1 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">Bitcoin sicher verwahren – für Privatpersonen & KMU weltweit</h1>
                             <!-- <p class="wow fadeInUp" data-wow-delay="0.4s">Wir helfen Ihnen, Ihre Bitcoin selbst zu sichern – mit Hardware Wallets, Multi-Signature und persönlicher Beratung. Ob Privatperson oder Unternehmen: Ihre Bitcoin gehören Ihnen. Wir zeigen Ihnen, wie.</p> -->
                             <ul>
-                                <li>Protection against loss, theft and common mistakes </li>
-                                <li>Documented backups & multisig systems for maximum security </li>
-                                <li>Swiss expertise, no technical knowledge required</li>
+                                <li>Schutz vor Verlust, Diebstahl und typischen Fehlern </li>
+                                <li>Dokumentierte Backups & Multisig-Systeme für maximale Sicherheit </li>
+                                <li>Schweizer Fachkompetenz – keine technische Vorkenntnisse nötig</li>
                             </ul>
                         </div>
 
@@ -48,6 +48,13 @@
             </div>
         </div>
     </div>
+
+    
+    <section class="teaservidsection">
+        <div class="container">
+            <video src="https://sicher-bitcoin-videos.s3.ap-southeast-1.amazonaws.com/homepage/teaser.mp4" controls></video>
+        </div>
+    </section>
 
 
     <div class="our-services">

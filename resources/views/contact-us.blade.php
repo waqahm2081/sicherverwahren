@@ -4,7 +4,7 @@
 <head>
 
     <title>Kontakt | Sicher Bitcoin Verwahren | Thun, Schweiz</title>
-    <meta name="description" content="Kontaktieren Sie uns für Bitcoin Self Custody Beratung, Multisig Setups und sichere Aufbewahrungslösungen. Standort Thun, Schweiz.">
+    <meta name="description" content="Kontaktieren Sie uns für Bitcoin Self Custody Beratung, Multisig Setups und sichere Aufbewahrungslösungen – für Kunden in Deutschland, Österreich und der Schweiz. Standort Thun, Schweiz.">
 	
     @include('includes.styles')
     

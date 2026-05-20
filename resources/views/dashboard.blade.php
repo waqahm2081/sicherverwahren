@@ -227,8 +227,8 @@
                 @if(auth()->user()->selected_option_type === 'digital')
                 @php
                     $subDays  = auth()->user()->created_at->diffInDays(now());
-                    $isLocked = $subDays > 30;
-                    $daysLeft = max(0, 30 - $subDays);
+                    $isLocked = $subDays > 60;
+                    $daysLeft = max(0, 60 - $subDays);
                 @endphp
                 <div class="ud-panel active" id="ud-panel-videos" role="tabpanel" style="position:relative;">
 
@@ -242,7 +242,7 @@
                                 </svg>
                             </div>
                             <h3>Zugang abgelaufen</h3>
-                            <p>Ihr 30-tägiger Zugang ist abgelaufen. Erneuern Sie Ihr Paket, um wieder Zugriff auf alle Kurse zu erhalten.</p>
+                            <p>Ihr 60-tägiger Zugang ist abgelaufen. Erneuern Sie Ihr Paket, um wieder Zugriff auf alle Kurse zu erhalten.</p>
                             <a href="/pricing" class="ud-renew-btn">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;">
                                     <polyline points="23 4 23 10 17 10"/>
@@ -268,7 +268,7 @@
                                 <circle cx="12" cy="12" r="10"/>
                                 <polyline points="12 6 12 12 16 14"/>
                             </svg>
-                            <span>Ihr Zugang läuft ab in <strong>{{ $daysLeft }} {{ $daysLeft === 1 ? 'Tag' : 'Tagen' }}</strong> — Paket am {{ auth()->user()->created_at->addDays(30)->format('d.m.Y') }}</span>
+                            <span>Ihr Zugang läuft ab in <strong>{{ $daysLeft }} {{ $daysLeft === 1 ? 'Tag' : 'Tagen' }}</strong> — Paket am {{ auth()->user()->created_at->addDays(60)->format('d.m.Y') }}</span>
                         </div>
                         <span class="ud-days-pill">{{ $daysLeft }}d verbleibend</span>
                     </div>
