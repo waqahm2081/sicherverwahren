@@ -30,10 +30,10 @@
                     <td style="padding:32px 36px 20px;">
                         <h1 style="margin:0 0 16px 0;font-size:22px;color:#2d2d2d;font-weight:bold;">Dear {{ $user->name }},</h1>
                         <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            Thank you for your payment.
+                            Thank you for your registration.
                         </p>
                         <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            We have received your payment and are now ordering the hardware required for your package.
+                            We have received your registration and are now ordering the hardware required for your package.
                         </p>
                         <p style="margin:0 0 24px 0;font-size:15px;color:#444444;line-height:1.6;">
                             Once the hardware has arrived, we will notify you about the start of your project and activate your access to the training content.
