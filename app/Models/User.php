@@ -20,7 +20,9 @@ class User extends Authenticatable
         'is_approved',
         'selected_package',
         'selected_option_type',
-        'preferred_language',  // ← added
+        'preferred_language',
+        'payment_token',
+        'payment_completed',
     ];
 
     protected $hidden = [
@@ -29,9 +31,10 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password'          => 'hashed',
-        'is_approved'       => 'boolean',
+        'email_verified_at'  => 'datetime',
+        'password'           => 'hashed',
+        'is_approved'        => 'boolean',
+        'payment_completed'  => 'boolean',
     ];
 
     public function isAdmin(): bool

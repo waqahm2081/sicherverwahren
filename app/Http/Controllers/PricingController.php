@@ -30,13 +30,13 @@ class PricingController extends Controller
     }
 
     /**
-     * Step 1: Create a Stripe PaymentIntent and return client_secret.
+     * Create a Stripe PaymentIntent — only for digital packages.
      */
     public function createPaymentIntent(Request $request)
     {
         $request->validate([
             'selected_package'     => ['required', 'string', 'max:255'],
-            'selected_option_type' => ['required', 'string', 'in:digital,onsite'],
+            'selected_option_type' => ['required', 'string', 'in:digital'],  // onsite never calls this
             'option_id'            => ['required', 'integer'],
         ]);
 
@@ -68,39 +68,52 @@ class PricingController extends Controller
     }
 
     /**
-     * Step 2: After successful payment, register the user and send emails.
+     * Register user.
+     * - Digital: payment_intent_id required, verified against Stripe before account creation.
+     * - Onsite:  no payment now; account created pending admin approval + later payment.
      */
     public function register(Request $request)
     {
-        $validated = $request->validate([
+        $isOnsite = $request->input('selected_option_type') === 'onsite';
+
+        $rules = [
             'name'                 => ['required', 'string', 'max:255'],
             'email'                => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone'                => ['required', 'string', 'max:50'],
             'password'             => ['required', 'confirmed', Password::min(8)],
             'selected_package'     => ['required', 'string', 'max:255'],
             'selected_option_type' => ['required', 'string', 'in:digital,onsite'],
-            'payment_intent_id'    => ['required', 'string'],
-            'preferred_language'   => ['required', 'string', 'in:de,en'],  // ← added
-        ]);
+            'preferred_language'   => ['required', 'string', 'in:de,en'],
+        ];
 
-        Stripe::setApiKey(env('STRIPE_SECRETKEY'));
-
-        try {
-            $intent = PaymentIntent::retrieve($validated['payment_intent_id']);
-
-            if ($intent->status !== 'succeeded') {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Zahlung nicht abgeschlossen. Bitte versuchen Sie es erneut.',
-                ], 402);
-            }
-        } catch (ApiErrorException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Zahlungsverifizierung fehlgeschlagen: ' . $e->getMessage(),
-            ], 500);
+        if (! $isOnsite) {
+            $rules['payment_intent_id'] = ['required', 'string'];
         }
 
+        $validated = $request->validate($rules);
+
+        // ── Digital: verify payment before creating account ──
+        if (! $isOnsite) {
+            Stripe::setApiKey(env('STRIPE_SECRETKEY'));
+
+            try {
+                $intent = PaymentIntent::retrieve($validated['payment_intent_id']);
+
+                if ($intent->status !== 'succeeded') {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Zahlung nicht abgeschlossen. Bitte versuchen Sie es erneut.',
+                    ], 402);
+                }
+            } catch (ApiErrorException $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Zahlungsverifizierung fehlgeschlagen: ' . $e->getMessage(),
+                ], 500);
+            }
+        }
+
+        // ── Create user ──
         $user = User::create([
             'name'                 => $validated['name'],
             'email'                => $validated['email'],
@@ -108,7 +121,11 @@ class PricingController extends Controller
             'password'             => Hash::make($validated['password']),
             'selected_package'     => $validated['selected_package'],
             'selected_option_type' => $validated['selected_option_type'],
-            'preferred_language'   => $validated['preferred_language'],  // ← added
+            'preferred_language'   => $validated['preferred_language'],
+            // onsite users start unapproved and unpaid; digital users are also unapproved
+            // (admin must still approve digital users too — existing behaviour unchanged)
+            'is_approved'          => false,
+            'payment_completed'    => $isOnsite ? false : true,  // digital paid already
         ]);
 
         // Email to admin
@@ -119,7 +136,9 @@ class PricingController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Ihr Konto wurde erfolgreich erstellt.',
+            'message' => $isOnsite
+                ? 'Ihre Anfrage wurde eingereicht. Wir prüfen Ihre Angaben und melden uns in Kürze.'
+                : 'Ihr Konto wurde erfolgreich erstellt.',
         ]);
     }
 }

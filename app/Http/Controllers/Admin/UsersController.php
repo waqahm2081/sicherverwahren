@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -60,9 +61,19 @@ class UsersController extends Controller
     {
         abort_if($user->role === 'admin', 403);
 
-        $user->update(['is_approved' => true]);
+        if ($user->selected_option_type === 'onsite') {
+            // Generate a unique payment token and send a payment-link email.
+            // Do NOT set is_approved yet — that happens after payment.
+            $token = \Illuminate\Support\Str::random(48);
+            $user->update(['payment_token' => $token]);
 
-        // Notify the user that their account is now active
+            Mail::to($user->email)->send(new \App\Mail\OnsitePaymentLink($user));
+
+            return back()->with('success', 'Zahlungslink an „' . $user->name . '" gesendet. Konto wird nach Zahlung freigeschaltet.');
+        }
+
+        // Digital users: approve immediately (existing behaviour)
+        $user->update(['is_approved' => true]);
         Mail::to($user->email)->send(new UserApproved($user));
 
         return back()->with('success', 'Benutzer „' . $user->name . '" wurde freigeschaltet.');

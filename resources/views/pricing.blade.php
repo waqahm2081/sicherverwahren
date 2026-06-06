@@ -246,6 +246,20 @@
             margin-top: 4px;
             min-height: 18px;
         }
+        .pkg-onsite-notice {
+            background: #f9f7ff;
+            border: 1px solid #e4ddf5;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 18px 0 16px;
+            font-size: .82rem;
+            color: #555;
+            line-height: 1.6;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .pkg-onsite-notice svg { flex-shrink: 0; margin-top: 2px; }
     </style>
 
     @include('includes.footer')
@@ -257,8 +271,8 @@
 
         /* ── Stripe init ── */
         const stripe = Stripe('{{ env("STRIPE_PUBLISHABLEKEY") }}');
-        let stripeElements = null; // Stripe Elements instance
-        let cardElement    = null; // the CardElement
+        let stripeElements = null;
+        let cardElement    = null;
 
         /* ── Data ── */
         const pricingData = JSON.parse(document.getElementById('pricing-data').textContent);
@@ -322,7 +336,33 @@
             const opt  = pkg.options.find(o => o.type === type) ?? pkg.options[0];
             if (!opt) return;
 
-            const typeLbl = opt.type === 'digital' ? '⚡ Digital Package' : '📍 Vor-Ort-Service Service';
+            const isOnsite = opt.type === 'onsite';
+            const typeLbl  = isOnsite ? '📍 Vor-Ort-Service' : '⚡ Digital Package';
+
+            // Payment section differs by type
+            const paymentSection = isOnsite
+                ? `<div class="pkg-onsite-notice">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6f54a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span>
+                            Die Zahlung erfolgt <strong>nach Bestätigung</strong> durch unser Team.
+                            Sie erhalten einen persönlichen Zahlungslink per E-Mail.
+                        </span>
+                   </div>`
+                : `<p class="pkg-form__step-label">② Zahlung</p>
+                   <p class="pkg-form__payment-note">
+                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f54a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                       Sichere Zahlung via Stripe – CHF ${esc(opt.price_fmt)}
+                   </p>
+                   <label class="pkg-form__label">Kartendetails *</label>
+                   <div class="pkg-form__card-wrap" id="stripe-card-element"></div>
+                   <div class="pkg-stripe-error" id="stripe-error"></div>`;
+
+            const submitLabel = isOnsite ? 'Anfrage senden' : 'Jetzt bezahlen &amp; registrieren';
+
+            const successTitle = isOnsite ? 'Anfrage eingereicht!' : 'Zahlung &amp; Registrierung erfolgreich!';
+            const successMsg   = isOnsite
+                ? 'Vielen Dank! Wir prüfen Ihre Anfrage und senden Ihnen den Zahlungslink per E-Mail zu.'
+                : 'Ihr Konto wurde erstellt. Wir melden uns in Kürze bei Ihnen.';
 
             document.getElementById('pkgModalContent').innerHTML = `
             <div class="pkg-modal__header">
@@ -335,7 +375,7 @@
                 </div>
             </div>
             <div class="pkg-modal__body">
-                <p class="pkg-form__title">Konto erstellen & bezahlen</p>
+                <p class="pkg-form__title">Konto erstellen${isOnsite ? '' : ' &amp; bezahlen'}</p>
 
                 <div id="pkgFormWrap">
 
@@ -361,7 +401,6 @@
                         <div class="pkg-form__error" id="err_email"></div>
                     </div>
 
-                    {{-- After the name/phone row, before email --}}
                     <div class="pkg-form__group">
                         <label class="pkg-form__label" for="pf_language">Bevorzugte Sprache *</label>
                         <select class="pkg-form__input" id="pf_language">
@@ -384,23 +423,13 @@
                         </div>
                     </div>
 
-                    {{-- Step 2: Payment --}}
-                    <p class="pkg-form__step-label">② Zahlung</p>
-                    <p class="pkg-form__payment-note">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f54a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                        Sichere Zahlung via Stripe – CHF ${esc(opt.price_fmt)}
-                    </p>
-                    <label class="pkg-form__label">Kartendetails *</label>
-                    <div class="pkg-form__card-wrap" id="stripe-card-element">
-                        {{-- Stripe CardElement mounts here --}}
-                    </div>
-                    <div class="pkg-stripe-error" id="stripe-error"></div>
+                    ${paymentSection}
 
                     <div class="pkg-form__error" id="err_general" style="font-size:.78rem; margin-top:8px;"></div>
 
                     <button class="pkg-form__submit" id="pf_submit"
                         onclick="submitPkgForm('${esc(pkg.name)}', '${esc(opt.type)}', '${esc(String(opt.id))}')">
-                        Jetzt bezahlen & registrieren
+                        ${submitLabel}
                     </button>
                     <button class="pkg-form__cancel" onclick="closePkgModal()">Abbrechen</button>
                 </div>
@@ -411,32 +440,34 @@
                             <polyline points="20 6 9 17 4 12"/>
                         </svg>
                     </div>
-                    <h3>Zahlung & Registrierung erfolgreich!</h3>
-                    <p>Ihr Konto wurde erstellt. Wir melden uns in Kürze bei Ihnen.</p>
+                    <h3>${successTitle}</h3>
+                    <p>${successMsg}</p>
                     <button class="pkg-form__cancel" onclick="closePkgModal()">Schliessen</button>
                 </div>
             </div>`;
 
-            /* Mount Stripe CardElement */
-            stripeElements = stripe.elements();
-            cardElement = stripeElements.create('card', {
-                style: {
-                    base: {
-                        fontFamily: 'inherit',
-                        fontSize: '15px',
-                        color: '#2d2d2d',
-                        '::placeholder': { color: '#aaa' },
+            // Mount Stripe CardElement only for digital packages
+            if (! isOnsite) {
+                stripeElements = stripe.elements();
+                cardElement = stripeElements.create('card', {
+                    style: {
+                        base: {
+                            fontFamily: 'inherit',
+                            fontSize: '15px',
+                            color: '#2d2d2d',
+                            '::placeholder': { color: '#aaa' },
+                        },
+                        invalid: { color: '#e53e3e' },
                     },
-                    invalid: { color: '#e53e3e' },
-                },
-                hidePostalCode: true,
-            });
-            cardElement.mount('#stripe-card-element');
+                    hidePostalCode: true,
+                });
+                cardElement.mount('#stripe-card-element');
 
-            cardElement.on('change', function (event) {
-                const errEl = document.getElementById('stripe-error');
-                if (errEl) errEl.textContent = event.error ? event.error.message : '';
-            });
+                cardElement.on('change', function (event) {
+                    const errEl = document.getElementById('stripe-error');
+                    if (errEl) errEl.textContent = event.error ? event.error.message : '';
+                });
+            }
 
             document.getElementById('pkgModalOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -484,6 +515,67 @@
             if (hasError) return;
 
             const btn = document.getElementById('pf_submit');
+
+            // ────────────────────────────────────────────────────
+            // ONSITE: No payment at registration — just register
+            // ────────────────────────────────────────────────────
+            if (optType === 'onsite') {
+                if (btn) { btn.disabled = true; btn.textContent = 'Anfrage wird gesendet…'; }
+
+                try {
+                    const regRes = await fetch('{{ route("pricing.register") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name,
+                            phone,
+                            email,
+                            password,
+                            password_confirmation: confirm,
+                            selected_package:      pkgName,
+                            selected_option_type:  optType,
+                            preferred_language:    language,
+                        }),
+                    });
+
+                    const regData = await regRes.json();
+
+                    if (regRes.ok && regData.success) {
+                        document.getElementById('pkgFormWrap').style.display = 'none';
+                        document.getElementById('pkgFormSuccess').classList.add('visible');
+                    } else {
+                        if (regData.errors) {
+                            const map = {
+                                name:                  'err_name',
+                                email:                 'err_email',
+                                phone:                 'err_phone',
+                                password:              'err_password',
+                                password_confirmation: 'err_password_confirm',
+                            };
+                            Object.entries(regData.errors).forEach(([field, msgs]) => {
+                                if (map[field]) setError(map[field], msgs[0]);
+                            });
+                        } else {
+                            setError('err_general', regData.message || 'Ein Fehler ist aufgetreten.');
+                        }
+                        if (btn) { btn.disabled = false; btn.textContent = 'Anfrage senden'; }
+                    }
+
+                } catch (err) {
+                    setError('err_general', 'Verbindungsfehler. Bitte versuchen Sie es erneut.');
+                    if (btn) { btn.disabled = false; btn.textContent = 'Anfrage senden'; }
+                }
+
+                return; // stop here for onsite
+            }
+
+            // ────────────────────────────────────────────────────
+            // DIGITAL: Full Stripe payment flow, then register
+            // ────────────────────────────────────────────────────
             if (btn) { btn.disabled = true; btn.textContent = 'Zahlung wird verarbeitet…'; }
 
             try {
@@ -552,7 +644,7 @@
                         selected_package:      pkgName,
                         selected_option_type:  optType,
                         payment_intent_id:     paymentIntent.id,
-                        preferred_language: language,
+                        preferred_language:    language,
                     }),
                 });
 
