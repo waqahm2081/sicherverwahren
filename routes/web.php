@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OnsitePaymentController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PackagesController as AdminPackagesController;
@@ -18,6 +19,11 @@ Route::get('/about-us', function () { return view('about-us'); });
 Route::get('/pricing',  [PricingController::class, 'index'])->name('pricing.index');
 Route::post('/pricing/payment-intent', [PricingController::class, 'createPaymentIntent'])->name('pricing.paymentIntent');
 Route::post('/pricing/register', [PricingController::class, 'register'])->name('pricing.register');
+
+/* ── Onsite payment link (unique per user, sent after admin approval) ── */
+Route::get('/pay/{token}',          [OnsitePaymentController::class, 'show'])->name('onsite.pay.show');
+Route::post('/pay/{token}/intent',  [OnsitePaymentController::class, 'createIntent'])->name('onsite.pay.intent');
+Route::post('/pay/{token}/complete',[OnsitePaymentController::class, 'complete'])->name('onsite.pay.complete');
 
 Route::get('/workshops',        function () { return view('workshops'); });
 Route::get('/faqs',             function () { return view('faqs'); });
@@ -49,6 +55,13 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
     if (! $user->isAdmin() && ! $user->is_approved) {
         return back()->withErrors([
             'email' => 'Ihr Konto wurde noch nicht freigeschaltet. Sobald ein Administrator Ihr Konto genehmigt hat, können Sie sich anmelden. Bei Fragen kontaktieren Sie bitte den Support.',
+        ])->onlyInput('email');
+    }
+
+    // Block onsite users who are approved but have not yet completed payment
+    if (! $user->isAdmin() && $user->selected_option_type === 'onsite' && ! $user->payment_completed) {
+        return back()->withErrors([
+            'email' => 'Ihre Zahlung ist noch ausstehend. Bitte verwenden Sie den Zahlungslink, den wir Ihnen per E-Mail zugesendet haben, um Ihren Zugang freizuschalten.',
         ])->onlyInput('email');
     }
 
@@ -93,23 +106,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('/packages/{package}/toggle', [AdminPackagesController::class, 'toggleActive'])->name('packages.toggle');
         Route::delete('/packages/{package}',       [AdminPackagesController::class, 'destroy'])->name('packages.destroy');
 
-        Route::get   ('videos',           [VideosController::class, 'index'])   ->name('videos.index');
-        Route::get   ('videos/create',    [VideosController::class, 'create'])  ->name('videos.create');
-        Route::post  ('videos',           [VideosController::class, 'store'])   ->name('videos.store');
-        Route::get   ('videos/{video}/edit', [VideosController::class, 'edit'])->name('videos.edit');
-        Route::put   ('videos/{video}',   [VideosController::class, 'update'])  ->name('videos.update');
-        Route::delete('videos/{video}',   [VideosController::class, 'destroy']) ->name('videos.destroy');
-        Route::post  ('videos/reorder',   [VideosController::class, 'reorder']) ->name('videos.reorder');
+        Route::get   ('videos',              [VideosController::class, 'index'])   ->name('videos.index');
+        Route::get   ('videos/create',       [VideosController::class, 'create'])  ->name('videos.create');
+        Route::post  ('videos',              [VideosController::class, 'store'])   ->name('videos.store');
+        Route::get   ('videos/{video}/edit', [VideosController::class, 'edit'])    ->name('videos.edit');
+        Route::put   ('videos/{video}',      [VideosController::class, 'update'])  ->name('videos.update');
+        Route::delete('videos/{video}',      [VideosController::class, 'destroy']) ->name('videos.destroy');
+        Route::post  ('videos/reorder',      [VideosController::class, 'reorder']) ->name('videos.reorder');
 
         // Orders
-        Route::get('/orders',              [AdminOrdersController::class, 'index'])->name('orders.index');
-        Route::get('/orders/{user}',       [AdminOrdersController::class, 'show'])->name('orders.show');
+        Route::get('/orders',        [AdminOrdersController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{user}', [AdminOrdersController::class, 'show'])->name('orders.show');
 
         // Users
-        Route::get('/users',               [AdminUsersController::class, 'index'])->name('users.index');
-        Route::get('/users/{user}/edit',   [AdminUsersController::class, 'edit'])->name('users.edit');
-        Route::put('/users/{user}',        [AdminUsersController::class, 'update'])->name('users.update');
-        Route::delete('/users/{user}',     [AdminUsersController::class, 'destroy'])->name('users.destroy');
-        Route::patch('/users/{user}/approve',     [AdminUsersController::class, 'approve'])->name('users.approve'); // NEW
+        Route::get('/users',                  [AdminUsersController::class, 'index'])->name('users.index');
+        Route::get('/users/{user}/edit',      [AdminUsersController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{user}',           [AdminUsersController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}',        [AdminUsersController::class, 'destroy'])->name('users.destroy');
+        Route::patch('/users/{user}/approve', [AdminUsersController::class, 'approve'])->name('users.approve');
     });
 });
