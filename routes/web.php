@@ -5,25 +5,35 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OnsitePaymentController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PackagesController as AdminPackagesController;
 use App\Http\Controllers\Admin\OrdersController as AdminOrdersController;
 use App\Http\Controllers\Admin\UsersController as AdminUsersController;
 use App\Http\Controllers\Admin\VideosController as VideosController;
+use App\Http\Controllers\Admin\BlogsController as AdminBlogsController;
 
 /* ── Public pages ── */
-Route::get('/', function () { return view('index'); });
+Route::get('/', function () {
+    $latestBlogs = \App\Models\Blog::with('category')
+        ->published()
+        ->latest('published_at')
+        ->limit(3)
+        ->get();
+    return view('index', compact('latestBlogs'));
+});
+
 Route::get('/about-us', function () { return view('about-us'); });
 
 Route::get('/pricing',  [PricingController::class, 'index'])->name('pricing.index');
 Route::post('/pricing/payment-intent', [PricingController::class, 'createPaymentIntent'])->name('pricing.paymentIntent');
 Route::post('/pricing/register', [PricingController::class, 'register'])->name('pricing.register');
 
-/* ── Onsite payment link (unique per user, sent after admin approval) ── */
-Route::get('/pay/{token}',          [OnsitePaymentController::class, 'show'])->name('onsite.pay.show');
-Route::post('/pay/{token}/intent',  [OnsitePaymentController::class, 'createIntent'])->name('onsite.pay.intent');
-Route::post('/pay/{token}/complete',[OnsitePaymentController::class, 'complete'])->name('onsite.pay.complete');
+/* ── Onsite payment link ── */
+Route::get('/pay/{token}',           [OnsitePaymentController::class, 'show'])->name('onsite.pay.show');
+Route::post('/pay/{token}/intent',   [OnsitePaymentController::class, 'createIntent'])->name('onsite.pay.intent');
+Route::post('/pay/{token}/complete', [OnsitePaymentController::class, 'complete'])->name('onsite.pay.complete');
 
 Route::get('/workshops',        function () { return view('workshops'); });
 Route::get('/faqs',             function () { return view('faqs'); });
@@ -32,6 +42,18 @@ Route::get('/impressum',        function () { return view('impressum'); });
 Route::get('/datenschutz',      function () { return view('datenschutz'); });
 Route::get('/agb',              function () { return view('agb'); });
 Route::get('/legal-disclaimer', function () { return view('legal-disclaimer'); });
+
+/* ── Blog (public) ── */
+Route::get('/blog',        [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::post('/lead/submit', [BlogController::class, 'submitLead'])->name('lead.submit');
+
+/* ── XML Sitemap ── */
+Route::get('/sitemap.xml', function () {
+    $blogs = \App\Models\Blog::published()->latest('published_at')->get();
+    $content = view('sitemap', compact('blogs'))->render();
+    return response($content, 200)->header('Content-Type', 'application/xml');
+})->name('sitemap');
 
 /* ── User auth ── */
 Route::get('/login', fn () => view('login'))->name('login')->middleware('guest');
@@ -42,7 +64,6 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
         'password' => ['required'],
     ]);
 
-    // Check credentials first without logging in
     if (! Auth::validate($credentials)) {
         return back()->withErrors([
             'email' => 'Die eingegebenen Zugangsdaten sind ungültig.',
@@ -51,14 +72,12 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
 
     $user = \App\Models\User::where('email', $credentials['email'])->first();
 
-    // Block unapproved non-admin users
     if (! $user->isAdmin() && ! $user->is_approved) {
         return back()->withErrors([
             'email' => 'Ihr Konto wurde noch nicht freigeschaltet. Sobald ein Administrator Ihr Konto genehmigt hat, können Sie sich anmelden. Bei Fragen kontaktieren Sie bitte den Support.',
         ])->onlyInput('email');
     }
 
-    // Block onsite users who are approved but have not yet completed payment
     if (! $user->isAdmin() && $user->selected_option_type === 'onsite' && ! $user->payment_completed) {
         return back()->withErrors([
             'email' => 'Ihre Zahlung ist noch ausstehend. Bitte verwenden Sie den Zahlungslink, den wir Ihnen per E-Mail zugesendet haben, um Ihren Zugang freizuschalten.',
@@ -88,7 +107,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('guest')->group(function () {
-        Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
+        Route::get('/login',  [AdminAuthController::class, 'showLogin'])->name('login');
         Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
     });
 
@@ -106,6 +125,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('/packages/{package}/toggle', [AdminPackagesController::class, 'toggleActive'])->name('packages.toggle');
         Route::delete('/packages/{package}',       [AdminPackagesController::class, 'destroy'])->name('packages.destroy');
 
+        // Videos
         Route::get   ('videos',              [VideosController::class, 'index'])   ->name('videos.index');
         Route::get   ('videos/create',       [VideosController::class, 'create'])  ->name('videos.create');
         Route::post  ('videos',              [VideosController::class, 'store'])   ->name('videos.store');
@@ -124,5 +144,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/users/{user}',           [AdminUsersController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}',        [AdminUsersController::class, 'destroy'])->name('users.destroy');
         Route::patch('/users/{user}/approve', [AdminUsersController::class, 'approve'])->name('users.approve');
+
+        // Blog Categories MUST come before /blogs/{blog} wildcard routes
+        Route::get('/blogs/categories',               [AdminBlogsController::class, 'categoriesIndex'])->name('blogs.categories');
+        Route::post('/blogs/categories',              [AdminBlogsController::class, 'categoryStore'])->name('blogs.category.store');
+        Route::put('/blogs/categories/{category}',    [AdminBlogsController::class, 'categoryUpdate'])->name('blogs.category.update');
+        Route::delete('/blogs/categories/{category}', [AdminBlogsController::class, 'categoryDestroy'])->name('blogs.category.destroy');
+
+        // Blogs
+        Route::get('/blogs',             [AdminBlogsController::class, 'index'])->name('blogs.index');
+        Route::get('/blogs/create',      [AdminBlogsController::class, 'create'])->name('blogs.create');
+        Route::post('/blogs',            [AdminBlogsController::class, 'store'])->name('blogs.store');
+        Route::get('/blogs/{blog}/edit', [AdminBlogsController::class, 'edit'])->name('blogs.edit');
+        Route::put('/blogs/{blog}',      [AdminBlogsController::class, 'update'])->name('blogs.update');
+        Route::delete('/blogs/{blog}',   [AdminBlogsController::class, 'destroy'])->name('blogs.destroy');
     });
 });

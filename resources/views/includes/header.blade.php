@@ -32,7 +32,7 @@
                             <li class="nav-item"><a class="nav-link" href="/pricing">Leistungen & Preise</a></li>
                             <li class="nav-item"><a class="nav-link" href="/workshops">Workshops</a></li>
                             <li class="nav-item"><a class="nav-link" href="/faqs">FAQs</a></li>
-                            <!-- <li class="nav-item"><a class="nav-link" href="/blogs">Blogs</a></li> -->
+                            <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
                             <li class="nav-item"><a class="nav-link" href="/contact-us" style="text-transform: inherit;">Kontaktieren Sie uns</a></li>
                         </ul>
                     </div>
@@ -52,7 +52,7 @@
                                 Dashboard
                             </a>
 
-                            {{-- Logout button (smaller, outline-style) --}}
+                            {{-- Logout button --}}
                             <form action="{{ route('logout') }}" method="POST" style="margin:0;">
                                 @csrf
                                 <button type="submit" style="
@@ -79,7 +79,7 @@
                                 </button>
                             </form>
                         @else
-                            {{-- User not logged in → show Login + CTA --}}
+                            {{-- User not logged in → show Login --}}
                             <a href="{{ route('login') }}" class="btn-default">
                                 <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
@@ -88,7 +88,6 @@
                                 </svg>
                                 Anmelden
                             </a>
-                            <!-- <a href="/contact-us" class="btn-default">Legen Sie los</a> -->
                         @endauth
 
                     </div>
@@ -101,9 +100,7 @@
     </div>
 </header>
 
-{{-- ── Mobile nav also includes auth links ── --}}
 <style>
-    /* Ensure auth buttons look right in responsive menu too */
     .slicknav_menu .header-auth-mobile {
         padding: 10px 20px 15px;
         display: flex;

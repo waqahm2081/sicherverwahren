@@ -545,33 +545,106 @@
     </div>
 
 
+    {{-- ── Latest Blog Articles ────────────────────────────────────────────── --}}
+    @if(isset($latestBlogs) && $latestBlogs->isNotEmpty())
+    <div class="our-testimonials" style="padding-top:0;">
+        <div class="container">
+            <div class="row section-row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h3 class="wow fadeInUp">Wissen & Tipps</h3>
+                        <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">Neueste <span>Artikel</span></h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                @foreach($latestBlogs as $blog)
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="{{ $loop->index * 0.1 }}s">
+                    <div class="service-item" style="display:flex;flex-direction:column;height:100%;">
+                        @if($blog->featured_image)
+                            <a href="{{ route('blog.show', $blog->slug) }}" style="display:block;border-radius:12px;overflow:hidden;margin-bottom:18px;aspect-ratio:16/9;">
+                                <img src="{{ asset('storage/'.$blog->featured_image) }}" alt="{{ $blog->title }}"
+                                     style="width:100%;height:100%;object-fit:cover;transition:transform .4s;" loading="lazy"
+                                     onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                            </a>
+                        @else
+                            <a href="{{ route('blog.show', $blog->slug) }}" style="display:flex;align-items:center;justify-content:center;border-radius:12px;aspect-ratio:16/9;background:linear-gradient(135deg,#f4f2f9,#ede9f5);margin-bottom:18px;">
+                                <svg style="width:40px;height:40px;fill:#c8bde0;" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                            </a>
+                        @endif
+
+                        @if($blog->category)
+                            <span style="display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#6f54a4;background:rgba(111,84,164,.08);padding:3px 10px;border-radius:20px;margin-bottom:10px;width:fit-content;">{{ $blog->category->name }}</span>
+                        @endif
+
+                        <div class="service-title-box" style="margin-bottom:10px;">
+                            <div class="service-title">
+                                <h3><a href="{{ route('blog.show', $blog->slug) }}">{{ Str::limit($blog->title, 65) }}</a></h3>
+                            </div>
+                            <div class="service-btn">
+                                <a href="{{ route('blog.show', $blog->slug) }}">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        @if($blog->excerpt)
+                            <div class="service-content" style="flex:1;">
+                                <p>{{ Str::limit($blog->excerpt, 100) }}</p>
+                            </div>
+                        @endif
+
+                        <div style="font-size:12px;color:#a89fc0;margin-top:14px;display:flex;align-items:center;gap:12px;">
+                            <span>{{ $blog->author }}</span>
+                            @if($blog->published_at)
+                                <span>·</span>
+                                <span>{{ $blog->published_at->format('d.m.Y') }}</span>
+                            @endif
+                            <span>·</span>
+                            <span>{{ $blog->reading_time }} Min.</span>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            <div class="row" style="margin-top:36px;">
+                <div class="col-12 text-center">
+                    <a href="{{ route('blog.index') }}" class="btn-default wow fadeInUp">
+                        Alle Artikel anzeigen
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    {{-- ── Lead Generation Section ─────────────────────────────────────────── --}}
     <div class="cta-box-section" style="padding: 0px 0 60px">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <!-- CTA Box Start -->
-                    <div class="cta-box">
-                        <!-- CTA Box Content Start -->
-                        <div class="cta-box-content">
-                            <!-- Section Title Start -->
-                            <div class="section-title dark-section">
+                    <div class="cta-box" style="flex-direction:column;gap:24px;padding:40px 48px;">
+                        <div class="cta-box-content" style="flex:unset;width:100%;text-align:center;">
+                            <div class="section-title dark-section" style="text-align:center;">
                                 <h2 class="wow fadeInUp" data-cursor="-opaque">Sichern Sie sich jetzt Ihre kostenlose Checkliste</h2>
-                                <p>Die 5 essentiellen Schritte, die JEDER Bitcoin-Besitzer VOR der Einrichtung einer Hardware-Wallet gehen muss.</p>
+                                <p style="max-width:540px;margin:0 auto 28px;">Die 5 essentiellen Schritte, die JEDER Bitcoin-Besitzer VOR der Einrichtung einer Hardware-Wallet gehen muss.</p>
                             </div>
-                            <!-- Section Title End -->
-                            
+                            <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                                <button onclick="openLeadModal('checklist')"
+                                        class="btn-default btn-highlighted"
+                                        style="background:linear-gradient(135deg,#fff,#f4f2f9);color:#6f54a4;border:none;cursor:pointer;font-family:inherit;">
+                                    Kostenlose Checkliste herunterladen
+                                </button>
+                                <button onclick="openLeadModal('training')"
+                                        class="btn-default"
+                                        style="background:transparent;border:2px solid rgba(255,255,255,.4);color:#fff;cursor:pointer;font-family:inherit;">
+                                    Zur Trainingsplattform
+                                </button>
+                            </div>
                         </div>
-                        <!-- CTA Box Content End -->
-
-                        <!-- CTA Box Image Start -->
-                        <div class="cta-box-image">
-                            <figure class="image-anime reveal">
-                                <img src="/images/cta-box-image.jpg" alt="">
-                            </figure>
-                        </div>
-                        <!-- CTA Box Image End -->
                     </div>
-                    <!-- CTA Box End -->
                 </div>
             </div>
         </div>
@@ -579,7 +652,7 @@
 
 
     @include('includes.footer')
-
+    @include('includes.lead-modal')
     @include('includes.scripts')
     
     
