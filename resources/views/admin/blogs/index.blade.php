@@ -24,6 +24,10 @@
         .blog-thumb { width:48px;height:48px;border-radius:8px;object-fit:cover;border:1.5px solid var(--border-light); }
         .blog-thumb-placeholder { width:48px;height:48px;border-radius:8px;background:var(--bg);border:1.5px solid var(--border-light);display:flex;align-items:center;justify-content:center; }
         .blog-thumb-placeholder svg { width:20px;height:20px;fill:var(--muted-light); }
+        td svg {
+            width: 20px;
+            height: 20px;
+        }
     </style>
 </head>
 <body>
