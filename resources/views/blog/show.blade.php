@@ -70,7 +70,7 @@
         .article-meta { display: flex; flex-wrap: wrap; gap: 20px; color: rgba(255,255,255,.6); font-size: 13.5px; padding-bottom: 40px; }
         .article-meta span { display: flex; align-items: center; gap: 6px; }
         .article-meta svg { width: 15px; height: 15px; fill: rgba(255,255,255,.4); }
-        .article-hero__img { width: 100%; max-height: 420px; object-fit: cover; display: block; border-radius: 0; }
+        .article-hero__img { width: 100%; object-fit: cover; display: block; margin-top: 50px; border-radius: 20px;  }
 
         .article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 60px 0 80px; align-items: start; }
         @media(max-width:1024px){ .article-layout{grid-template-columns:1fr;} }
