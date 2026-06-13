@@ -34,7 +34,7 @@
         .blog-card { background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid #ede9f5; box-shadow: 0 2px 12px rgba(111,84,164,.06); transition: transform .25s, box-shadow .25s; display: flex; flex-direction: column; }
         .blog-card:hover { transform: translateY(-4px); box-shadow: 0 10px 32px rgba(111,84,164,.14); }
         .blog-card__img { aspect-ratio: 16/9; overflow: hidden; background: #f4f2f9; }
-        .blog-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+        .blog-card__img img { width: 100%; height: 100%; transition: transform .4s; }
         .blog-card:hover .blog-card__img img { transform: scale(1.05); }
         .blog-card__img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
         .blog-card__img-placeholder svg { width: 48px; height: 48px; fill: #c8bde0; }
