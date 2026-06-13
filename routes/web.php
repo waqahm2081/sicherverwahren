@@ -48,13 +48,6 @@ Route::get('/blog',        [BlogController::class, 'index'])->name('blog.index')
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::post('/lead/submit', [BlogController::class, 'submitLead'])->name('lead.submit');
 
-/* ── XML Sitemap ── */
-Route::get('/sitemap.xml', function () {
-    $blogs = \App\Models\Blog::published()->latest('published_at')->get();
-    $content = view('sitemap', compact('blogs'))->render();
-    return response($content, 200)->header('Content-Type', 'application/xml');
-})->name('sitemap');
-
 /* ── User auth ── */
 Route::get('/login', fn () => view('login'))->name('login')->middleware('guest');
 
