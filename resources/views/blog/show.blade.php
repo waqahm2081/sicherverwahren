@@ -163,11 +163,11 @@
     {{-- Article Body --}}
     <section>
         <div class="container">
-            <div class="article-layout">
-
             @if($blog->featured_image)
                 <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->title }}" class="article-hero__img">
             @endif
+            <div class="article-layout">
+
 
                 {{-- Content --}}
                 <div>
