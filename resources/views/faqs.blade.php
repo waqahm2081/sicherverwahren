@@ -7,7 +7,66 @@
     <meta name="description" content="Antworten zu den wichtigsten Fragen rund um Bitcoin Verwahrung: Hardware Wallets, Multisig, Backup, Sicherheit und Risiken. Bitcoin Sicherheitsberatung für Deutschland, Österreich und die Schweiz.">
 	
     @include('includes.styles')
-    
+
+    <link rel="canonical" href="{{ url('/faqs') }}">
+
+    {{-- FAQPage Schema (hardcoded – matches visible accordion Q&As) --}}
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'FAQPage',
+        'mainEntity' => [
+            [
+                '@type' => 'Question',
+                'name' => 'Was passiert, wenn ich meine Hardware-Wallet verliere oder sie kaputt geht?',
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => 'Das ist kein Problem, solange Sie Ihr Backup (die 24 Wörter, auch "Seed" genannt) sicher aufbewahrt haben. Ihre Bitcoin ist nicht auf dem physischen Gerät, sondern auf der Blockchain gespeichert. Die Hardware-Wallet ist nur der Schlüssel dazu. Mit Ihrem Backup können Sie Ihre Bitcoin jederzeit auf einer neuen Wallet wiederherstellen. Wir zeigen Ihnen im Service genau, wie das funktioniert und wo Sie Ihr Backup am besten lagern.',
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => 'Kann ich auch andere Kryptowährungen wie Ethereum mit Ihnen sichern?',
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => 'Nein. Wir konzentrieren uns ausschließlich auf Bitcoin. Wir sind überzeugte Bitcoiner und unterstützen aus Überzeugung und für maximale Sicherheit keine anderen Kryptowährungen. Unsere Expertise, unsere Prozesse und die von uns empfohlene Hardware (BitBox02 Bitcoin-only) sind spezifisch auf Bitcoin optimiert.',
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => 'Wie lange dauert ein typischer Einrichtungstermin?',
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => 'Die Dauer hängt vom gewählten Paket ab. Private Starter: Ca. 1,5 - 2 Stunden. Private Secure / Business Essential: Ca. 3 - 4 Stunden. Business Professional: Ca. 4 - 5 Stunden. Business Enterprise: Ein Tag oder mehrere Termine.',
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => 'Ist die Hardware-Wallet im Paketpreis inbegriffen?',
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => 'Ja, absolut. Der Preis ist all-inclusive. Sie bezahlen einmalig für das Paket und erhalten dafür die Hardware, die persönliche Einrichtung bei Ihnen vor Ort, die Schulung und die Dokumentation. Es gibt keine versteckten Kosten.',
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => 'Warum sollte ich Sie beauftragen und es nicht selbst machen?',
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => 'Weil es um Ihr wertvolles Vermögen geht. Der Teufel steckt im Detail: Ein Tippfehler beim Aufschreiben des Seeds, ein unsicheres Backup-Medium oder ein falsch konfiguriertes Multi-Signature-Setup kann zu einem unwiederbringlichen Verlust führen. Wir bringen jahrelange Erfahrung und wissen, worauf es ankommt. Wir sorgen dafür, dass es von Anfang an richtig und sicher gemacht wird, damit Sie beruhigt schlafen können.',
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => 'Stellen Quantencomputer ein Risiko für Bitcoin dar – und wann?',
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => 'Adam Back (CEO von Blockstream, Erfinder von Hashcash) sieht Quantencomputer für Bitcoin als "ridiculously early" – eine echte Bedrohung frühestens in 20–40 Jahren. Quantencomputer werden zuerst leichtere Ziele wie Banken und Militär angreifen, und Mining wäre ökonomisch attraktiver als ein Angriff. Fazit: Kein Grund zur Sorge. Das Fenster für ein geordnetes Upgrade ist groß, und die Ökonomie spricht gegen einen Angriff.',
+                ],
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+    </script>
 
 </head>
 <body>

@@ -1,3 +1,13 @@
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CFVSPGM8J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CFVSPGM8J4');
+</script>
+
 <!-- Meta -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -5,6 +15,10 @@
 
 <meta name="robots" content="index, follow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="/images/loader.jpg" type="image/jpeg">
+<link rel="shortcut icon" href="/images/loader.jpg" type="image/jpeg">
+<link rel="apple-touch-icon" href="/images/loader.jpg">
 
 <!-- Open Graph Tags for Social Media -->
 <meta property="og:title" content="Sicher Bitcoin Verwahren – Bitcoin sicher verwahren in der Schweiz">

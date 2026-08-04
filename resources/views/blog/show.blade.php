@@ -27,26 +27,39 @@
     <meta name="twitter:image"       content="{{ asset('storage/' . $blog->featured_image) }}">
     @endif
 
-    {{-- Article Schema --}}
+    {{-- BlogPosting Schema --}}
+    @php
+        $articleSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'BlogPosting',
+            'headline' => $blog->title,
+            'description' => $blog->meta_description
+                ?: Str::limit(strip_tags($blog->excerpt ?: $blog->content), 160),
+            'author' => [
+                '@type' => 'Person',
+                'name' => $blog->author ?: 'Sicher Bitcoin Verwahren',
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Sicher Bitcoin Verwahren',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => asset('images/logo.jpg'),
+                ],
+            ],
+            'datePublished' => ($blog->published_at ?? $blog->created_at)?->toIso8601String(),
+            'dateModified' => $blog->updated_at->toIso8601String(),
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => url('/blog/' . $blog->slug),
+            ],
+        ];
+        if ($blog->featured_image) {
+            $articleSchema['image'] = asset('storage/' . $blog->featured_image);
+        }
+    @endphp
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "{{ addslashes($blog->title) }}",
-        "description": "{{ addslashes(Str::limit(strip_tags($blog->excerpt ?: $blog->content), 160)) }}",
-        "author": {"@type":"Person","name":"{{ $blog->author }}"},
-        "publisher": {
-            "@type": "Organization",
-            "name": "Sicher Bitcoin Verwahren",
-            "logo": {"@type":"ImageObject","url":"https://sicher-bitcoin-verwahren.ch/images/logo.jpg"}
-        },
-        "datePublished": "{{ $blog->published_at?->toIso8601String() }}",
-        "dateModified":  "{{ $blog->updated_at->toIso8601String() }}",
-        "mainEntityOfPage": {"@type":"WebPage","@id":"{{ url('/blog/'.$blog->slug) }}"}
-        @if($blog->featured_image)
-        ,"image": "{{ asset('storage/'.$blog->featured_image) }}"
-        @endif
-    }
+    {!! json_encode($articleSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
 
     {{-- Breadcrumb Schema --}}
