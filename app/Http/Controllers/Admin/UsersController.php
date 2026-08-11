@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\HardwareShippedMail;
+use App\Mail\OnsitePaymentLink;
 use App\Mail\UserApproved;
-use App\Models\User;
 use App\Models\PricingPackage;
+use App\Models\PricingPackageOption;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -62,21 +64,73 @@ class UsersController extends Controller
         abort_if($user->role === 'admin', 403);
 
         if ($user->selected_option_type === 'onsite') {
-            // Generate a unique payment token and send a payment-link email.
-            // Do NOT set is_approved yet — that happens after payment.
-            $token = \Illuminate\Support\Str::random(48);
-            $user->update(['payment_token' => $token]);
-
-            Mail::to($user->email)->send(new \App\Mail\OnsitePaymentLink($user));
-
-            return back()->with('success', 'Zahlungslink an „' . $user->name . '" gesendet. Konto wird nach Zahlung freigeschaltet.');
+            return redirect()
+                ->route('admin.orders.show', $user)
+                ->with('info', 'Bitte Termin und Betrag hinterlegen und den Zahlungslink von der Bestellseite senden.');
         }
 
-        // Digital users: approve immediately (existing behaviour)
-        $user->update(['is_approved' => true]);
-        Mail::to($user->email)->send(new UserApproved($user));
+        // Digital: activate 60-day access from approval
+        $user->activateCourseAccess();
+        Mail::to($user->email)->send(new UserApproved($user->fresh()));
 
         return back()->with('success', 'Benutzer „' . $user->name . '" wurde freigeschaltet.');
+    }
+
+    public function sendPaymentLink(Request $request, User $user)
+    {
+        abort_if($user->role === 'admin', 403);
+        abort_unless($user->selected_option_type === 'onsite', 422);
+
+        $option = PricingPackageOption::whereHas('package', fn ($q) => $q->where('name', $user->selected_package))
+            ->where('type', 'onsite')
+            ->first();
+
+        $validated = $request->validate([
+            'quoted_amount_chf'    => ['required', 'integer', 'min:1'],
+            'appointment_date'     => ['required', 'string', 'max:255'],
+            'appointment_location' => ['required', 'string', 'max:255'],
+            'contact_person'       => ['nullable', 'string', 'max:255'],
+        ]);
+
+        // Prefer submitted amount; fall back to catalogue price if somehow empty
+        if (empty($validated['quoted_amount_chf']) && $option) {
+            $validated['quoted_amount_chf'] = (int) $option->price_chf;
+        }
+
+        $token = Str::random(48);
+
+        $user->update([
+            'payment_token'        => $token,
+            'quoted_amount_chf'    => $validated['quoted_amount_chf'],
+            'appointment_date'     => $validated['appointment_date'],
+            'appointment_location' => $validated['appointment_location'],
+            'contact_person'       => $validated['contact_person'] ?? 'Sicher Bitcoin Verwahren',
+        ]);
+
+        Mail::to($user->email)->send(new OnsitePaymentLink($user->fresh()));
+
+        return back()->with('success', 'Zahlungslink an „' . $user->name . '" gesendet.');
+    }
+
+    public function markShipped(Request $request, User $user)
+    {
+        abort_if($user->role === 'admin', 403);
+        abort_unless($user->selected_option_type === 'digital', 422);
+
+        $validated = $request->validate([
+            'shipping_date'   => ['required', 'date'],
+            'tracking_number' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $user->update([
+            'shipped_at'      => now(),
+            'shipping_date'   => $validated['shipping_date'],
+            'tracking_number' => $validated['tracking_number'] ?: null,
+        ]);
+
+        Mail::to($user->email)->send(new HardwareShippedMail($user->fresh()));
+
+        return back()->with('success', 'Versandbestätigung an „' . $user->name . '" gesendet.');
     }
 
     public function edit(User $user)
@@ -108,7 +162,7 @@ class UsersController extends Controller
         ];
 
         if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+            $data['password'] = $request->password;
         }
 
         $user->update($data);
@@ -122,6 +176,7 @@ class UsersController extends Controller
         abort_if($user->role === 'admin', 403);
         $name = $user->name;
         $user->delete();
+
         return back()->with('success', 'Benutzer „' . $name . '" wurde gelöscht.');
     }
 }

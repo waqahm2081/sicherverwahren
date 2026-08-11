@@ -13,13 +13,19 @@ class UserApproved extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public User $user) {}
+    public string $expiryDate;
+
+    public function __construct(public User $user)
+    {
+        $this->expiryDate = optional($user->access_ends_at)->format('d.m.Y')
+            ?? now()->addDays(60)->format('d.m.Y');
+    }
 
     public function envelope(): Envelope
     {
         $subject = $this->user->preferred_language === 'en'
             ? 'Your account has been approved'
-            : 'Ihr Konto wurde freigeschaltet';
+            : 'Ihr Zugang wurde freigeschaltet – ' . ($this->user->selected_package ?? 'Paket');
 
         return new Envelope(subject: $subject);
     }

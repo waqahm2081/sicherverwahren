@@ -17,9 +17,15 @@ class OnsitePaymentLink extends Mailable
 
     public function envelope(): Envelope
     {
-        $subject = $this->user->preferred_language === 'en'
-            ? 'Your appointment is confirmed – complete your payment'
-            : 'Ihr Termin wurde bestätigt – Zahlung abschliessen';
+        $isEnterprise = stripos((string) $this->user->selected_package, 'Enterprise') !== false;
+
+        if ($this->user->preferred_language === 'en') {
+            $subject = 'Your appointment is confirmed – complete your payment';
+        } elseif ($isEnterprise) {
+            $subject = 'Ihr persönlicher Zahlungslink – Business Enterprise';
+        } else {
+            $subject = 'Ihr persönlicher Zahlungslink – ' . ($this->user->selected_package ?? 'Vor-Ort-Service');
+        }
 
         return new Envelope(subject: $subject);
     }

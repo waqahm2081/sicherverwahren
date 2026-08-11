@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrierung erhalten</title>
+    <title>{{ $user->selected_option_type === 'onsite' ? 'Anfrage eingegangen' : 'Bestellung bestätigt' }}</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f4f4f4;font-family:Arial,Helvetica,sans-serif;">
 
@@ -28,70 +28,86 @@
                 {{-- Body --}}
                 <tr>
                     <td style="padding:32px 36px 20px;">
-                        <h1 style="margin:0 0 16px 0;font-size:22px;color:#2d2d2d;font-weight:bold;">Guten Tag {{ $user->name }},</h1>
                         <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            Vielen Dank für Ihre Zahlung.
-                        </p>
-                        <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            Wir haben den Zahlungseingang erhalten und bestellen nun die für Ihr Paket benötigte Hardware.
-                        </p>
-                        <p style="margin:0 0 24px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            Sobald diese bei uns eingetroffen ist, informieren wir Sie über den Start Ihres Projekts bzw. schalten Ihren Zugang zu den Schulungsinhalten frei.
+                            Guten Tag {{ $user->name }},
                         </p>
 
-                        {{-- Package summary --}}
-                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f7ff;border-radius:5px;border:1px solid #e4ddf5;margin-bottom:24px;">
-                            <tr>
-                                <td style="padding:14px 18px;border-bottom:1px solid #e4ddf5;">
-                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                        <tr>
-                                            <td width="130" style="font-size:13px;color:#888888;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;">Paket</td>
-                                            <td style="font-size:14px;color:#2d2d2d;">{{ $user->selected_package ?? '—' }}</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding:14px 18px;">
-                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                        <tr>
-                                            <td width="130" style="font-size:13px;color:#888888;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;">Service-Typ</td>
-                                            <td style="font-size:14px;color:#2d2d2d;">{{ ucfirst($user->selected_option_type ?? '—') }}</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
+                        @if($user->selected_option_type === 'onsite')
+                            <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                                vielen Dank für Ihr Interesse an {{ $user->selected_package ?? 'Business Enterprise' }}.
+                            </p>
+                            <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                                Da jede Unternehmensstruktur unterschiedliche Anforderungen an Rollen, Berechtigungen, Governance, Notfallplanung und technische Umsetzung stellt, prüfen wir Ihre Angaben persönlich.
+                            </p>
+                            <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                                Wir melden uns innerhalb von 1–2 Arbeitstagen bei Ihnen, um Ihre Ausgangslage, den gewünschten Projektumfang und das weitere Vorgehen zu besprechen.
+                            </p>
+                            <p style="margin:0 0 24px 0;font-size:15px;color:#444444;line-height:1.6;">
+                                Zu diesem Zeitpunkt ist noch keine Zahlung erforderlich. Den persönlichen Zahlungslink erhalten Sie erst nach der gemeinsamen Abstimmung und Terminvereinbarung.
+                            </p>
+                        @else
+                            <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                                vielen Dank für Ihr Vertrauen und Ihre Bestellung bei Sicher Bitcoin Verwahren.
+                            </p>
+                            <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                                Wir bestätigen den erfolgreichen Zahlungseingang für folgendes Paket:
+                            </p>
 
-                        {{-- Pending notice --}}
-                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
-                            <tr>
-                                <td style="background-color:#f0f7ff;border-left:4px solid #6f54a4;padding:14px 16px;border-radius:4px;">
-                                    <p style="margin:0;font-size:14px;color:#2d2d2d;line-height:1.6;">
-                                        Ihr Konto wird derzeit überprüft. Unser Team wird Ihre Registrierung prüfen, und Sie erhalten eine weitere E-Mail, sobald Ihr Konto freigeschaltet wurde.
-                                    </p>
-                                </td>
-                            </tr>
-                        </table>
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f7ff;border-radius:5px;border:1px solid #e4ddf5;margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:14px 18px;border-bottom:1px solid #e4ddf5;">
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td width="130" style="font-size:13px;color:#888888;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;">Paket</td>
+                                                <td style="font-size:14px;color:#2d2d2d;">{{ $user->selected_package ?? '—' }}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:14px 18px;border-bottom:1px solid #e4ddf5;">
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td width="130" style="font-size:13px;color:#888888;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;">Leistungsart</td>
+                                                <td style="font-size:14px;color:#2d2d2d;">Digital</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:14px 18px;">
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td width="130" style="font-size:13px;color:#888888;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;">Betrag</td>
+                                                <td style="font-size:14px;color:#2d2d2d;">CHF {{ $amountFormatted ?? '—' }}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
 
-                        <p style="margin:0 0 6px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            Sollten Sie in der Zwischenzeit Fragen haben, können Sie uns jederzeit unter
-                            <a href="mailto:{{ config('mail.from.address') }}" style="color:#6f54a4;text-decoration:none;">{{ config('mail.from.address') }}</a> kontaktieren.
-                        </p>
+                            <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                                Ihr persönliches Hardware-Paket wird nun für Sie vorbereitet. Sobald es versendet wurde, erhalten Sie eine separate Versandbestätigung.
+                            </p>
+                            <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                                Nach der Zustellung aktivieren wir Ihren persönlichen Zugang zur Trainingsplattform. Ab der Freischaltung stehen Ihnen die zu Ihrem Paket gehörenden Videoinhalte während 60 Tagen zur Verfügung.
+                            </p>
+                            <p style="margin:0 0 24px 0;font-size:15px;color:#444444;line-height:1.6;">
+                                Bei Fragen erreichen Sie uns jederzeit unter
+                                <a href="mailto:info@sicher-bitcoin-verwahren.ch" style="color:#6f54a4;text-decoration:none;">info@sicher-bitcoin-verwahren.ch</a>.
+                            </p>
+                        @endif
                     </td>
                 </tr>
 
                 {{-- Footer --}}
                 <tr>
                     <td style="padding:20px 36px 28px;border-top:1px solid #eeeeee;">
-                        <p style="margin:0 0 4px 0;font-size:12px;color:#aaaaaa;line-height:1.6;">
+                        <p style="margin:0;font-size:12px;color:#aaaaaa;line-height:1.6;">
                             Freundliche Grüsse<br>
                             Ihr Team von Sicher Bitcoin Verwahren<br>
                             <a href="https://www.sicher-bitcoin-verwahren.ch" style="color:#aaaaaa;text-decoration:none;">www.sicher-bitcoin-verwahren.ch</a> &nbsp;|&nbsp;
                             <a href="mailto:info@sicher-bitcoin-verwahren.ch" style="color:#aaaaaa;text-decoration:none;">info@sicher-bitcoin-verwahren.ch</a>
-                        </p>
-                        <p style="margin:12px 0 0;font-size:12px;color:#aaaaaa;line-height:1.6;">
-                            Sie erhalten diese E-Mail, weil Sie sich auf sicher-bitcoin-verwahren.ch registriert haben. Falls Sie dies nicht waren, kontaktieren Sie uns bitte sofort.
                         </p>
                     </td>
                 </tr>

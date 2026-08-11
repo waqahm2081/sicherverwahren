@@ -395,22 +395,26 @@
                         </div>
                         <div class="adm-detail-card__body">
                             @php
-                                $daysSince    = $user->created_at->diffInDays(now());
-                                $daysLeft     = max(0, 30 - $daysSince);
-                                $expired      = $daysSince > 30;
+                                $accessEnds = $user->access_ends_at;
+                                $expired    = ! $accessEnds || $accessEnds->isPast();
+                                $daysLeft   = ($accessEnds && ! $expired)
+                                    ? max(0, (int) now()->startOfDay()->diffInDays($accessEnds->copy()->startOfDay(), false))
+                                    : 0;
                             @endphp
                             <div class="adm-field-row">
-                                <div class="adm-field-row__label">Zugang seit</div>
-                                <div class="adm-field-row__value">{{ $user->created_at->format('d.m.Y') }}</div>
+                                <div class="adm-field-row__label">Freigeschaltet</div>
+                                <div class="adm-field-row__value">{{ optional($user->approved_at)->format('d.m.Y') ?? '—' }}</div>
                             </div>
                             <div class="adm-field-row">
                                 <div class="adm-field-row__label">Läuft ab</div>
-                                <div class="adm-field-row__value">{{ $user->created_at->addDays(30)->format('d.m.Y') }}</div>
+                                <div class="adm-field-row__value">{{ optional($accessEnds)->format('d.m.Y') ?? '—' }}</div>
                             </div>
                             <div class="adm-field-row">
                                 <div class="adm-field-row__label">Status</div>
                                 <div class="adm-field-row__value">
-                                    @if($expired)
+                                    @if(! $user->is_approved)
+                                        <span style="display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:#b45309;background:#fffbeb;padding:3px 10px;border-radius:20px;">Noch nicht freigeschaltet</span>
+                                    @elseif($expired)
                                         <span style="display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:#d94f4f;background:#fef2f2;padding:3px 10px;border-radius:20px;">
                                             <span style="width:6px;height:6px;border-radius:50%;background:#d94f4f;display:inline-block;"></span>
                                             Abgelaufen
@@ -423,6 +427,88 @@
                                     @endif
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    {{-- Hardware shipment --}}
+                    <div class="adm-detail-card">
+                        <div class="adm-detail-card__header">
+                            <div class="adm-detail-card__header-icon adm-detail-card__header-icon--blue">
+                                <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                            </div>
+                            <div class="adm-detail-card__title">Hardware-Versand</div>
+                        </div>
+                        <div class="adm-detail-card__body">
+                            @if($user->shipped_at)
+                                <div class="adm-field-row">
+                                    <div class="adm-field-row__label">Versendet</div>
+                                    <div class="adm-field-row__value">{{ optional($user->shipping_date)->format('d.m.Y') ?? $user->shipped_at->format('d.m.Y') }}</div>
+                                </div>
+                                @if($user->tracking_number)
+                                <div class="adm-field-row">
+                                    <div class="adm-field-row__label">Sendung</div>
+                                    <div class="adm-field-row__value">{{ $user->tracking_number }}</div>
+                                </div>
+                                @endif
+                            @else
+                                <form method="POST" action="{{ route('admin.users.ship', $user) }}" style="display:flex;flex-direction:column;gap:10px;">
+                                    @csrf
+                                    <div>
+                                        <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;">Versanddatum *</label>
+                                        <input type="date" name="shipping_date" required value="{{ date('Y-m-d') }}"
+                                               style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                                    </div>
+                                    <div>
+                                        <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;">Sendungsnummer (optional)</label>
+                                        <input type="text" name="tracking_number" placeholder="z. B. 99.00.123456.12345678"
+                                               style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                                    </div>
+                                    <button type="submit" class="adm-btn adm-btn--secondary" style="justify-content:center;">Versandbestätigung senden</button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- Onsite / Enterprise payment link --}}
+                    @if($user->selected_option_type === 'onsite' && ! $user->payment_completed)
+                    <div class="adm-detail-card">
+                        <div class="adm-detail-card__header">
+                            <div class="adm-detail-card__header-icon adm-detail-card__header-icon--purple">
+                                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                            </div>
+                            <div class="adm-detail-card__title">Zahlungslink senden</div>
+                        </div>
+                        <div class="adm-detail-card__body">
+                            <form method="POST" action="{{ route('admin.users.paymentLink', $user) }}" style="display:flex;flex-direction:column;gap:10px;">
+                                @csrf
+                                @php
+                                    $defaultAmount = $option?->price_chf ?? $user->quoted_amount_chf;
+                                @endphp
+                                <div>
+                                    <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;">Betrag CHF *</label>
+                                    <input type="number" name="quoted_amount_chf" required min="1" value="{{ old('quoted_amount_chf', $defaultAmount) }}"
+                                           style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;">Termin *</label>
+                                    <input type="text" name="appointment_date" required value="{{ old('appointment_date', $user->appointment_date) }}" placeholder="z. B. 15.09.2026, 10:00 Uhr"
+                                           style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;">Ort *</label>
+                                    <input type="text" name="appointment_location" required value="{{ old('appointment_location', $user->appointment_location) }}" placeholder="Adresse / Standort"
+                                           style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;">Ansprechperson</label>
+                                    <input type="text" name="contact_person" value="{{ old('contact_person', $user->contact_person ?? 'Sicher Bitcoin Verwahren') }}"
+                                           style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                                </div>
+                                <button type="submit" class="adm-btn adm-btn--secondary" style="justify-content:center;">
+                                    {{ $user->payment_token ? 'Zahlungslink erneut senden' : 'Zahlungslink senden' }}
+                                </button>
+                            </form>
                         </div>
                     </div>
                     @endif

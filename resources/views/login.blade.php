@@ -235,9 +235,12 @@
                         @enderror
                     </div>
 
-                    <div class="lp-remember">
-                        <input type="checkbox" id="lp_remember" name="remember">
-                        <label for="lp_remember">Angemeldet bleiben</label>
+                    <div class="lp-remember" style="justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <input type="checkbox" id="lp_remember" name="remember">
+                            <label for="lp_remember">Angemeldet bleiben</label>
+                        </div>
+                        <a href="{{ route('password.request') }}" style="font-size:.78rem;color:var(--lp-primary);font-weight:600;text-decoration:none;">Passwort vergessen?</a>
                     </div>
 
                     <button type="submit" class="lp-submit">Anmelden</button>

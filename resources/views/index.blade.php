@@ -628,20 +628,20 @@
                     <div class="cta-box" style="flex-direction:column;gap:24px;padding:40px 48px;">
                         <div class="cta-box-content" style="flex:unset;width:100%;text-align:center;">
                             <div class="section-title dark-section" style="text-align:center;">
-                                <h2 class="wow fadeInUp" data-cursor="-opaque">Sichern Sie sich jetzt Ihre kostenlose Checkliste</h2>
-                                <p style="max-width:540px;margin:0 auto 28px;">Die 5 essentiellen Schritte, die JEDER Bitcoin-Besitzer VOR der Einrichtung einer Hardware-Wallet gehen muss.</p>
+                                <h2 class="wow fadeInUp" data-cursor="-opaque">Wie sicher sind Ihre Bitcoin wirklich?</h2>
+                                <p style="max-width:540px;margin:0 auto 28px;">Finden Sie in weniger als fünf Minuten heraus, ob Ihr Bitcoin-Setup ausreichend gegen Verlust, Diebstahl und typische Fehler geschützt ist – mit dem kostenlosen Bitcoin Sicherheits-Selbsttest 2026.</p>
                             </div>
                             <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
                                 <button onclick="openLeadModal('checklist')"
                                         class="btn-default btn-highlighted"
                                         style="background:linear-gradient(135deg,#fff,#f4f2f9);color:#6f54a4;border:none;cursor:pointer;font-family:inherit;">
-                                    Kostenlose Checkliste herunterladen
+                                    Jetzt kostenlosen Selbsttest herunterladen
                                 </button>
-                                <button onclick="openLeadModal('training')"
+                                <a href="{{ route('pricing.index') }}"
                                         class="btn-default"
                                         style="background:transparent;border:2px solid rgba(255,255,255,.4);color:#fff;cursor:pointer;font-family:inherit;">
-                                    Zur Trainingsplattform
-                                </button>
+                                    Videokurse entdecken
+                                </a>
                             </div>
                         </div>
                     </div>

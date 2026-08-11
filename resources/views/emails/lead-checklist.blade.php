@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ihre kostenlose Bitcoin-Sicherheits-Checkliste</title>
+    <title>Ihr Bitcoin Sicherheits-Selbsttest 2026</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f4f4f4;font-family:Arial,Helvetica,sans-serif;">
 
@@ -24,33 +24,28 @@
                 {{-- Body --}}
                 <tr>
                     <td style="padding:32px 36px 20px;">
-                        <p style="margin:0 0 6px 0;font-size:13px;color:#888888;text-transform:uppercase;letter-spacing:1px;">Ihr Download</p>
-                        <h1 style="margin:0 0 20px 0;font-size:22px;color:#2d2d2d;font-weight:bold;">Bitcoin-Sicherheits-Selbsttest 2026</h1>
                         <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
                             Guten Tag {{ $leadName }},
                         </p>
                         <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            vielen Dank für Ihr Interesse! Anbei finden Sie Ihre persönliche <strong>Bitcoin-Sicherheits-Checkliste</strong> als PDF-Anhang.
+                            vielen Dank für Ihr Interesse an einer sicheren Bitcoin-Selbstverwahrung.
+                        </p>
+                        <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                            Im Anhang finden Sie Ihren kostenlosen <strong>Bitcoin Sicherheits-Selbsttest 2026</strong>. Damit können Sie in weniger als fünf Minuten prüfen, wie gut Ihr aktuelles Sicherheitskonzept gegen Verlust, Diebstahl und typische Fehler vorbereitet ist.
+                        </p>
+                        <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                            Gehen Sie die 15 Fragen in Ruhe durch und zählen Sie anschliessend Ihre Punkte zusammen. Die Auswertung zeigt Ihnen, in welchen Bereichen bereits eine gute Grundlage besteht und wo noch Handlungsbedarf bestehen könnte.
                         </p>
                         <p style="margin:0 0 24px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            Die Checkliste führt Sie durch die 5 essentiellen Schritte, die jeder Bitcoin-Besitzer vor der Einrichtung einer Hardware-Wallet beachten sollte.
-                        </p>
-
-                        {{-- Divider --}}
-                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #eeeeee;margin-bottom:24px;">
-                            <tr><td style="padding:0;font-size:0;line-height:0;">&nbsp;</td></tr>
-                        </table>
-
-                        <p style="margin:0 0 16px 0;font-size:14px;color:#666666;line-height:1.6;">
-                            Möchten Sie tiefer in das Thema Bitcoin-Sicherheit einsteigen? Entdecken Sie unsere <a href="https://sicher-bitcoin-verwahren.ch/pricing" style="color:#6f54a4;text-decoration:none;font-weight:bold;">digitale Trainingsplattform</a> für eine strukturierte Schritt-für-Schritt-Anleitung.
+                            Möchten Sie erkannte Sicherheitslücken anschliessend Schritt für Schritt schliessen? Unsere digitalen Videokurse begleiten Sie verständlich und praxisnah von der Einrichtung der Hardware Wallet bis zur langfristigen Sicherung und Notfallplanung.
                         </p>
 
                         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;margin-bottom:8px;">
                             <tr>
                                 <td align="center">
-                                    <a href="https://sicher-bitcoin-verwahren.ch/pricing"
+                                    <a href="{{ url('/pricing') }}"
                                        style="display:inline-block;background-color:#6f54a4;color:#ffffff;text-decoration:none;font-size:14px;font-weight:bold;padding:14px 32px;border-radius:100px;">
-                                        Zur Trainingsplattform
+                                        Videokurse entdecken
                                     </a>
                                 </td>
                             </tr>
@@ -60,11 +55,12 @@
 
                 {{-- Footer --}}
                 <tr>
-                    <td style="padding:20px 36px;background-color:#f9f7ff;border-top:1px solid #e4ddf5;">
-                        <p style="margin:0;font-size:12px;color:#999999;text-align:center;line-height:1.6;">
-                            © 2026 Sicher Bitcoin Verwahren · Allmendingen-Allee 9, 3608 Thun<br>
-                            <a href="https://sicher-bitcoin-verwahren.ch/datenschutz" style="color:#6f54a4;text-decoration:none;">Datenschutz</a> ·
-                            <a href="https://sicher-bitcoin-verwahren.ch/impressum" style="color:#6f54a4;text-decoration:none;">Impressum</a>
+                    <td style="padding:20px 36px 28px;border-top:1px solid #eeeeee;">
+                        <p style="margin:0;font-size:12px;color:#aaaaaa;line-height:1.6;">
+                            Freundliche Grüsse<br>
+                            Ihr Team von Sicher Bitcoin Verwahren<br>
+                            <a href="https://www.sicher-bitcoin-verwahren.ch" style="color:#aaaaaa;text-decoration:none;">www.sicher-bitcoin-verwahren.ch</a> &nbsp;|&nbsp;
+                            <a href="mailto:info@sicher-bitcoin-verwahren.ch" style="color:#aaaaaa;text-decoration:none;">info@sicher-bitcoin-verwahren.ch</a>
                         </p>
                     </td>
                 </tr>

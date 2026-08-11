@@ -25,7 +25,7 @@
                         <p style="margin:0 0 6px 0;font-size:13px;color:#888888;text-transform:uppercase;letter-spacing:1px;">Admin Benachrichtigung</p>
                         <h1 style="margin:0 0 20px 0;font-size:22px;color:#2d2d2d;font-weight:bold;">Neuer Lead eingegangen</h1>
                         <p style="margin:0 0 20px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            Ein neuer Interessent hat die Checkliste angefordert. Die Details finden Sie unten.
+                            Ein neuer Interessent hat den Bitcoin Sicherheits-Selbsttest angefordert. Die Details finden Sie unten.
                         </p>
 
                         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f7ff;border-radius:5px;border:1px solid #e4ddf5;margin-bottom:24px;">
@@ -54,7 +54,7 @@
                                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                         <tr>
                                             <td width="120" style="font-size:13px;color:#888888;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;">Quelle</td>
-                                            <td style="font-size:14px;color:#2d2d2d;">{{ $lead->source === 'training' ? 'Digitale Trainingsplattform' : 'Bitcoin-Checkliste' }}</td>
+                                            <td style="font-size:14px;color:#2d2d2d;">{{ $lead->source === 'training' ? 'Videokurse / Pricing' : 'Bitcoin Sicherheits-Selbsttest' }}</td>
                                         </tr>
                                     </table>
                                 </td>

@@ -199,20 +199,20 @@
 
                     {{-- Lead CTA 1: Checklist --}}
                     <div class="article-lead-cta" style="margin-top:48px;">
-                        <h3>Kostenlose Bitcoin-Sicherheits-Checkliste</h3>
-                        <p>Laden Sie jetzt unsere kostenlose Checkliste herunter und starten Sie sicher mit Bitcoin Self-Custody.</p>
+                        <h3>Bitcoin Sicherheits-Selbsttest 2026</h3>
+                        <p>Finden Sie in weniger als fünf Minuten heraus, ob Ihr Bitcoin-Setup ausreichend gegen Verlust, Diebstahl und typische Fehler geschützt ist.</p>
                         <button class="article-lead-cta-btn" onclick="openLeadModal('checklist')">
-                            Jetzt kostenlos herunterladen
+                            Jetzt kostenlosen Selbsttest herunterladen
                         </button>
                     </div>
 
-                    {{-- Lead CTA 2: Training --}}
+                    {{-- Lead CTA 2: Pricing / courses --}}
                     <div class="article-lead-cta" style="background:linear-gradient(135deg, #2d1f4e, #6f54a4);">
-                        <h3>Bitcoin Self-Custody Digital Lernen</h3>
-                        <p>Erlernen Sie Bitcoin Self-Custody Schritt für Schritt über unsere digitale Trainingsplattform.</p>
-                        <button class="article-lead-cta-btn" onclick="openLeadModal('training')">
-                            Zur Trainingsplattform
-                        </button>
+                        <h3>Videokurse entdecken</h3>
+                        <p>Erlernen Sie Bitcoin Self-Custody Schritt für Schritt mit unseren digitalen Videokursen.</p>
+                        <a href="{{ route('pricing.index') }}" class="article-lead-cta-btn" style="display:inline-block;text-decoration:none;">
+                            Videokurse entdecken
+                        </a>
                     </div>
                 </div>
 
@@ -233,10 +233,10 @@
 
                         <div style="border-top:1px solid #ede9f5;margin:20px 0;"></div>
 
-                        <h4>Gratis Checkliste sichern</h4>
-                        <p style="font-size:13px;color:#7a728f;margin-bottom:14px;">Die 5 essentiellen Schritte für sichere Bitcoin-Verwahrung.</p>
+                        <h4>Gratis Selbsttest sichern</h4>
+                        <p style="font-size:13px;color:#7a728f;margin-bottom:14px;">Der Bitcoin Sicherheits-Selbsttest 2026 – in weniger als fünf Minuten.</p>
                         <button onclick="openLeadModal('checklist')" style="width:100%;background:linear-gradient(135deg,#6f54a4,#c086c0);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:700;font-size:13.5px;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
-                            Jetzt herunterladen
+                            Jetzt kostenlosen Selbsttest herunterladen
                         </button>
                     </div>
                 </aside>

@@ -18,7 +18,7 @@ class LeadChecklistMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Ihre kostenlose Bitcoin-Sicherheits-Checkliste',
+            subject: 'Ihr Bitcoin Sicherheits-Selbsttest 2026',
         );
     }
 

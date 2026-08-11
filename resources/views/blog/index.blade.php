@@ -150,11 +150,11 @@
             {{-- Lead generation banner --}}
             <div class="lead-banner wow fadeInUp">
                 <div class="lead-banner__text">
-                    <h3>Kostenlose Bitcoin-Sicherheits-Checkliste</h3>
-                    <p>Die 5 essentiellen Schritte, die JEDER Bitcoin-Besitzer kennen muss.</p>
+                    <h3>Bitcoin Sicherheits-Selbsttest 2026</h3>
+                    <p>Finden Sie in weniger als fünf Minuten heraus, wie sicher Ihr Bitcoin-Setup wirklich ist.</p>
                 </div>
                 <button class="lead-banner__btn" onclick="openLeadModal('checklist')">
-                    Jetzt kostenlos herunterladen
+                    Jetzt kostenlosen Selbsttest herunterladen
                 </button>
             </div>
 

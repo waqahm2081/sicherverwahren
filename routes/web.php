@@ -6,6 +6,7 @@ use App\Http\Controllers\PricingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OnsitePaymentController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PackagesController as AdminPackagesController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\OrdersController as AdminOrdersController;
 use App\Http\Controllers\Admin\UsersController as AdminUsersController;
 use App\Http\Controllers\Admin\VideosController as VideosController;
 use App\Http\Controllers\Admin\BlogsController as AdminBlogsController;
+use App\Http\Controllers\Admin\CouponsController as AdminCouponsController;
 
 /* ── Public pages ── */
 Route::get('/', function () {
@@ -28,6 +30,7 @@ Route::get('/about-us', function () { return view('about-us'); });
 
 Route::get('/pricing',  [PricingController::class, 'index'])->name('pricing.index');
 Route::post('/pricing/payment-intent', [PricingController::class, 'createPaymentIntent'])->name('pricing.paymentIntent');
+Route::post('/pricing/validate-coupon', [PricingController::class, 'validateCoupon'])->name('pricing.validateCoupon');
 Route::post('/pricing/register', [PricingController::class, 'register'])->name('pricing.register');
 
 /* ── Onsite payment link ── */
@@ -50,6 +53,11 @@ Route::post('/lead/submit', [BlogController::class, 'submitLead'])->name('lead.s
 
 /* ── User auth ── */
 Route::get('/login', fn () => view('login'))->name('login')->middleware('guest');
+
+Route::get('/forgot-password', [PasswordResetController::class, 'showRequestForm'])->name('password.request')->middleware('guest');
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.email')->middleware('guest');
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset')->middleware('guest');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update')->middleware('guest');
 
 Route::post('/login', function (\Illuminate\Http\Request $request) {
     $credentials = $request->validate([
@@ -137,6 +145,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/users/{user}',           [AdminUsersController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}',        [AdminUsersController::class, 'destroy'])->name('users.destroy');
         Route::patch('/users/{user}/approve', [AdminUsersController::class, 'approve'])->name('users.approve');
+        Route::post('/users/{user}/payment-link', [AdminUsersController::class, 'sendPaymentLink'])->name('users.paymentLink');
+        Route::post('/users/{user}/ship', [AdminUsersController::class, 'markShipped'])->name('users.ship');
+
+        // Coupons
+        Route::get('/coupons', [AdminCouponsController::class, 'index'])->name('coupons.index');
+        Route::put('/coupons/{coupon}', [AdminCouponsController::class, 'update'])->name('coupons.update');
 
         // Blog Categories MUST come before /blogs/{blog} wildcard routes
         Route::get('/blogs/categories',               [AdminBlogsController::class, 'categoriesIndex'])->name('blogs.categories');

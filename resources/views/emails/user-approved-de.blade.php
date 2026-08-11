@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konto freigeschaltet</title>
+    <title>Zugang freigeschaltet</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f4f4f4;font-family:Arial,Helvetica,sans-serif;">
 
@@ -25,49 +25,24 @@
                     </td>
                 </tr>
 
-                {{-- Approved banner --}}
-                <tr>
-                    <td align="center" style="background-color:#e8f5e9;padding:16px 36px;">
-                        <p style="margin:0;font-size:15px;color:#2e7d32;font-weight:bold;">
-                            ✔ Ihr Konto wurde freigeschaltet
-                        </p>
-                    </td>
-                </tr>
-
                 {{-- Body --}}
                 <tr>
                     <td style="padding:32px 36px 20px;">
-                        <h1 style="margin:0 0 16px 0;font-size:22px;color:#2d2d2d;font-weight:bold;">Guten Tag {{ $user->name }},</h1>
                         <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            Gute Neuigkeiten – Ihr Konto wurde überprüft und freigeschaltet.
+                            Guten Tag {{ $user->name }},
+                        </p>
+                        <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                            Ihr persönlicher Zugang zum Videokurs {{ $user->selected_package ?? '' }} wurde freigeschaltet.
+                        </p>
+                        <p style="margin:0 0 16px 0;font-size:15px;color:#444444;line-height:1.6;">
+                            Ab heute stehen Ihnen die zu Ihrem Paket gehörenden Schulungsinhalte während 60 Tagen zur Verfügung.
                         </p>
                         <p style="margin:0 0 24px 0;font-size:15px;color:#444444;line-height:1.6;">
-                            Sie können sich jetzt einloggen und auf Ihr Dashboard zugreifen. Ihre Schulungsinhalte sind für Sie bereit.
+                            <strong>Zugangsende:</strong> {{ $expiryDate }}
                         </p>
-
-                        {{-- Package reminder --}}
-                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f7ff;border-radius:5px;border:1px solid #e4ddf5;margin-bottom:28px;">
-                            <tr>
-                                <td style="padding:14px 18px;border-bottom:1px solid #e4ddf5;">
-                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                        <tr>
-                                            <td width="130" style="font-size:13px;color:#888888;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;">Paket</td>
-                                            <td style="font-size:14px;color:#2d2d2d;">{{ $user->selected_package ?? '—' }}</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding:14px 18px;">
-                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                        <tr>
-                                            <td width="130" style="font-size:13px;color:#888888;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;">Service-Typ</td>
-                                            <td style="font-size:14px;color:#2d2d2d;">{{ ucfirst($user->selected_option_type ?? '—') }}</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
+                        <p style="margin:0 0 28px 0;font-size:15px;color:#444444;line-height:1.6;">
+                            Wir empfehlen Ihnen, die Module in der vorgegebenen Reihenfolge durchzuarbeiten und jeden Schritt in Ruhe umzusetzen. So entsteht eine nachvollziehbare Sicherheitsstruktur, die Sie selbst verstehen und kontrollieren können.
+                        </p>
 
                         {{-- Login CTA --}}
                         <table cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
@@ -82,8 +57,8 @@
                         </table>
 
                         <p style="margin:0;font-size:14px;color:#666666;line-height:1.6;">
-                            Sollten Sie Fragen haben, kontaktieren Sie uns bitte unter
-                            <a href="mailto:{{ config('mail.from.address') }}" style="color:#6f54a4;text-decoration:none;">{{ config('mail.from.address') }}</a>.
+                            Bei Fragen können Sie uns jederzeit unter
+                            <a href="mailto:info@sicher-bitcoin-verwahren.ch" style="color:#6f54a4;text-decoration:none;">info@sicher-bitcoin-verwahren.ch</a> kontaktieren.
                         </p>
                     </td>
                 </tr>

@@ -54,7 +54,7 @@
                         $firstOpt = $digital ?? $onsite ?? $pkg->options->first();
                     @endphp
 
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="{{ $loop->index * 0.1 }}s">
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="{{ $loop->index * 0.1 }}s" id="{{ $pkg->slug }}">
                         <div class="pricing-item">
 
                             <div class="pricing-header">
@@ -149,8 +149,9 @@
                                 <div class="pkg-cta-row">
                                     <button
                                         class="pkg-cta-btn"
+                                        id="cta-btn-{{ $pkg->id }}"
                                         onclick="openPkgModal('{{ $pkg->id }}')"
-                                    >Jetzt anfragen</button>
+                                    >{{ $digital && ! $isEnterp ? 'Jetzt kaufen' : 'Jetzt anfragen' }}</button>
                                 </div>
 
                             </div>
@@ -303,10 +304,68 @@
                     priceDisplay.innerHTML = '<sup>CHF</sup>' + panel.dataset.price;
                 }
                 activeOption[pkgId] = panel.dataset.optionType;
+                const ctaBtn = document.getElementById('cta-btn-' + pkgId);
+                if (ctaBtn) {
+                    ctaBtn.textContent = panel.dataset.optionType === 'digital'
+                        ? 'Jetzt kaufen'
+                        : 'Jetzt anfragen';
+                }
             }
         };
 
         /* ── Helpers ── */
+        let appliedCouponCode = '';
+
+        window.applyCoupon = async function (pkgName, optType) {
+            const code  = (document.getElementById('pf_coupon')?.value || '').trim();
+            const email = (document.getElementById('pf_email')?.value || '').trim();
+            const errEl = document.getElementById('err_coupon');
+            const okEl  = document.getElementById('pf_coupon_ok');
+            if (errEl) errEl.textContent = '';
+            if (okEl) { okEl.style.display = 'none'; okEl.textContent = ''; }
+
+            if (!code) {
+                if (errEl) errEl.textContent = 'Bitte geben Sie einen Rabattcode ein.';
+                return;
+            }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                if (errEl) errEl.textContent = 'Bitte zuerst eine gültige E-Mail-Adresse eingeben.';
+                return;
+            }
+
+            try {
+                const res = await fetch('{{ route("pricing.validateCoupon") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        coupon_code: code,
+                        selected_package: pkgName,
+                        selected_option_type: optType,
+                        email,
+                    }),
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) {
+                    appliedCouponCode = '';
+                    if (errEl) errEl.textContent = data.message || (data.errors?.coupon_code?.[0]) || 'Ungültiger Code.';
+                    return;
+                }
+                appliedCouponCode = code.toUpperCase();
+                if (okEl) {
+                    okEl.style.display = 'block';
+                    okEl.textContent = data.message + ' Neuer Betrag: CHF ' + data.final_fmt;
+                }
+                const priceEl = document.querySelector('.pkg-modal__price');
+                if (priceEl) priceEl.textContent = data.final_fmt;
+            } catch (e) {
+                if (errEl) errEl.textContent = 'Rabattcode konnte nicht geprüft werden.';
+            }
+        };
+
         function esc(str) {
             return String(str)
                 .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -357,12 +416,12 @@
                    <div class="pkg-form__card-wrap" id="stripe-card-element"></div>
                    <div class="pkg-stripe-error" id="stripe-error"></div>`;
 
-            const submitLabel = isOnsite ? 'Anfrage senden' : 'Jetzt bezahlen &amp; registrieren';
+            const submitLabel = isOnsite ? 'Jetzt anfragen' : 'Jetzt kaufen';
 
-            const successTitle = isOnsite ? 'Anfrage eingereicht!' : 'Zahlung &amp; Registrierung erfolgreich!';
+            const successTitle = isOnsite ? 'Anfrage eingereicht!' : 'Bestellung erfolgreich!';
             const successMsg   = isOnsite
-                ? 'Vielen Dank! Wir prüfen Ihre Anfrage und senden Ihnen den Zahlungslink per E-Mail zu.'
-                : 'Ihr Konto wurde erstellt. Wir melden uns in Kürze bei Ihnen.';
+                ? 'Vielen Dank für Ihre Anfrage. Wir haben Ihre Angaben erhalten und melden uns innerhalb von 1–2 Arbeitstagen persönlich bei Ihnen.'
+                : 'Vielen Dank für Ihre Bestellung. Ihre Zahlung wurde erfolgreich verarbeitet. Sie erhalten in Kürze eine Bestätigung per E-Mail.';
 
             document.getElementById('pkgModalContent').innerHTML = `
             <div class="pkg-modal__header">
@@ -423,6 +482,17 @@
                         </div>
                     </div>
 
+                    ${!isOnsite ? `
+                    <div class="pkg-form__group">
+                        <label class="pkg-form__label" for="pf_coupon">Rabattcode (optional)</label>
+                        <div style="display:flex;gap:8px;">
+                            <input class="pkg-form__input" id="pf_coupon" type="text" placeholder="z. B. SECURE5" style="flex:1;text-transform:uppercase;">
+                            <button type="button" class="pkg-form__cancel" id="pf_coupon_btn" onclick="applyCoupon('${esc(pkg.name)}', '${esc(opt.type)}')" style="margin:0;white-space:nowrap;">Anwenden</button>
+                        </div>
+                        <div class="pkg-form__error" id="err_coupon"></div>
+                        <div id="pf_coupon_ok" style="display:none;margin-top:6px;font-size:.78rem;color:#1d7a53;font-weight:600;"></div>
+                    </div>` : ''}
+
                     ${paymentSection}
 
                     <div class="pkg-form__error" id="err_general" style="font-size:.78rem; margin-top:8px;"></div>
@@ -471,6 +541,7 @@
 
             document.getElementById('pkgModalOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
+            appliedCouponCode = '';
 
             setTimeout(() => {
                 const first = document.getElementById('pf_name');
@@ -591,13 +662,15 @@
                         selected_package:     pkgName,
                         selected_option_type: optType,
                         option_id:            optionId,
+                        email,
+                        coupon_code:          appliedCouponCode || (document.getElementById('pf_coupon')?.value || '').trim() || null,
                     }),
                 });
                 const intentData = await intentRes.json();
 
                 if (!intentRes.ok || !intentData.client_secret) {
-                    setError('err_general', intentData.message || 'Fehler beim Erstellen der Zahlung.');
-                    if (btn) { btn.disabled = false; btn.textContent = 'Jetzt bezahlen & registrieren'; }
+                    setError('err_general', intentData.message || intentData.errors?.coupon_code?.[0] || 'Fehler beim Erstellen der Zahlung.');
+                    if (btn) { btn.disabled = false; btn.textContent = 'Jetzt kaufen'; }
                     return;
                 }
 
@@ -615,13 +688,13 @@
                 if (error) {
                     const errEl = document.getElementById('stripe-error');
                     if (errEl) errEl.textContent = error.message;
-                    if (btn) { btn.disabled = false; btn.textContent = 'Jetzt bezahlen & registrieren'; }
+                    if (btn) { btn.disabled = false; btn.textContent = 'Jetzt kaufen'; }
                     return;
                 }
 
                 if (paymentIntent.status !== 'succeeded') {
                     setError('err_general', 'Zahlung nicht abgeschlossen. Bitte versuchen Sie es erneut.');
-                    if (btn) { btn.disabled = false; btn.textContent = 'Jetzt bezahlen & registrieren'; }
+                    if (btn) { btn.disabled = false; btn.textContent = 'Jetzt kaufen'; }
                     return;
                 }
 
@@ -645,6 +718,7 @@
                         selected_option_type:  optType,
                         payment_intent_id:     paymentIntent.id,
                         preferred_language:    language,
+                        coupon_code:           appliedCouponCode || (document.getElementById('pf_coupon')?.value || '').trim() || null,
                     }),
                 });
 
@@ -668,12 +742,12 @@
                     } else {
                         setError('err_general', regData.message || 'Ein Fehler ist aufgetreten.');
                     }
-                    if (btn) { btn.disabled = false; btn.textContent = 'Jetzt bezahlen & registrieren'; }
+                    if (btn) { btn.disabled = false; btn.textContent = 'Jetzt kaufen'; }
                 }
 
             } catch (err) {
                 setError('err_general', 'Verbindungsfehler. Bitte versuchen Sie es erneut.');
-                if (btn) { btn.disabled = false; btn.textContent = 'Jetzt bezahlen & registrieren'; }
+                if (btn) { btn.disabled = false; btn.textContent = 'Jetzt kaufen'; }
             }
         };
 

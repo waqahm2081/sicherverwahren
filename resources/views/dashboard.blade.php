@@ -226,9 +226,10 @@
                 ══════════════════════════════════════════════ --}}
                 @if(auth()->user()->selected_option_type === 'digital')
                 @php
-                    $subDays  = auth()->user()->created_at->diffInDays(now());
-                    $isLocked = $subDays > 60;
-                    $daysLeft = max(0, 60 - $subDays);
+                    $accessEnds = auth()->user()->access_ends_at;
+                    $isLocked   = ! $accessEnds || $accessEnds->isPast();
+                    $daysLeft   = $accessEnds ? max(0, (int) now()->startOfDay()->diffInDays($accessEnds->copy()->startOfDay(), false)) : 0;
+                    if ($accessEnds && $accessEnds->isPast()) { $daysLeft = 0; }
                 @endphp
                 <div class="ud-panel active" id="ud-panel-videos" role="tabpanel" style="position:relative;">
 
@@ -261,14 +262,14 @@
                         </div>
                     </div>
 
-                    @if(!$isLocked)
+                    @if(!$isLocked && $accessEnds)
                     <div class="ud-sub-banner">
                         <div class="ud-sub-banner-left">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"/>
                                 <polyline points="12 6 12 12 16 14"/>
                             </svg>
-                            <span>Ihr Zugang läuft ab in <strong>{{ $daysLeft }} {{ $daysLeft === 1 ? 'Tag' : 'Tagen' }}</strong> — Paket am {{ auth()->user()->created_at->addDays(60)->format('d.m.Y') }}</span>
+                            <span>Ihr Zugang läuft ab in <strong>{{ $daysLeft }} {{ $daysLeft === 1 ? 'Tag' : 'Tagen' }}</strong> — Paket am {{ $accessEnds->format('d.m.Y') }}</span>
                         </div>
                         <span class="ud-days-pill">{{ $daysLeft }}d verbleibend</span>
                     </div>

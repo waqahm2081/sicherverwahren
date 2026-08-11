@@ -14,8 +14,8 @@
         {{-- Header --}}
         <div id="leadModalHeader" style="background:linear-gradient(135deg,#6f54a4,#c086c0);padding:32px 32px 28px;">
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.7);margin-bottom:8px;">Kostenlos</div>
-            <h3 id="leadModalTitle" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.3;">Kostenlose Bitcoin-Sicherheits-Checkliste</h3>
-            <p id="leadModalDesc" style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.5;">Geben Sie Ihre Daten ein und erhalten Sie die Checkliste sofort per E-Mail.</p>
+            <h3 id="leadModalTitle" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.3;">Bitcoin Sicherheits-Selbsttest 2026</h3>
+            <p id="leadModalDesc" style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.5;">Geben Sie Ihre Daten ein und erhalten Sie den Selbsttest sofort per E-Mail.</p>
         </div>
 
         {{-- Form --}}
@@ -43,7 +43,7 @@
 
                 <button type="submit" id="leadSubmitBtn"
                         style="width:100%;background:linear-gradient(135deg,#6f54a4,#c086c0);color:#fff;border:none;padding:14px;border-radius:100px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;transition:opacity .2s;">
-                    Jetzt kostenlos herunterladen
+                    Jetzt kostenlosen Selbsttest herunterladen
                 </button>
 
                 <p style="font-size:11.5px;color:#a89fc0;text-align:center;margin-top:12px;">
@@ -59,7 +59,7 @@
                 <svg style="width:28px;height:28px;fill:#fff;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
             </div>
             <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;color:#1a1625;margin-bottom:10px;">Vielen Dank!</h3>
-            <p style="font-size:15px;color:#7a728f;line-height:1.6;">Die Checkliste wurde an Ihre E-Mail-Adresse gesendet. Bitte überprüfen Sie auch Ihren Spam-Ordner.</p>
+            <p style="font-size:15px;color:#7a728f;line-height:1.6;">Vielen Dank. Der Bitcoin Sicherheits-Selbsttest 2026 wurde an Ihre E-Mail-Adresse gesendet. Bitte prüfen Sie auch Ihren Spam-Ordner.</p>
             <button onclick="closeLeadModal()" style="margin-top:24px;background:#f4f2f9;color:#6f54a4;border:none;padding:12px 28px;border-radius:100px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;">
                 Schließen
             </button>
@@ -80,13 +80,13 @@ function openLeadModal(source) {
 
     if (source === 'training') {
         document.getElementById('leadModalTitle').textContent = 'Bitcoin Self-Custody Digital Lernen';
-        document.getElementById('leadModalDesc').textContent  = 'Erhalten Sie kostenlos Ihre Checkliste und erfahren Sie mehr über unsere digitale Trainingsplattform.';
-        document.getElementById('leadSubmitBtn').textContent  = 'Jetzt Zugang sichern';
+        document.getElementById('leadModalDesc').textContent  = 'Erhalten Sie kostenlos Ihren Selbsttest und erfahren Sie mehr über unsere digitalen Videokurse.';
+        document.getElementById('leadSubmitBtn').textContent  = 'Jetzt kostenlosen Selbsttest herunterladen';
         document.getElementById('leadModalHeader').style.background = 'linear-gradient(135deg,#2d1f4e,#6f54a4)';
     } else {
-        document.getElementById('leadModalTitle').textContent = 'Kostenlose Bitcoin-Sicherheits-Checkliste';
-        document.getElementById('leadModalDesc').textContent  = 'Geben Sie Ihre Daten ein und erhalten Sie die Checkliste sofort per E-Mail.';
-        document.getElementById('leadSubmitBtn').textContent  = 'Jetzt kostenlos herunterladen';
+        document.getElementById('leadModalTitle').textContent = 'Bitcoin Sicherheits-Selbsttest 2026';
+        document.getElementById('leadModalDesc').textContent  = 'Geben Sie Ihre Daten ein und erhalten Sie den Selbsttest sofort per E-Mail.';
+        document.getElementById('leadSubmitBtn').textContent  = 'Jetzt kostenlosen Selbsttest herunterladen';
         document.getElementById('leadModalHeader').style.background = 'linear-gradient(135deg,#6f54a4,#c086c0)';
     }
 
@@ -131,7 +131,7 @@ async function submitLead(e) {
         errBox.textContent = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
         errBox.style.display = 'block';
         btn.disabled = false;
-        btn.textContent = 'Jetzt kostenlos herunterladen';
+        btn.textContent = 'Jetzt kostenlosen Selbsttest herunterladen';
     }
 }
 </script>

@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EnterprisePaymentConfirmationMail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use Stripe\Exception\ApiErrorException;
 
 class OnsitePaymentController extends Controller
 {
-    /**
-     * Show the payment page for an onsite user given their unique token.
-     */
     public function show(string $token)
     {
         $user = User::where('payment_token', $token)
@@ -21,29 +20,29 @@ class OnsitePaymentController extends Controller
 
         if ($user->payment_completed) {
             return view('onsite-payment', [
-                'user'          => $user,
-                'alreadyPaid'   => true,
+                'user'        => $user,
+                'alreadyPaid' => true,
             ]);
         }
 
-        // Look up the price from the DB
         $option = \App\Models\PricingPackageOption::whereHas('package', function ($q) use ($user) {
-                $q->where('name', $user->selected_package);
-            })
+            $q->where('name', $user->selected_package);
+        })
             ->where('type', 'onsite')
             ->first();
+
+        $amountChf = $user->quoted_amount_chf
+            ?? ($option ? (int) $option->price_chf : null);
 
         return view('onsite-payment', [
             'user'         => $user,
             'alreadyPaid'  => false,
             'option'       => $option,
+            'amountChf'    => $amountChf,
             'stripeKey'    => env('STRIPE_PUBLISHABLEKEY'),
         ]);
     }
 
-    /**
-     * Create a PaymentIntent for the onsite payment page.
-     */
     public function createIntent(Request $request, string $token)
     {
         $user = User::where('payment_token', $token)
@@ -53,16 +52,21 @@ class OnsitePaymentController extends Controller
         abort_if($user->payment_completed, 409, 'Already paid.');
 
         $option = \App\Models\PricingPackageOption::whereHas('package', function ($q) use ($user) {
-                $q->where('name', $user->selected_package);
-            })
+            $q->where('name', $user->selected_package);
+        })
             ->where('type', 'onsite')
-            ->firstOrFail();
+            ->first();
+
+        $amountChf = $user->quoted_amount_chf
+            ?? ($option ? (float) $option->price_chf : null);
+
+        abort_if(! $amountChf, 422, 'Kein Betrag hinterlegt.');
 
         Stripe::setApiKey(env('STRIPE_SECRETKEY'));
 
         try {
             $intent = PaymentIntent::create([
-                'amount'   => (int) round($option->price_chf * 100),
+                'amount'   => (int) round($amountChf * 100),
                 'currency' => 'chf',
                 'metadata' => [
                     'user_id'     => $user->id,
@@ -77,9 +81,6 @@ class OnsitePaymentController extends Controller
         }
     }
 
-    /**
-     * Verify payment server-side and unlock the account.
-     */
     public function complete(Request $request, string $token)
     {
         $request->validate(['payment_intent_id' => ['required', 'string']]);
@@ -108,12 +109,18 @@ class OnsitePaymentController extends Controller
             ], 500);
         }
 
-        // Unlock the account
         $user->update([
             'is_approved'       => true,
+            'approved_at'       => now(),
             'payment_completed' => true,
-            'payment_token'     => null,   // invalidate token so link can't be reused
+            'payment_token'     => null,
+            // Enterprise / onsite does not get digital course activation
+            'access_ends_at'    => null,
         ]);
+
+        if (stripos((string) $user->selected_package, 'Enterprise') !== false) {
+            Mail::to($user->email)->send(new EnterprisePaymentConfirmationMail($user->fresh()));
+        }
 
         return response()->json(['success' => true]);
     }

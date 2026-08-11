@@ -296,13 +296,13 @@
                                 </span>
                                 <span class="value">{{ $user->selected_package }}</span>
                             </div>
-                            @if($option)
+                            @if($option || !empty($amountChf))
                             <div class="pp-summary-row">
                                 <span class="label">
                                     @if($user->preferred_language === 'en') Amount @else Betrag @endif
                                 </span>
                                 <span class="value" style="color:#6f54a4;font-size:1rem;">
-                                    CHF {{ $option->formattedPrice() }}
+                                    CHF {{ number_format((float) ($amountChf ?? $option?->price_chf ?? 0), 0, '.', "'") }}
                                 </span>
                             </div>
                             @endif
@@ -319,7 +319,7 @@
                             @if($user->preferred_language === 'en')
                                 Pay Now &amp; Activate Access
                             @else
-                                Jetzt bezahlen &amp; Zugang aktivieren
+                                Jetzt sicher bezahlen
                             @endif
                         </button>
 
@@ -420,7 +420,7 @@
                 if (! intentRes.ok || ! intentData.client_secret) {
                     genErr.textContent = intentData.message || '{{ $user->preferred_language === "en" ? "Failed to initialise payment." : "Fehler beim Initialisieren der Zahlung." }}';
                     btn.disabled  = false;
-                    btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt bezahlen & Zugang aktivieren" }}';
+                    btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt sicher bezahlen" }}';
                     return;
                 }
 
@@ -433,14 +433,14 @@
                 if (error) {
                     stripeErr.textContent = error.message;
                     btn.disabled  = false;
-                    btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt bezahlen & Zugang aktivieren" }}';
+                    btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt sicher bezahlen" }}';
                     return;
                 }
 
                 if (paymentIntent.status !== 'succeeded') {
                     genErr.textContent = '{{ $user->preferred_language === "en" ? "Payment not completed. Please try again." : "Zahlung nicht abgeschlossen. Bitte erneut versuchen." }}';
                     btn.disabled  = false;
-                    btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt bezahlen & Zugang aktivieren" }}';
+                    btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt sicher bezahlen" }}';
                     return;
                 }
 
@@ -465,13 +465,13 @@
                 } else {
                     genErr.textContent = completeData.message || '{{ $user->preferred_language === "en" ? "An error occurred. Please contact support." : "Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support." }}';
                     btn.disabled  = false;
-                    btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt bezahlen & Zugang aktivieren" }}';
+                    btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt sicher bezahlen" }}';
                 }
 
             } catch (err) {
                 genErr.textContent = '{{ $user->preferred_language === "en" ? "Connection error. Please try again." : "Verbindungsfehler. Bitte erneut versuchen." }}';
                 btn.disabled  = false;
-                btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt bezahlen & Zugang aktivieren" }}';
+                btn.textContent = '{{ $user->preferred_language === "en" ? "Pay Now & Activate Access" : "Jetzt sicher bezahlen" }}';
             }
         };
     })();
