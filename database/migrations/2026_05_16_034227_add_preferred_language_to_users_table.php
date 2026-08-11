@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('preferred_language', 10)->default('de')->after('selected_option_type');
-        });
+        if (! Schema::hasColumn('users', 'preferred_language')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('preferred_language', 10)->default('de')->after('selected_option_type');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('preferred_language');
-        });
+        if (Schema::hasColumn('users', 'preferred_language')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('preferred_language');
+            });
+        }
     }
 };
