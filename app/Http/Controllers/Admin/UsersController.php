@@ -9,6 +9,7 @@ use App\Mail\UserApproved;
 use App\Models\PricingPackage;
 use App\Models\PricingPackageOption;
 use App\Models\User;
+use App\Services\AutomatedEmailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -131,6 +132,93 @@ class UsersController extends Controller
         Mail::to($user->email)->send(new HardwareShippedMail($user->fresh()));
 
         return back()->with('success', 'Versandbestätigung an „' . $user->name . '" gesendet.');
+    }
+
+    public function updateAccess(Request $request, User $user)
+    {
+        abort_if($user->role === 'admin', 403);
+        abort_unless($user->selected_option_type === 'digital', 422);
+
+        $validated = $request->validate([
+            'approved_at'    => ['nullable', 'date'],
+            'access_ends_at' => ['nullable', 'date'],
+            'reset_flags'    => ['nullable', 'array'],
+            'reset_flags.*'  => ['in:reminder_10d_sent_at,expired_email_sent_at,upsell_secure5_sent_at,upsell_pro7_sent_at'],
+        ]);
+
+        $data = [
+            'approved_at'    => $validated['approved_at'] ?? null,
+            'access_ends_at' => $validated['access_ends_at'] ?? null,
+        ];
+
+        foreach ($validated['reset_flags'] ?? [] as $flag) {
+            $data[$flag] = null;
+        }
+
+        $user->update($data);
+
+        return back()->with('success', 'Videozugang für „' . $user->name . '" wurde aktualisiert.');
+    }
+
+    public function simulateAccess(Request $request, User $user)
+    {
+        abort_if($user->role === 'admin', 403);
+        abort_unless($user->selected_option_type === 'digital', 422);
+
+        $validated = $request->validate([
+            'preset' => ['required', 'in:reminder_10d,expired,upsell_due'],
+        ]);
+
+        $data = match ($validated['preset']) {
+            'reminder_10d' => [
+                'access_ends_at'       => now()->addDays(10)->endOfDay(),
+                'reminder_10d_sent_at' => null,
+            ],
+            'expired' => [
+                'access_ends_at'        => now()->subDay()->endOfDay(),
+                'expired_email_sent_at' => null,
+            ],
+            'upsell_due' => [
+                'access_ends_at'         => now()->subDays(31)->endOfDay(),
+                'upsell_secure5_sent_at' => null,
+                'upsell_pro7_sent_at'    => null,
+            ],
+        };
+
+        $user->update($data);
+
+        $labels = [
+            'reminder_10d' => '10 Tage verbleibend',
+            'expired'      => 'Zugang abgelaufen',
+            'upsell_due'   => 'Upsell fällig',
+        ];
+
+        return back()->with('success', 'Simulation „' . $labels[$validated['preset']] . '" für „' . $user->name . '" gesetzt.');
+    }
+
+    public function sendAutomatedEmail(Request $request, User $user, AutomatedEmailService $emails)
+    {
+        abort_if($user->role === 'admin', 403);
+        abort_unless($user->selected_option_type === 'digital', 422);
+
+        $validated = $request->validate([
+            'type' => ['required', 'in:reminder,expired,upsell_secure5,upsell_pro7'],
+        ]);
+
+        try {
+            $result = match ($validated['type']) {
+                'reminder'        => $emails->sendReminder($user, true),
+                'expired'         => $emails->sendExpired($user, true),
+                'upsell_secure5'  => $emails->sendUpsellSecure5($user, true),
+                'upsell_pro7'     => $emails->sendUpsellPro7($user, true),
+            };
+        } catch (\InvalidArgumentException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return back()->with('success', $result !== ''
+            ? 'E-Mail gesendet: ' . $result
+            : 'E-Mail wurde nicht gesendet.');
     }
 
     public function edit(User $user)

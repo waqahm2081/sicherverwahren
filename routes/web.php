@@ -147,6 +147,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('/users/{user}/approve', [AdminUsersController::class, 'approve'])->name('users.approve');
         Route::post('/users/{user}/payment-link', [AdminUsersController::class, 'sendPaymentLink'])->name('users.paymentLink');
         Route::post('/users/{user}/ship', [AdminUsersController::class, 'markShipped'])->name('users.ship');
+        Route::patch('/users/{user}/access', [AdminUsersController::class, 'updateAccess'])->name('users.access');
+        Route::post('/users/{user}/access/simulate', [AdminUsersController::class, 'simulateAccess'])->name('users.access.simulate');
+        Route::post('/users/{user}/automated-email', [AdminUsersController::class, 'sendAutomatedEmail'])->name('users.automatedEmail');
 
         // Coupons
         Route::get('/coupons', [AdminCouponsController::class, 'index'])->name('coupons.index');

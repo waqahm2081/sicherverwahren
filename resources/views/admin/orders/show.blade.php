@@ -262,6 +262,22 @@
                 </a>
             </div>
 
+            @if(session('success'))
+                <div style="background:#edfaf4;border:1px solid #b7ebd0;color:#1d7a53;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:13.5px;font-weight:600;">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div style="background:#fef2f2;border:1px solid #fecaca;color:#d94f4f;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:13.5px;font-weight:600;">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if(session('info'))
+                <div style="background:#fffbeb;border:1px solid #fde68a;color:#b45309;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:13.5px;font-weight:600;">
+                    {{ session('info') }}
+                </div>
+            @endif
+
             {{-- Hero --}}
             <div class="adm-order-hero">
                 <div class="adm-order-hero__top">
@@ -400,15 +416,9 @@
                                 $daysLeft   = ($accessEnds && ! $expired)
                                     ? max(0, (int) now()->startOfDay()->diffInDays($accessEnds->copy()->startOfDay(), false))
                                     : 0;
+                                $isStarter    = $user->selected_package === 'Private Starter';
+                                $isEssential  = $user->selected_package === 'Business Essential';
                             @endphp
-                            <div class="adm-field-row">
-                                <div class="adm-field-row__label">Freigeschaltet</div>
-                                <div class="adm-field-row__value">{{ optional($user->approved_at)->format('d.m.Y') ?? '—' }}</div>
-                            </div>
-                            <div class="adm-field-row">
-                                <div class="adm-field-row__label">Läuft ab</div>
-                                <div class="adm-field-row__value">{{ optional($accessEnds)->format('d.m.Y') ?? '—' }}</div>
-                            </div>
                             <div class="adm-field-row">
                                 <div class="adm-field-row__label">Status</div>
                                 <div class="adm-field-row__value">
@@ -426,6 +436,99 @@
                                         </span>
                                     @endif
                                 </div>
+                            </div>
+
+                            <form method="POST" action="{{ route('admin.users.access', $user) }}" style="display:flex;flex-direction:column;gap:10px;margin-top:14px;">
+                                @csrf
+                                @method('PATCH')
+                                <div>
+                                    <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;">Freigeschaltet am</label>
+                                    <input type="datetime-local" name="approved_at"
+                                           value="{{ optional($user->approved_at)->format('Y-m-d\TH:i') }}"
+                                           style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;">Zugangsende</label>
+                                    <input type="datetime-local" name="access_ends_at"
+                                           value="{{ optional($user->access_ends_at)->format('Y-m-d\TH:i') }}"
+                                           style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                                </div>
+                                <div style="font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:6px;">
+                                    <span>Gesendet-Flags zurücksetzen:</span>
+                                    <label style="display:flex;align-items:center;gap:6px;color:var(--text);"><input type="checkbox" name="reset_flags[]" value="reminder_10d_sent_at"> 10-Tage-Erinnerung</label>
+                                    <label style="display:flex;align-items:center;gap:6px;color:var(--text);"><input type="checkbox" name="reset_flags[]" value="expired_email_sent_at"> Ablauf-E-Mail</label>
+                                    @if($isStarter)
+                                        <label style="display:flex;align-items:center;gap:6px;color:var(--text);"><input type="checkbox" name="reset_flags[]" value="upsell_secure5_sent_at"> Upsell SECURE5</label>
+                                    @endif
+                                    @if($isEssential)
+                                        <label style="display:flex;align-items:center;gap:6px;color:var(--text);"><input type="checkbox" name="reset_flags[]" value="upsell_pro7_sent_at"> Upsell PRO7</label>
+                                    @endif
+                                </div>
+                                <button type="submit" class="adm-btn adm-btn--secondary" style="justify-content:center;">Daten speichern</button>
+                            </form>
+
+                            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-light);">
+                                <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Simulation</div>
+                                <div style="display:flex;flex-direction:column;gap:8px;">
+                                    <form method="POST" action="{{ route('admin.users.access.simulate', $user) }}">
+                                        @csrf
+                                        <input type="hidden" name="preset" value="reminder_10d">
+                                        <button type="submit" class="adm-btn adm-btn--secondary" style="width:100%;justify-content:center;">10 Tage verbleibend simulieren</button>
+                                    </form>
+                                    <form method="POST" action="{{ route('admin.users.access.simulate', $user) }}">
+                                        @csrf
+                                        <input type="hidden" name="preset" value="expired">
+                                        <button type="submit" class="adm-btn adm-btn--secondary" style="width:100%;justify-content:center;">Zugang abgelaufen simulieren</button>
+                                    </form>
+                                    @if($isStarter || $isEssential)
+                                    <form method="POST" action="{{ route('admin.users.access.simulate', $user) }}">
+                                        @csrf
+                                        <input type="hidden" name="preset" value="upsell_due">
+                                        <button type="submit" class="adm-btn adm-btn--secondary" style="width:100%;justify-content:center;">Upsell fällig simulieren</button>
+                                    </form>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-light);">
+                                <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">E-Mail jetzt senden</div>
+                                <div style="display:flex;flex-direction:column;gap:8px;">
+                                    <form method="POST" action="{{ route('admin.users.automatedEmail', $user) }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="reminder">
+                                        <button type="submit" class="adm-btn adm-btn--primary" style="width:100%;justify-content:center;">10-Tage-Erinnerung senden</button>
+                                    </form>
+                                    <form method="POST" action="{{ route('admin.users.automatedEmail', $user) }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="expired">
+                                        <button type="submit" class="adm-btn adm-btn--primary" style="width:100%;justify-content:center;">Ablauf-E-Mail senden</button>
+                                    </form>
+                                    @if($isStarter)
+                                    <form method="POST" action="{{ route('admin.users.automatedEmail', $user) }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="upsell_secure5">
+                                        <button type="submit" class="adm-btn adm-btn--primary" style="width:100%;justify-content:center;">Upsell SECURE5 senden</button>
+                                    </form>
+                                    @endif
+                                    @if($isEssential)
+                                    <form method="POST" action="{{ route('admin.users.automatedEmail', $user) }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="upsell_pro7">
+                                        <button type="submit" class="adm-btn adm-btn--primary" style="width:100%;justify-content:center;">Upsell PRO7 senden</button>
+                                    </form>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-light);font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:6px;">
+                                <div>Erinnerung gesendet: {{ optional($user->reminder_10d_sent_at)->format('d.m.Y H:i') ?? '—' }}</div>
+                                <div>Ablauf-E-Mail gesendet: {{ optional($user->expired_email_sent_at)->format('d.m.Y H:i') ?? '—' }}</div>
+                                @if($isStarter)
+                                    <div>Upsell SECURE5 gesendet: {{ optional($user->upsell_secure5_sent_at)->format('d.m.Y H:i') ?? '—' }}</div>
+                                @endif
+                                @if($isEssential)
+                                    <div>Upsell PRO7 gesendet: {{ optional($user->upsell_pro7_sent_at)->format('d.m.Y H:i') ?? '—' }}</div>
+                                @endif
                             </div>
                         </div>
                     </div>
