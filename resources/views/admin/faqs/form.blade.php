@@ -9,14 +9,13 @@
     @include('admin.partials.styles')
 </head>
 <body>
-<div class="adm-layout">
     @include('admin.partials.sidebar')
-    <div class="adm-main">
+    <main class="adm-main">
         @include('admin.partials.topbar', ['title' => $faq ? 'FAQ bearbeiten' : 'Neue FAQ'])
 
         <div class="adm-content">
             <form method="POST" action="{{ $faq ? route('admin.faqs.update', $faq) : route('admin.faqs.store') }}"
-                  style="max-width:720px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;">
+                  style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;">
                 @csrf
                 @if($faq) @method('PUT') @endif
 
@@ -52,7 +51,6 @@
                 </div>
             </form>
         </div>
-    </div>
-</div>
+    </main>
 </body>
 </html>

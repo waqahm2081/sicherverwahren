@@ -9,9 +9,8 @@
     @include('admin.partials.styles')
 </head>
 <body>
-<div class="adm-layout">
     @include('admin.partials.sidebar')
-    <div class="adm-main">
+    <main class="adm-main">
         @include('admin.partials.topbar', ['title' => 'Rabattcodes'])
 
         <div class="adm-content">
@@ -58,7 +57,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 </body>
 </html>

@@ -127,7 +127,8 @@
     .adm-sidebar__logout:hover { background: #fef2f2; border-color: #fecaca; color: #d94f4f; }
 
     /* ── Main ── */
-    .adm-main { margin-left: var(--sidebar-width); flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+    .adm-layout { display: flex; flex: 1; width: 100%; min-height: 100vh; }
+    .adm-main { margin-left: var(--sidebar-width); flex: 1; width: 100%; min-width: 0; min-height: 100vh; display: flex; flex-direction: column; }
 
     /* ── Topbar ── */
     .adm-topbar {

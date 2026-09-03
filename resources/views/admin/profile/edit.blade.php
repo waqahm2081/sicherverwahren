@@ -9,9 +9,8 @@
     @include('admin.partials.styles')
 </head>
 <body>
-<div class="adm-layout">
     @include('admin.partials.sidebar')
-    <div class="adm-main">
+    <main class="adm-main">
         @include('admin.partials.topbar', ['title' => 'Passwort ändern'])
 
         <div class="adm-content">
@@ -33,7 +32,7 @@
             </div>
 
             <form method="POST" action="{{ route('admin.profile.password') }}"
-                  style="max-width:480px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;">
+                  style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;">
                 @csrf
                 @method('PUT')
 
@@ -58,7 +57,6 @@
                 <button type="submit" class="adm-btn adm-btn--primary">Passwort speichern</button>
             </form>
         </div>
-    </div>
-</div>
+    </main>
 </body>
 </html>

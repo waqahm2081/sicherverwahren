@@ -9,9 +9,8 @@
     @include('admin.partials.styles')
 </head>
 <body>
-<div class="adm-layout">
     @include('admin.partials.sidebar')
-    <div class="adm-main">
+    <main class="adm-main">
         @include('admin.partials.topbar', ['title' => 'Leads'])
 
         <div class="adm-content">
@@ -101,7 +100,6 @@
 
             <div style="margin-top:16px;">{{ $leads->links() }}</div>
         </div>
-    </div>
-</div>
+    </main>
 </body>
 </html>
