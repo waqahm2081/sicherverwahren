@@ -23,6 +23,10 @@
             <form id="leadForm" onsubmit="submitLead(event)">
                 @csrf
                 <input type="hidden" name="source" id="leadSource" value="checklist">
+                {{-- Honeypot spam trap --}}
+                <div style="position:absolute;left:-9999px;height:0;overflow:hidden;" aria-hidden="true">
+                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+                </div>
 
                 <div style="margin-bottom:16px;">
                     <label style="display:block;font-size:13px;font-weight:600;color:#3d3456;margin-bottom:6px;">Ihr Name *</label>
@@ -125,7 +129,7 @@ async function submitLead(e) {
             document.getElementById('leadFormWrap').style.display = 'none';
             document.getElementById('leadSuccess').style.display = 'block';
         } else {
-            throw new Error('Server error');
+            throw new Error(data.message || 'Server error');
         }
     } catch (err) {
         errBox.textContent = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';

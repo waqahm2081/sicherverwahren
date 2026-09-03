@@ -100,6 +100,21 @@
     </div>
 </header>
 
+{{-- Mobile auth links (injected into SlickNav menu by function.js) --}}
+<div id="header-auth-mobile-template" style="display:none;">
+    <div class="header-auth-mobile">
+        @auth
+            <a href="{{ route('user.dashboard') }}">Dashboard</a>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit">Abmelden</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}">Anmelden</a>
+        @endauth
+    </div>
+</div>
+
 <style>
     .slicknav_menu .header-auth-mobile {
         padding: 10px 20px 15px;

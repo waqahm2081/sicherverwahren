@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="blog-page">
 <head>
     <title>{{ $blog->meta_title ?: $blog->title }} | Sicher Bitcoin Verwahren</title>
     <meta name="description" content="{{ $blog->meta_description ?: Str::limit(strip_tags($blog->excerpt ?: $blog->content), 160) }}">
@@ -131,9 +131,22 @@
         .related-card__body { padding: 18px; }
         .related-card__title { font-size: 15px; font-weight: 700; color: #1a1625; line-height: 1.35; margin-bottom: 6px; }
         .related-card__date { font-size: 12px; color: #a89fc0; }
+
+        /* Mobile / overflow fixes */
+        html.blog-page, body.blog-page { overflow-x: hidden; }
+        body.blog-page .article-content,
+        body.blog-page .article-content * { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; }
+        body.blog-page .article-content table { display: block; overflow-x: auto; }
+        body.blog-page .article-content pre { white-space: pre-wrap; }
+        body.blog-page .cb-cursor { display: none !important; }
+        @media (max-width: 768px) {
+            body.blog-page .gt_float_switcher { top: 72px !important; right: 8px !important; }
+            .article-hero { padding-top: 40px; }
+            .article-layout { padding: 40px 0 60px; }
+        }
     </style>
 </head>
-<body>
+<body class="blog-page">
     @include('includes.header')
 
     {{-- Hero --}}
@@ -162,7 +175,7 @@
                 @if($blog->published_at)
                 <span>
                     <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
-                    {{ $blog->published_at->format('d. F Y') }}
+                    {{ $blog->published_at->locale('de')->translatedFormat('d. F Y') }}
                 </span>
                 @endif
                 <span>
@@ -269,7 +282,7 @@
                             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#6f54a4;margin-bottom:6px;">{{ $rel->category->name }}</div>
                         @endif
                         <div class="related-card__title">{{ $rel->title }}</div>
-                        <div class="related-card__date">{{ $rel->published_at?->format('d.m.Y') }}</div>
+                        <div class="related-card__date">{{ $rel->published_at?->locale('de')->translatedFormat('d. F Y') }}</div>
                     </div>
                 </a>
                 @endforeach

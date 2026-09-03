@@ -203,10 +203,10 @@
 
         @if($existingVideos->isNotEmpty())
             @foreach($existingVideos as $vi => $vid)
-                <div class="adm-video-block" data-vindex="{{ $vi }}" draggable="true">
+                <div class="adm-video-block" data-vindex="{{ $vi }}">
                     <div class="adm-video-block__header">
                         <div style="display:flex;align-items:center;gap:10px;">
-                            <span class="adm-drag-handle" title="Ziehen zum Sortieren">⠿</span>
+                            <span class="adm-drag-handle" draggable="true" title="Ziehen zum Sortieren">⠿</span>
                             <span class="adm-video-block__num">Video {{ $vi + 1 }}</span>
                         </div>
                         <button type="button" class="adm-btn adm-btn--danger"
@@ -316,6 +316,7 @@
         cursor: grab;
         line-height: 1;
         padding: 0 4px;
+        user-select: none;
     }
     .adm-drag-handle:active { cursor: grabbing; }
 </style>
@@ -428,10 +429,10 @@
 
         const vi  = videoCount++;
         const html = `
-            <div class="adm-video-block" data-vindex="${vi}" draggable="true">
+            <div class="adm-video-block" data-vindex="${vi}">
                 <div class="adm-video-block__header">
                     <div style="display:flex;align-items:center;gap:10px;">
-                        <span class="adm-drag-handle" title="Ziehen zum Sortieren">⠿</span>
+                        <span class="adm-drag-handle" draggable="true" title="Ziehen zum Sortieren">⠿</span>
                         <span class="adm-video-block__num">Video ${vi + 1}</span>
                     </div>
                     <button type="button" class="adm-btn adm-btn--danger"
@@ -505,6 +506,10 @@
         let dragged     = null;
 
         container.addEventListener('dragstart', e => {
+            if (!e.target.classList.contains('adm-drag-handle')) {
+                e.preventDefault();
+                return;
+            }
             dragged = e.target.closest('.adm-video-block');
             if (!dragged) return;
             dragged.classList.add('dragging');

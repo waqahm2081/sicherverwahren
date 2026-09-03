@@ -49,6 +49,30 @@
             <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
             <span>Blog verwalten</span>
         </a>
+
+        <a href="{{ route('admin.leads.index') }}"
+           class="adm-sidebar__link {{ request()->routeIs('admin.leads*') ? 'adm-sidebar__link--active' : '' }}">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <span>Leads</span>
+        </a>
+
+        <a href="{{ route('admin.faqs.index') }}"
+           class="adm-sidebar__link {{ request()->routeIs('admin.faqs*') ? 'adm-sidebar__link--active' : '' }}">
+            <svg viewBox="0 0 24 24"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg>
+            <span>FAQs verwalten</span>
+        </a>
+
+        <a href="{{ route('admin.videos.index') }}"
+           class="adm-sidebar__link {{ request()->routeIs('admin.videos*') ? 'adm-sidebar__link--active' : '' }}">
+            <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            <span>Videos</span>
+        </a>
+
+        <a href="{{ route('admin.profile.edit') }}"
+           class="adm-sidebar__link {{ request()->routeIs('admin.profile*') ? 'adm-sidebar__link--active' : '' }}">
+            <svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+            <span>Passwort ändern</span>
+        </a>
     </nav>
 
     <div class="adm-sidebar__footer">

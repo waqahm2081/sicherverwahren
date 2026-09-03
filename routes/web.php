@@ -6,6 +6,8 @@ use App\Http\Controllers\PricingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OnsitePaymentController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -15,6 +17,9 @@ use App\Http\Controllers\Admin\UsersController as AdminUsersController;
 use App\Http\Controllers\Admin\VideosController as VideosController;
 use App\Http\Controllers\Admin\BlogsController as AdminBlogsController;
 use App\Http\Controllers\Admin\CouponsController as AdminCouponsController;
+use App\Http\Controllers\Admin\LeadsController as AdminLeadsController;
+use App\Http\Controllers\Admin\FaqsController as AdminFaqsController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 
 /* ── Public pages ── */
 Route::get('/', function () {
@@ -39,7 +44,8 @@ Route::post('/pay/{token}/intent',   [OnsitePaymentController::class, 'createInt
 Route::post('/pay/{token}/complete', [OnsitePaymentController::class, 'complete'])->name('onsite.pay.complete');
 
 Route::get('/workshops',        function () { return view('workshops'); });
-Route::get('/faqs',             function () { return view('faqs'); });
+Route::get('/faqs',             [FaqController::class, 'index'])->name('faqs.index');
+Route::get('/sitemap.xml',      [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/contact-us',       function () { return view('contact-us'); });
 Route::get('/impressum',        function () { return view('impressum'); });
 Route::get('/datenschutz',      function () { return view('datenschutz'); });
@@ -49,7 +55,9 @@ Route::get('/legal-disclaimer', function () { return view('legal-disclaimer'); }
 /* ── Blog (public) ── */
 Route::get('/blog',        [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
-Route::post('/lead/submit', [BlogController::class, 'submitLead'])->name('lead.submit');
+Route::post('/lead/submit', [BlogController::class, 'submitLead'])
+    ->middleware('throttle:10,1')
+    ->name('lead.submit');
 
 /* ── User auth ── */
 Route::get('/login', fn () => view('login'))->name('login')->middleware('guest');
@@ -101,7 +109,7 @@ Route::post('/logout', function (\Illuminate\Http\Request $request) {
 /* ── User Dashboard ── */
 Route::middleware('auth')->group(function () {
     Route::get('/user-dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
-    Route::post('/user-dashboard/profile', [DashboardController::class, 'updateProfile'])->name('user.profile.update');
+    Route::match(['post', 'patch'], '/user-dashboard/profile', [DashboardController::class, 'updateProfile'])->name('user.profile.update');
 });
 
 /* ── Admin routes ── */
@@ -168,5 +176,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/blogs/{blog}/edit', [AdminBlogsController::class, 'edit'])->name('blogs.edit');
         Route::put('/blogs/{blog}',      [AdminBlogsController::class, 'update'])->name('blogs.update');
         Route::delete('/blogs/{blog}',   [AdminBlogsController::class, 'destroy'])->name('blogs.destroy');
+
+        // Leads
+        Route::get('/leads', [AdminLeadsController::class, 'index'])->name('leads.index');
+        Route::patch('/leads/{lead}', [AdminLeadsController::class, 'update'])->name('leads.update');
+        Route::delete('/leads/{lead}', [AdminLeadsController::class, 'destroy'])->name('leads.destroy');
+
+        // FAQs
+        Route::get('/faqs', [AdminFaqsController::class, 'index'])->name('faqs.index');
+        Route::get('/faqs/create', [AdminFaqsController::class, 'create'])->name('faqs.create');
+        Route::post('/faqs', [AdminFaqsController::class, 'store'])->name('faqs.store');
+        Route::get('/faqs/{faq}/edit', [AdminFaqsController::class, 'edit'])->name('faqs.edit');
+        Route::put('/faqs/{faq}', [AdminFaqsController::class, 'update'])->name('faqs.update');
+        Route::delete('/faqs/{faq}', [AdminFaqsController::class, 'destroy'])->name('faqs.destroy');
+        Route::post('/faqs/reorder', [AdminFaqsController::class, 'reorder'])->name('faqs.reorder');
+
+        // Admin profile / password
+        Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
     });
 });

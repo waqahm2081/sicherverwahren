@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="blog-page">
 <head>
     <title>Blog – Bitcoin Sicherheit & Self-Custody | Sicher Bitcoin Verwahren</title>
     <meta name="description" content="Aktuelle Artikel zu Bitcoin Self-Custody, Hardware Wallets, Sicherheitsstrategien und Multisig für Privatpersonen und Unternehmen in der Schweiz.">
@@ -59,9 +59,15 @@
         .lead-banner__btn { white-space: nowrap; background: #fff; color: #6f54a4; padding: 14px 28px; border-radius: 100px; font-weight: 700; font-size: 14px; text-decoration: none; border: none; cursor: pointer; transition: transform .2s, box-shadow .2s; flex-shrink: 0; }
         .lead-banner__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
         @media(max-width:640px){ .lead-banner{ flex-direction:column; padding:28px; } }
+
+        html.blog-page, body.blog-page { overflow-x: hidden; }
+        body.blog-page .cb-cursor { display: none !important; }
+        @media (max-width: 768px) {
+            body.blog-page .gt_float_switcher { top: 72px !important; right: 8px !important; }
+        }
     </style>
 </head>
-<body>
+<body class="blog-page">
     @include('includes.header')
 
     {{-- Hero --}}

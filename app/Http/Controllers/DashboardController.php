@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use App\Models\PricingPackage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
 class DashboardController extends Controller
@@ -49,7 +48,7 @@ class DashboardController extends Controller
         $user->phone = $validated['phone'] ?? $user->phone;
 
         if ($request->filled('password')) {
-            $user->password = Hash::make($validated['password']);
+            $user->password = $validated['password'];
         }
 
         $user->save();

@@ -10,62 +10,23 @@
 
     <link rel="canonical" href="{{ url('/faqs') }}">
 
-    {{-- FAQPage Schema (hardcoded – matches visible accordion Q&As) --}}
+    {{-- FAQPage Schema --}}
+    @php
+        $faqSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'mainEntity' => $faqs->map(fn ($faq) => [
+                '@type' => 'Question',
+                'name' => $faq->question,
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => strip_tags($faq->answer),
+                ],
+            ])->values()->all(),
+        ];
+    @endphp
     <script type="application/ld+json">
-    {!! json_encode([
-        '@context' => 'https://schema.org',
-        '@type' => 'FAQPage',
-        'mainEntity' => [
-            [
-                '@type' => 'Question',
-                'name' => 'Was passiert, wenn ich meine Hardware-Wallet verliere oder sie kaputt geht?',
-                'acceptedAnswer' => [
-                    '@type' => 'Answer',
-                    'text' => 'Das ist kein Problem, solange Sie Ihr Backup (die 24 Wörter, auch "Seed" genannt) sicher aufbewahrt haben. Ihre Bitcoin ist nicht auf dem physischen Gerät, sondern auf der Blockchain gespeichert. Die Hardware-Wallet ist nur der Schlüssel dazu. Mit Ihrem Backup können Sie Ihre Bitcoin jederzeit auf einer neuen Wallet wiederherstellen. Wir zeigen Ihnen im Service genau, wie das funktioniert und wo Sie Ihr Backup am besten lagern.',
-                ],
-            ],
-            [
-                '@type' => 'Question',
-                'name' => 'Kann ich auch andere Kryptowährungen wie Ethereum mit Ihnen sichern?',
-                'acceptedAnswer' => [
-                    '@type' => 'Answer',
-                    'text' => 'Nein. Wir konzentrieren uns ausschließlich auf Bitcoin. Wir sind überzeugte Bitcoiner und unterstützen aus Überzeugung und für maximale Sicherheit keine anderen Kryptowährungen. Unsere Expertise, unsere Prozesse und die von uns empfohlene Hardware (BitBox02 Bitcoin-only) sind spezifisch auf Bitcoin optimiert.',
-                ],
-            ],
-            [
-                '@type' => 'Question',
-                'name' => 'Wie lange dauert ein typischer Einrichtungstermin?',
-                'acceptedAnswer' => [
-                    '@type' => 'Answer',
-                    'text' => 'Die Dauer hängt vom gewählten Paket ab. Private Starter: Ca. 1,5 - 2 Stunden. Private Secure / Business Essential: Ca. 3 - 4 Stunden. Business Professional: Ca. 4 - 5 Stunden. Business Enterprise: Ein Tag oder mehrere Termine.',
-                ],
-            ],
-            [
-                '@type' => 'Question',
-                'name' => 'Ist die Hardware-Wallet im Paketpreis inbegriffen?',
-                'acceptedAnswer' => [
-                    '@type' => 'Answer',
-                    'text' => 'Ja, absolut. Der Preis ist all-inclusive. Sie bezahlen einmalig für das Paket und erhalten dafür die Hardware, die persönliche Einrichtung bei Ihnen vor Ort, die Schulung und die Dokumentation. Es gibt keine versteckten Kosten.',
-                ],
-            ],
-            [
-                '@type' => 'Question',
-                'name' => 'Warum sollte ich Sie beauftragen und es nicht selbst machen?',
-                'acceptedAnswer' => [
-                    '@type' => 'Answer',
-                    'text' => 'Weil es um Ihr wertvolles Vermögen geht. Der Teufel steckt im Detail: Ein Tippfehler beim Aufschreiben des Seeds, ein unsicheres Backup-Medium oder ein falsch konfiguriertes Multi-Signature-Setup kann zu einem unwiederbringlichen Verlust führen. Wir bringen jahrelange Erfahrung und wissen, worauf es ankommt. Wir sorgen dafür, dass es von Anfang an richtig und sicher gemacht wird, damit Sie beruhigt schlafen können.',
-                ],
-            ],
-            [
-                '@type' => 'Question',
-                'name' => 'Stellen Quantencomputer ein Risiko für Bitcoin dar – und wann?',
-                'acceptedAnswer' => [
-                    '@type' => 'Answer',
-                    'text' => 'Adam Back (CEO von Blockstream, Erfinder von Hashcash) sieht Quantencomputer für Bitcoin als "ridiculously early" – eine echte Bedrohung frühestens in 20–40 Jahren. Quantencomputer werden zuerst leichtere Ziele wie Banken und Militär angreifen, und Mining wäre ökonomisch attraktiver als ein Angriff. Fazit: Kein Grund zur Sorge. Das Fenster für ein geordnetes Upgrade ist groß, und die Ökonomie spricht gegen einen Angriff.',
-                ],
-            ],
-        ],
-    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+    {!! json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
 
 </head>
@@ -107,119 +68,26 @@
 
                             <!-- FAQ Accordion Start -->
                             <div class="faq-accordion" id="accordion">
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.2s">
-                                    <h2 class="accordion-header" id="heading1">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                                            Was passiert, wenn ich meine Hardware-Wallet verliere oder sie kaputt geht?
+                                @forelse($faqs as $index => $faq)
+                                <div class="accordion-item wow fadeInUp" data-wow-delay="{{ min(0.2 + $index * 0.2, 1.0) }}s">
+                                    <h2 class="accordion-header" id="heading{{ $faq->id }}">
+                                        <button class="accordion-button {{ $index === 1 ? '' : 'collapsed' }}" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapse{{ $faq->id }}"
+                                                aria-expanded="{{ $index === 1 ? 'true' : 'false' }}"
+                                                aria-controls="collapse{{ $faq->id }}">
+                                            {{ $faq->question }}
                                         </button>
                                     </h2>
-                                    <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1" data-bs-parent="#accordion">
+                                    <div id="collapse{{ $faq->id }}" class="accordion-collapse collapse {{ $index === 1 ? 'show' : '' }}"
+                                         aria-labelledby="heading{{ $faq->id }}" data-bs-parent="#accordion">
                                         <div class="accordion-body">
-                                            <p>Das ist kein Problem, solange Sie Ihr Backup (die 24 Wörter, auch "Seed" genannt) sicher aufbewahrt haben. Ihre Bitcoin ist nicht auf dem physischen Gerät, sondern auf der Blockchain gespeichert. Die Hardware-Wallet ist nur der Schlüssel dazu. Mit Ihrem Backup können Sie Ihre Bitcoin jederzeit auf einer neuen Wallet wiederherstellen. Wir zeigen Ihnen im Service genau, wie das funktioniert und wo Sie Ihr Backup am besten lagern.</p>
+                                            {!! $faq->answer !!}
                                         </div>
                                     </div>
                                 </div>
-                                <!-- FAQ Item End -->
-
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.4s">
-                                    <h2 class="accordion-header" id="heading2">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                            Kann ich auch andere Kryptowährungen wie Ethereum mit Ihnen sichern?
-                                        </button>
-                                    </h2>
-                                    <div id="collapse2" class="accordion-collapse collapse show" aria-labelledby="heading2" data-bs-parent="#accordion">
-                                        <div class="accordion-body">
-                                            <p>Nein. Wir konzentrieren uns ausschließlich auf Bitcoin. Wir sind überzeugte Bitcoiner und unterstützen aus Überzeugung und für maximale Sicherheit keine anderen Kryptowährungen. Unsere Expertise, unsere Prozesse und die von uns empfohlene Hardware (BitBox02 Bitcoin-only) sind spezifisch auf Bitcoin optimiert.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
-
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.6s">
-                                    <h2 class="accordion-header" id="heading3">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                                            Wie lange dauert ein typischer Einrichtungstermin?
-                                        </button>
-                                    </h2>
-                                    <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#accordion">
-                                        <div class="accordion-body">
-                                            <p>
-                                                Die Dauer hängt vom gewählten Paket ab.
-                                                <br/>
-                                                <strong>Private Starter:</strong> Ca. 1,5 - 2 Stunden<br/>
-                                                <strong>Private Secure / Business Essential:</strong> Ca. 3 - 4 Stunden<br/>
-                                                <strong>Business Professional:</strong> Ca. 4 - 5 Stunden<br/>
-                                                <strong>Business Enterprise:</strong> Ein Tag oder mehrere Termine
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
-
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.8s">
-                                    <h2 class="accordion-header" id="heading4">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                                            Ist die Hardware-Wallet im Paketpreis inbegriffen?
-                                        </button>
-                                    </h2>
-                                    <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordion">
-                                        <div class="accordion-body">
-                                            <p>Ja, absolut. Der Preis ist all-inclusive. Sie bezahlen einmalig für das Paket und erhalten dafür die Hardware, die persönliche Einrichtung bei Ihnen vor Ort, die Schulung und die Dokumentation. Es gibt keine versteckten Kosten.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
-
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.8s">
-                                    <h2 class="accordion-header" id="heading5">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                                            Warum sollte ich Sie beauftragen und es nicht selbst machen?
-                                        </button>
-                                    </h2>
-                                    <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#accordion">
-                                        <div class="accordion-body">
-                                            <p>Weil es um Ihr wertvolles Vermögen geht. Der Teufel steckt im Detail: Ein Tippfehler beim Aufschreiben des Seeds, ein unsicheres Backup-Medium oder ein falsch konfiguriertes Multi-Signature-Setup kann zu einem unwiederbringlichen Verlust führen. Wir bringen jahrelange Erfahrung und wissen, worauf es ankommt. Wir sorgen dafür, dass es von Anfang an richtig und sicher gemacht wird, damit Sie beruhigt schlafen können.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
-
-
-
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.8s">
-                                    <h2 class="accordion-header" id="heading6">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
-                                            Stellen Quantencomputer ein Risiko für Bitcoin dar – und wann?
-                                        </button>
-                                    </h2>
-                                    <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6" data-bs-parent="#accordion">
-                                        <div class="accordion-body">
-                                            <p>
-                                                <strong>Wer ist Adam Back?</strong><br/>
-                                                Adam Back ist ein britischer Kryptograf und CEO von Blockstream. Er ist eine der angesehensten Persönlichkeiten in der Bitcoin-Welt. Bereits 1997 erfand er Hashcash, das später als Grundlage für Bitcoins Mining-Algorithmus diente. Im Original-Bitcoin-Whitepaper von Satoshi Nakamoto wird Adam Back namentlich zitiert. Seine Einschätzung zur Quantencomputer-Bedrohung hat daher besonderes Gewicht.
-                                            </p>
-                                            <p>
-                                                <strong>Seine Aussage:</strong><br/>
-                                                Quantencomputer sind für Bitcoin "ridiculously early". Eine echte Bedrohung sieht er frühestens in 20–40 Jahren. Zudem betont er zwei entscheidende Punkte:
-                                                <br/>
-                                                Erstens: Quantencomputer werden zuerst leichtere Ziele angreifen – Banken, Militär, staatliche Kommunikation. Deren RSA- und Diffie-Hellman-Verschlüsselung ist weit verwundbarer als Bitcoins ECDSA. Diese Systeme sind das "niedrig hängende Obst".
-                                                <br/>
-                                                Zweitens: Selbst wenn Quantencomputer leistungsfähig genug sind, ist Mining ökonomisch attraktiver als ein Angriff. Die akademische Forschung zeigt: Ein Quanten-Miner, der 16 Minuten Grover-Iterationen fährt und dann misst, kann effizienter minen als klassische Rechner – mit besseren Energiekosten pro Block. Warum das Netzwerk angreifen, wenn man es profitabler nutzen kann?
-                                            </p>
-                                            <p>
-                                                <strong>Fazit:</strong><br/>
-                                                Kein Grund zur Sorge. Das Fenster für ein geordnetes Upgrade ist groß, und die Ökonomie spricht gegen einen Angriff.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-
+                                @empty
+                                <p class="text-center">Keine FAQs verfügbar.</p>
+                                @endforelse
                             </div>
                             <!-- FAQ Accordion End -->
                         </div>

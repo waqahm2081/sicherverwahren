@@ -34,6 +34,12 @@
 		prependTo : '.responsive-menu'
 	});
 
+	/* Inject login/dashboard links into mobile menu */
+	var authMobile = $('#header-auth-mobile-template .header-auth-mobile');
+	if (authMobile.length && $('.slicknav_menu .header-auth-mobile').length === 0) {
+		$('.slicknav_menu').append(authMobile.clone());
+	}
+
 	if($("a[href='#top']").length){
 		$(document).on("click", "a[href='#top']", function() {
 			$("html, body").animate({ scrollTop: 0 }, "slow");

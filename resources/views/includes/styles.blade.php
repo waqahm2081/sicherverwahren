@@ -11,10 +11,8 @@
 <!-- Meta -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-
-<meta name="robots" content="index, follow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
 
 <link rel="icon" href="/images/loader.jpg" type="image/jpeg">
 <link rel="shortcut icon" href="/images/loader.jpg" type="image/jpeg">
@@ -39,7 +37,6 @@
 "image": "https://sicher-bitcoin-verwahren.ch/assets/images/logo.png",
 "@id": "https://sicher-bitcoin-verwahren.ch",
 "url": "https://sicher-bitcoin-verwahren.ch",
-"telephone": "+41 79 123 45 67",
 "address": {
     "@type": "PostalAddress",
     "streetAddress": "Allmendingen-Allee 9",
@@ -54,8 +51,7 @@
 },
 "openingHours": "Mo-Fr 09:00-17:00",
 "sameAs": [
-    "https://twitter.com/sicherbitcoin",
-    "https://linkedin.com/company/sicherbitcoin"
+    "https://www.linkedin.com/company/sicher-bitcoin-verwahren"
 ]
 }
 </script>
