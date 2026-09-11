@@ -39,12 +39,24 @@ class AutomatedEmailService
         $leads = Lead::query()
             ->whereNull('followup_sent_at')
             ->where('created_at', '<=', now()->subDays(2))
+            ->orderBy('id')
             ->get();
 
         foreach ($leads as $lead) {
-            Mail::to($lead->email)->send(new LeadFollowupMail($lead->name));
-            $lead->update(['followup_sent_at' => now()]);
-            $messages[] = "Lead follow-up → {$lead->email}";
+            if (! $this->isDeliverableEmail($lead->email)) {
+                $lead->update(['followup_sent_at' => now()]);
+                $messages[] = "Lead follow-up SKIPPED (invalid email) → {$lead->email}";
+                continue;
+            }
+
+            try {
+                Mail::to($lead->email)->send(new LeadFollowupMail($lead->name));
+                $lead->update(['followup_sent_at' => now()]);
+                $messages[] = "Lead follow-up → {$lead->email}";
+            } catch (\Throwable $e) {
+                report($e);
+                $messages[] = "Lead follow-up FAILED → {$lead->email}: {$e->getMessage()}";
+            }
         }
 
         return $messages;
@@ -66,7 +78,12 @@ class AutomatedEmailService
             ->get();
 
         foreach ($users as $user) {
-            $messages[] = $this->sendReminder($user);
+            try {
+                $messages[] = $this->sendReminder($user);
+            } catch (\Throwable $e) {
+                report($e);
+                $messages[] = "10-day reminder FAILED → {$user->email}: {$e->getMessage()}";
+            }
         }
 
         return array_values(array_filter($messages));
@@ -88,7 +105,12 @@ class AutomatedEmailService
             ->get();
 
         foreach ($users as $user) {
-            $messages[] = $this->sendExpired($user);
+            try {
+                $messages[] = $this->sendExpired($user);
+            } catch (\Throwable $e) {
+                report($e);
+                $messages[] = "Expired email FAILED → {$user->email}: {$e->getMessage()}";
+            }
         }
 
         return array_values(array_filter($messages));
@@ -111,7 +133,12 @@ class AutomatedEmailService
             ->get();
 
         foreach ($starterUsers as $user) {
-            $messages[] = $this->sendUpsellSecure5($user);
+            try {
+                $messages[] = $this->sendUpsellSecure5($user);
+            } catch (\Throwable $e) {
+                report($e);
+                $messages[] = "SECURE5 FAILED → {$user->email}: {$e->getMessage()}";
+            }
         }
 
         $essentialUsers = User::query()
@@ -124,7 +151,12 @@ class AutomatedEmailService
             ->get();
 
         foreach ($essentialUsers as $user) {
-            $messages[] = $this->sendUpsellPro7($user);
+            try {
+                $messages[] = $this->sendUpsellPro7($user);
+            } catch (\Throwable $e) {
+                report($e);
+                $messages[] = "PRO7 FAILED → {$user->email}: {$e->getMessage()}";
+            }
         }
 
         return array_values(array_filter($messages));
@@ -241,6 +273,20 @@ class AutomatedEmailService
         if ($user->role === 'admin' || $user->selected_option_type !== 'digital') {
             throw new \InvalidArgumentException('Diese E-Mail gilt nur für digitale Kundenkonten.');
         }
+    }
+
+    protected function isDeliverableEmail(?string $email): bool
+    {
+        if (! $email || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        $domain = substr(strrchr($email, '@'), 1) ?: '';
+
+        // Fake/test domains that Hostpoint rejects as unroutable
+        $blocked = ['test', 'example.com', 'example.org', 'example.net', 'localhost', 'invalid'];
+
+        return ! in_array(strtolower($domain), $blocked, true);
     }
 
     protected function emailOwnsPackage(string $email, string $package): bool
