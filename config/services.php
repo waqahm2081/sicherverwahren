@@ -36,4 +36,9 @@ return [
         'secret' => env('STRIPE_SECRETKEY'),
     ],
 
+    'turnstile' => [
+        'site_key' => env('TURNSTILE_SITE_KEY'),
+        'secret'   => env('TURNSTILE_SECRET_KEY'),
+    ],
+
 ];

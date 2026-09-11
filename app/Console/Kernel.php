@@ -12,7 +12,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('sbv:process-automated-emails')->dailyAt('09:00');
+        $schedule->command('sbv:process-automated-emails')
+            ->dailyAt('09:00')
+            ->timezone(config('app.timezone'))
+            ->withoutOverlapping(30);
     }
 
     /**

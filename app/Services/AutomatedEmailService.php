@@ -7,6 +7,7 @@ use App\Mail\CourseExpiryReminderMail;
 use App\Mail\LeadFollowupMail;
 use App\Mail\UpsellPro7Mail;
 use App\Mail\UpsellSecure5Mail;
+use App\Support\LeadGuard;
 use App\Models\Coupon;
 use App\Models\Lead;
 use App\Models\User;
@@ -43,7 +44,7 @@ class AutomatedEmailService
             ->get();
 
         foreach ($leads as $lead) {
-            if (! $this->isDeliverableEmail($lead->email)) {
+            if (! LeadGuard::isDeliverableEmail($lead->email)) {
                 $lead->update(['followup_sent_at' => now()]);
                 $messages[] = "Lead follow-up SKIPPED (invalid email) → {$lead->email}";
                 continue;
@@ -273,20 +274,6 @@ class AutomatedEmailService
         if ($user->role === 'admin' || $user->selected_option_type !== 'digital') {
             throw new \InvalidArgumentException('Diese E-Mail gilt nur für digitale Kundenkonten.');
         }
-    }
-
-    protected function isDeliverableEmail(?string $email): bool
-    {
-        if (! $email || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return false;
-        }
-
-        $domain = substr(strrchr($email, '@'), 1) ?: '';
-
-        // Fake/test domains that Hostpoint rejects as unroutable
-        $blocked = ['test', 'example.com', 'example.org', 'example.net', 'localhost', 'invalid'];
-
-        return ! in_array(strtolower($domain), $blocked, true);
     }
 
     protected function emailOwnsPackage(string $email, string $package): bool

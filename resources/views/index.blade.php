@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="zxx">
+﻿<!DOCTYPE html>
+<html lang="de">
 
 <head>
-    <title>Bitcoin sicher verwahren in Deutschland, Österreich & Schweiz | Privat & Unternehmen | Sicher Bitcoin Verwahren</title>
-    <meta name="description" content="Bitcoin sicher verwahren – für Privatpersonen und KMU in Deutschland, Österreich und der Schweiz. Hardware Wallets, Multisig, sichere Backup Strategien und klare Video Anleitungen. Einfach, sicher, unabhängig.">
+    <title>Bitcoin sicher verwahren in Deutschland, Ã–sterreich & Schweiz | Privat & Unternehmen | Sicher Bitcoin Verwahren</title>
+    <meta name="description" content="Bitcoin sicher verwahren â€“ fÃ¼r Privatpersonen und KMU in Deutschland, Ã–sterreich und der Schweiz. Hardware Wallets, Multisig, sichere Backup Strategien und klare Video Anleitungen. Einfach, sicher, unabhÃ¤ngig.">
 	
     @include('includes.styles')
     
@@ -18,7 +18,7 @@
     <div class="preloader">
 		<div class="loading-container">
 			<div class="loading"></div>
-			<div id="loading-icon"><img src="/images/loader.jpg" alt=""></div>
+			<div id="loading-icon"><img src="/images/loader.jpg" width="80" height="80" alt="Sicher Bitcoin Verwahren wird geladen"></div>
 		</div>
 	</div>
 
@@ -28,13 +28,13 @@
                 <div class="col-lg-10">
                     <div class="hero-content">
                         <div class="section-title dark-section">
-                            <h3 class="wow fadeInUp">Sichere Bitcoin‑Selbstverwahrung. Lokal vertraut, weltweit verfügbar.</h3>
-                            <h1 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">Bitcoin sicher verwahren – für Privatpersonen & KMU weltweit</h1>
-                            <!-- <p class="wow fadeInUp" data-wow-delay="0.4s">Wir helfen Ihnen, Ihre Bitcoin selbst zu sichern – mit Hardware Wallets, Multi-Signature und persönlicher Beratung. Ob Privatperson oder Unternehmen: Ihre Bitcoin gehören Ihnen. Wir zeigen Ihnen, wie.</p> -->
+                            <h3 class="wow fadeInUp">Sichere Bitcoinâ€‘Selbstverwahrung. Lokal vertraut, weltweit verfÃ¼gbar.</h3>
+                            <h1 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">Bitcoin sicher verwahren â€“ fÃ¼r Privatpersonen & KMU weltweit</h1>
+                            <!-- <p class="wow fadeInUp" data-wow-delay="0.4s">Wir helfen Ihnen, Ihre Bitcoin selbst zu sichern â€“ mit Hardware Wallets, Multi-Signature und persÃ¶nlicher Beratung. Ob Privatperson oder Unternehmen: Ihre Bitcoin gehÃ¶ren Ihnen. Wir zeigen Ihnen, wie.</p> -->
                             <ul>
                                 <li>Schutz vor Verlust, Diebstahl und typischen Fehlern </li>
-                                <li>Dokumentierte Backups & Multisig-Systeme für maximale Sicherheit </li>
-                                <li>Schweizer Fachkompetenz – keine technische Vorkenntnisse nötig</li>
+                                <li>Dokumentierte Backups & Multisig-Systeme fÃ¼r maximale Sicherheit </li>
+                                <li>Schweizer Fachkompetenz â€“ keine technische Vorkenntnisse nÃ¶tig</li>
                             </ul>
                         </div>
 
@@ -52,7 +52,11 @@
     
     <section class="teaservidsection">
         <div class="container">
-            <video src="https://sicher-bitcoin-videos.s3.ap-southeast-1.amazonaws.com/homepage/teaser.mp4" controls></video>
+            <video src="https://sicher-bitcoin-videos.s3.ap-southeast-1.amazonaws.com/homepage/teaser.mp4"
+                   controls preload="none" playsinline
+                   poster="/images/logo.jpg"
+                   title="Sicher Bitcoin Verwahren Teaser-Video"
+                   style="width:100%;aspect-ratio:16/9;background:#0f0a1e;"></video>
         </div>
     </section>
 
@@ -75,7 +79,7 @@
                     <!-- Service Item Start -->
                     <div class="service-item wow fadeInUp">
                         <div class="icon-box">
-                            <img src="/images/icon-service-1.svg" alt="">
+                            <img src="/images/icon-service-1.svg" width="64" height="64" loading="lazy" alt="Bitcoin Self-Custody Beratung">
                         </div>
                         <div class="service-title-box">
                             <div class="service-title">
@@ -88,7 +92,7 @@
                             </div>
                         </div>
                         <div class="service-content">
-                            <p>Erfahren Sie, wie Sie Ihre Bitcoins sicher speichern und verwalten. Wir führen Sie Schritt für Schritt durch Hardware-Wallets, Backup-Strategien und sicheres Schlüsselmanagement.</p>
+                            <p>Erfahren Sie, wie Sie Ihre Bitcoins sicher speichern und verwalten. Wir fÃ¼hren Sie Schritt fÃ¼r Schritt durch Hardware-Wallets, Backup-Strategien und sicheres SchlÃ¼sselmanagement.</p>
                         </div>
                     </div>
                     <!-- Service Item End -->
@@ -98,11 +102,11 @@
                     <!-- Service Item Start -->
                     <div class="service-item active wow fadeInUp" data-wow-delay="0.2s">
                         <div class="icon-box">
-                            <img src="/images/icon-service-2.svg" alt="">
+                            <img src="/images/icon-service-2.svg" width="64" height="64" loading="lazy" alt="Hardware Wallet Einrichtung">
                         </div>
                         <div class="service-title-box">
                             <div class="service-title">
-                                <h3><a href="/pricing">Bitcoin Verwahrung für Unternehmen</a></h3>
+                                <h3><a href="/pricing">Bitcoin Verwahrung fÃ¼r Unternehmen</a></h3>
                             </div>
                             <div class="service-btn">
                                 <a href="/pricing">
@@ -111,7 +115,7 @@
                             </div>
                         </div>
                         <div class="service-content">
-                            <p>Wir unterstützen Unternehmen beim Aufbau sicherer Bitcoin-Verwahrstrukturen. Von der Richtliniengestaltung bis zur technischen Einrichtung bleiben Ihre Geschäftswerte geschützt.</p>
+                            <p>Wir unterstÃ¼tzen Unternehmen beim Aufbau sicherer Bitcoin-Verwahrstrukturen. Von der Richtliniengestaltung bis zur technischen Einrichtung bleiben Ihre GeschÃ¤ftswerte geschÃ¼tzt.</p>
                         </div>
                     </div>
                     <!-- Service Item End -->
@@ -121,7 +125,7 @@
                     <!-- Service Item Start -->
                     <div class="service-item wow fadeInUp" data-wow-delay="0.4s">
                         <div class="icon-box">
-                            <img src="/images/icon-service-3.svg" alt="">
+                            <img src="/images/icon-service-3.svg" width="64" height="64" loading="lazy" alt="Multisig und Backup Strategien">
                         </div>
                         <div class="service-title-box">
                             <div class="service-title">
@@ -134,7 +138,7 @@
                             </div>
                         </div>
                         <div class="service-content">
-                            <p>Erhalten Sie praktische Schulungen zur sicheren Bitcoin-Aufbewahrung und Risikoprävention. Wir entwickeln maßgeschneiderte Sicherheitskonzepte, die Ihren Bedürfnissen entsprechen.</p>
+                            <p>Erhalten Sie praktische Schulungen zur sicheren Bitcoin-Aufbewahrung und RisikoprÃ¤vention. Wir entwickeln maÃŸgeschneiderte Sicherheitskonzepte, die Ihren BedÃ¼rfnissen entsprechen.</p>
                         </div>
                     </div>
                     <!-- Service Item End -->
@@ -171,21 +175,21 @@
                                     <div class="icon-box">
                                     </div>
                                     <div class="cta-contact-content">
-                                        <h3>Offizielle Partnerschaften mit führenden Herstellern</h3>
+                                        <h3>Offizielle Partnerschaften mit fÃ¼hrenden Herstellern</h3>
                                     </div>
                                 </div>
                                 <div class="cta-contact-item">
                                     <div class="icon-box">
                                     </div>
                                     <div class="cta-contact-content">
-                                        <h3>Keine Anlageberatung – nur technische Sicherheit & Selbstbestimmung</h3>
+                                        <h3>Keine Anlageberatung â€“ nur technische Sicherheit & Selbstbestimmung</h3>
                                     </div>
                                 </div>
                                 <div class="cta-contact-item">
                                     <div class="icon-box">
                                     </div>
                                     <div class="cta-contact-content">
-                                        <h3>Persönlich, diskret, unabhängig</h3>
+                                        <h3>PersÃ¶nlich, diskret, unabhÃ¤ngig</h3>
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +200,7 @@
                         <!-- CTA Box Image Start -->
                         <div class="cta-box-image">
                             <figure class="image-anime reveal">
-                                <img src="/images/cta-box-image.jpg" alt="">
+                                <img src="/images/cta-box-image.jpg" width="600" height="400" loading="lazy" alt="Kostenlose Bitcoin Sicherheitsberatung">
                             </figure>
                         </div>
                         <!-- CTA Box Image End -->
@@ -216,7 +220,7 @@
                         <!-- About Image Box Start -->
                         <div class="about-image-box about-img-1">
                             <figure class="image-anime reveal">
-                                <img src="/images/about-image-1.jpg" alt="">
+                                <img src="/images/about-image-1.jpg" width="560" height="420" loading="lazy" alt="Über Sicher Bitcoin Verwahren">
                             </figure>
                         </div>
                         <!-- About Image Box End -->
@@ -225,13 +229,13 @@
                         <div class="about-image-box">
                             <div class="about-img-2">
                                 <figure class="image-anime reveal">
-                                    <img src="/images/about-image-2.jpg" alt="">
+                                    <img src="/images/about-image-2.jpg" width="280" height="210" loading="lazy" alt="Persönliche Bitcoin Beratung">
                                 </figure>
                             </div>
 
                             <div class="about-img-3">
                                 <figure class="image-anime reveal">
-                                    <img src="/images/about-image-3.jpg" alt="">
+                                    <img src="/images/about-image-3.jpg" width="280" height="210" loading="lazy" alt="Sichere Bitcoin Verwahrung">
                                 </figure>
                             </div>
                         </div>
@@ -240,7 +244,7 @@
                         <!-- Get Free Security Circle Start -->
                         <div class="get-free-security-circle">
                             <a href="contact.html">
-                                <img src="/images/get-free-security-circle.svg" alt="">
+                                <img src="/images/get-free-security-circle.svg" width="160" height="160" loading="lazy" alt="Kostenloser Sicherheits-Selbsttest">
                             </a>
                         </div>
                         <!-- Get Free Security Circle End -->
@@ -253,8 +257,8 @@
                     <div class="about-us-content">
                         <!-- Section Title Start -->
                         <div class="section-title">
-                            <h3 class="wow fadeInUp">Über uns</h3>
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">Experten für Bitcoin  <span>Sicherheit und Unabhängigkeit</span></h2>
+                            <h3 class="wow fadeInUp">Ãœber uns</h3>
+                            <h2 class="wow fadeInUp" data-wow-delay="0.2s" data-cursor="-opaque">Experten fÃ¼r Bitcoin  <span>Sicherheit und UnabhÃ¤ngigkeit</span></h2>
                             <p class="wow fadeInUp" data-wow-delay="0.4s"> Wir sind ein auf Bitcoin-Sicherheit spezialisiertes Unternehmen aus Thun. Unser Team hilft Privatpersonen und Unternehmen, ihre Bitcoin sicher selbst zu verwahren.</p>
                         </div>
                         <!-- Section Title End -->
@@ -264,15 +268,15 @@
                             <!-- About Us Body Image Start -->
                             <div class="about-us-body-img">
                                 <figure class="image-anime">
-                                    <img src="/images/about-body-img.png" alt="">
+                                    <img src="/images/about-body-img.png" width="540" height="360" loading="lazy" alt="Bitcoin Self-Custody Prozess">
                                 </figure>
                             </div>
                             <!-- About Us Body Image End -->
                             
                             <!-- About Us Body Content Start -->
                             <div class="about-us-body-content">
-                                <h3>Stärkung der finanziellen Souveränität</h3>
-                                <p>Übernehmen Sie durch sichere Selbstverwahrung die volle Kontrolle über Ihre Bitcoins.</p>
+                                <h3>StÃ¤rkung der finanziellen SouverÃ¤nitÃ¤t</h3>
+                                <p>Ãœbernehmen Sie durch sichere Selbstverwahrung die volle Kontrolle Ã¼ber Ihre Bitcoins.</p>
                             </div>
                             <!-- About Us Body Content End -->
                         </div>
@@ -283,9 +287,9 @@
                             <!-- About Footer List Start -->
                             <div class="about-footer-list">
                                 <ul>
-                                    <li>Kompetente Unterstützung</li>
-                                    <li>Höchste Sicherheit</li>
-                                    <li>Volle Unabhängigkeit</li>
+                                    <li>Kompetente UnterstÃ¼tzung</li>
+                                    <li>HÃ¶chste Sicherheit</li>
+                                    <li>Volle UnabhÃ¤ngigkeit</li>
                                 </ul>
                             </div>
                             <!-- About Footer List End -->
@@ -327,7 +331,7 @@
                     <!-- Why Choose Image Start -->
                     <div class="why-choose-image">
                         <figure class="image-anime reveal">
-                            <img src="/images/why-choose-image.jpg" alt="">
+                            <img src="/images/why-choose-image.jpg" width="560" height="420" loading="lazy" alt="Warum Sicher Bitcoin Verwahren">
                         </figure>
                     </div>
                     <!-- Why Choose Image End -->
@@ -348,11 +352,11 @@
                             <!-- Why Choose Item Start -->
                             <div class="why-choose-item wow fadeInUp" data-wow-delay="0.4s">
                                 <div class="icon-box">
-                                    <img src="/images/icon-why-choose-1.svg" alt="">
+                                    <img src="/images/icon-why-choose-1.svg" width="48" height="48" loading="lazy" alt="">
                                 </div>
                                 <div class="why-choose-item-content">
                                     <h3 style="text-transform: initial;">Kostenlose Erstberatung anfragen</h3>
-                                    <p>Senden Sie uns eine unverbindliche Anfrage über unser Kontaktformular. Wir melden uns schnellstmöglich bei Ihnen für ein erstes Gespräch.</p>
+                                    <p>Senden Sie uns eine unverbindliche Anfrage Ã¼ber unser Kontaktformular. Wir melden uns schnellstmÃ¶glich bei Ihnen fÃ¼r ein erstes GesprÃ¤ch.</p>
                                 </div>
                             </div>
                             <!-- Why Choose Item End -->
@@ -360,11 +364,11 @@
                             <!-- Why Choose Item Start -->
                             <div class="why-choose-item wow fadeInUp" data-wow-delay="0.6s">
                                 <div class="icon-box">
-                                    <img src="/images/icon-why-choose-2.svg" alt="">
+                                    <img src="/images/icon-why-choose-2.svg" width="48" height="48" loading="lazy" alt="">
                                 </div>
                                 <div class="why-choose-item-content">
                                     <h3 style="text-transform: initial;" >Individuelles Angebot erhalten</h3>
-                                    <p>Gemeinsam finden wir das passende Service-Paket für Sie. Sie erhalten ein detailliertes, transparentes Angebot.</p>
+                                    <p>Gemeinsam finden wir das passende Service-Paket fÃ¼r Sie. Sie erhalten ein detailliertes, transparentes Angebot.</p>
                                 </div>
                             </div>
                             <!-- Why Choose Item End -->
@@ -372,31 +376,31 @@
                             <!-- Why Choose Item Start -->
                             <div class="why-choose-item wow fadeInUp" data-wow-delay="0.8s">
                                 <div class="icon-box">
-                                    <img src="/images/icon-why-choose-3.svg" alt="">
+                                    <img src="/images/icon-why-choose-3.svg" width="48" height="48" loading="lazy" alt="">
                                 </div>
                                 <div class="why-choose-item-content">
                                     <h3 style="text-transform: initial;">Termin vereinbaren & vorbereiten</h3>
-                                    <p>Sie bestätigen das Angebot und wir vereinbaren einen Termin. Wir kommen zu Ihnen – diskret und professionell.</p>
+                                    <p>Sie bestÃ¤tigen das Angebot und wir vereinbaren einen Termin. Wir kommen zu Ihnen â€“ diskret und professionell.</p>
                                 </div>
                             </div>
 
                             <div class="why-choose-item wow fadeInUp" data-wow-delay="0.6s">
                                 <div class="icon-box">
-                                    <img src="/images/icon-why-choose-2.svg" alt="">
+                                    <img src="/images/icon-why-choose-2.svg" width="48" height="48" loading="lazy" alt="">
                                 </div>
                                 <div class="why-choose-item-content">
-                                    <h3>Persönliche Einrichtung & Schulung</h3>
+                                    <h3>PersÃ¶nliche Einrichtung & Schulung</h3>
                                     <p>Unser Expertenteam richtet bei Ihnen vor Ort Ihr sicheres Bitcoin-Setup ein und schult Sie im Umgang damit.</p>
                                 </div>
                             </div>
 
                             <div class="why-choose-item wow fadeInUp" data-wow-delay="0.8s">
                                 <div class="icon-box">
-                                    <img src="/images/icon-why-choose-3.svg" alt="">
+                                    <img src="/images/icon-why-choose-3.svg" width="48" height="48" loading="lazy" alt="">
                                 </div>
                                 <div class="why-choose-item-content">
-                                    <h3 style="text-transform: inherit;">Souverän in die Zukunft</h3>
-                                    <p>Sie gehen mit einem fertigen, dokumentierten Setup und dem Wissen, Ihre Bitcoin souverän zu verwalten.</p>
+                                    <h3 style="text-transform: inherit;">SouverÃ¤n in die Zukunft</h3>
+                                    <p>Sie gehen mit einem fertigen, dokumentierten Setup und dem Wissen, Ihre Bitcoin souverÃ¤n zu verwalten.</p>
                                 </div>
                             </div>
                             <!-- Why Choose Item End -->
@@ -445,15 +449,15 @@
                                             <div class="testimonial-item">
                                                 <div class="testimonial-header">
                                                     <div class="testimonial-company-logo">
-                                                        <img src="/images/company-logo.jpg" alt="">
+                                                        <img src="/images/company-logo.jpg" width="80" height="80" loading="lazy" alt="Kundenlogo">
                                                     </div>        
                                                     <div class="testimonial-quote">
-                                                        <img src="/images/testimonial-quote.svg" alt="">
+                                                        <img src="/images/testimonial-quote.svg" width="32" height="32" loading="lazy" alt="">
                                                     </div>
                                                 </div>                               
                                                 <div class="testimonial-content">
                                                     <p>
-                                                        Äußerst professioneller Service! Die Einrichtung unseres Multi-Signature Setups für die Firmen-Bitcoin war reibungslos. Endlich schlafe ich wieder ruhig
+                                                        Ã„uÃŸerst professioneller Service! Die Einrichtung unseres Multi-Signature Setups fÃ¼r die Firmen-Bitcoin war reibungslos. Endlich schlafe ich wieder ruhig
                                                     </p>
                                                 </div>
                                                 <div class="testimonial-body">
@@ -471,14 +475,14 @@
                                             <div class="testimonial-item">
                                                 <div class="testimonial-header">
                                                     <div class="testimonial-company-logo">
-                                                        <img src="/images/company-logo.jpg" alt="">
+                                                        <img src="/images/company-logo.jpg" width="80" height="80" loading="lazy" alt="Kundenlogo">
                                                     </div>        
                                                     <div class="testimonial-quote">
-                                                        <img src="/images/testimonial-quote.svg" alt="">
+                                                        <img src="/images/testimonial-quote.svg" width="32" height="32" loading="lazy" alt="">
                                                     </div>
                                                 </div>                               
                                                 <div class="testimonial-content">
-                                                    <p>Ich fühle mich viel sicherer. Die geduldige Schulung hat mir alle Ängste genommen. Absolute Empfehlung!</p>
+                                                    <p>Ich fÃ¼hle mich viel sicherer. Die geduldige Schulung hat mir alle Ã„ngste genommen. Absolute Empfehlung!</p>
                                                 </div>
                                                 <div class="testimonial-body">
                                                     <div class="author-content">
@@ -492,10 +496,10 @@
                                             <div class="testimonial-item">
                                                 <div class="testimonial-header">
                                                     <div class="testimonial-company-logo">
-                                                        <img src="/images/company-logo.jpg" alt="">
+                                                        <img src="/images/company-logo.jpg" width="80" height="80" loading="lazy" alt="Kundenlogo">
                                                     </div>        
                                                     <div class="testimonial-quote">
-                                                        <img src="/images/testimonial-quote.svg" alt="">
+                                                        <img src="/images/testimonial-quote.svg" width="32" height="32" loading="lazy" alt="">
                                                     </div>
                                                 </div>                               
                                                 <div class="testimonial-content">
@@ -504,7 +508,7 @@
                                                 <div class="testimonial-body">
                                                     <div class="author-content">
                                                         <h3>Daniel R.</h3>
-                                                        <p>Investor aus Zürich</p>
+                                                        <p>Investor aus ZÃ¼rich</p>
                                                     </div>   
                                                 </div>                                    
                                             </div>
@@ -523,7 +527,7 @@
                             <div class="testimonial-contact-info">
                                <div class="testimonial-contact-box">
                                     <div class="testimonial-contact-content">
-                                        <p>Wenn Sie Fragen haben oder Hilfe benötigen.</p>
+                                        <p>Wenn Sie Fragen haben oder Hilfe benÃ¶tigen.</p>
                                     </div>
                                 </div>
                                 <!-- Testimonial Contact Box End -->
@@ -545,7 +549,7 @@
     </div>
 
 
-    {{-- ── Latest Blog Articles ────────────────────────────────────────────── --}}
+    {{-- â”€â”€ Latest Blog Articles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ --}}
     @if(isset($latestBlogs) && $latestBlogs->isNotEmpty())
     <div class="our-testimonials" style="padding-top:0;">
         <div class="container">
@@ -598,10 +602,10 @@
                         <div style="font-size:12px;color:#a89fc0;margin-top:14px;display:flex;align-items:center;gap:12px;">
                             <span>{{ $blog->author }}</span>
                             @if($blog->published_at)
-                                <span>·</span>
+                                <span>Â·</span>
                                 <span>{{ $blog->published_at->format('d.m.Y') }}</span>
                             @endif
-                            <span>·</span>
+                            <span>Â·</span>
                             <span>{{ $blog->reading_time }} Min.</span>
                         </div>
                     </div>
@@ -620,7 +624,7 @@
     </div>
     @endif
 
-    {{-- ── Lead Generation Section ─────────────────────────────────────────── --}}
+    {{-- â”€â”€ Lead Generation Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ --}}
     <div class="cta-box-section" style="padding: 0px 0 60px">
         <div class="container">
             <div class="row">
@@ -629,7 +633,7 @@
                         <div class="cta-box-content" style="flex:unset;width:100%;text-align:center;">
                             <div class="section-title dark-section" style="text-align:center;">
                                 <h2 class="wow fadeInUp" data-cursor="-opaque">Wie sicher sind Ihre Bitcoin wirklich?</h2>
-                                <p style="max-width:540px;margin:0 auto 28px;">Finden Sie in weniger als fünf Minuten heraus, ob Ihr Bitcoin-Setup ausreichend gegen Verlust, Diebstahl und typische Fehler geschützt ist – mit dem kostenlosen Bitcoin Sicherheits-Selbsttest 2026.</p>
+                                <p style="max-width:540px;margin:0 auto 28px;">Finden Sie in weniger als fÃ¼nf Minuten heraus, ob Ihr Bitcoin-Setup ausreichend gegen Verlust, Diebstahl und typische Fehler geschÃ¼tzt ist â€“ mit dem kostenlosen Bitcoin Sicherheits-Selbsttest 2026.</p>
                             </div>
                             <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
                                 <button onclick="openLeadModal('checklist')"

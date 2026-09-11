@@ -20,7 +20,7 @@
 
                 <!-- Logo -->
                 <a class="navbar-brand" href="/">
-                    <img src="/images/logo.jpg" style="width: 80px;" alt="Logo">
+                    <img src="/images/logo.jpg" style="width: 80px;" width="80" height="80" alt="Sicher Bitcoin Verwahren Logo">
                 </a>
 
                 <!-- Main Menu -->

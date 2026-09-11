@@ -4,7 +4,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-CFVSPGM8J4');
 </script>
 
@@ -25,16 +24,18 @@
 <meta property="og:url" content="https://sicher-bitcoin-verwahren.ch">
 <meta property="og:image" content="https://sicher-bitcoin-verwahren.ch/assets/images/og-image.jpg">
 
-<!-- Canonical URL -->
+<!-- Canonical URL (page-specific views may override) -->
+@if(request()->is('/'))
 <link rel="canonical" href="https://sicher-bitcoin-verwahren.ch">
+@endif
 
-    <!-- Structured Data for Local Business -->
+<!-- Structured Data for Local Business -->
 <script type="application/ld+json">
 {
 "@context": "https://schema.org",
 "@type": "LocalBusiness",
 "name": "Sicher Bitcoin Verwahren",
-"image": "https://sicher-bitcoin-verwahren.ch/assets/images/logo.png",
+"image": "https://sicher-bitcoin-verwahren.ch/images/logo.jpg",
 "@id": "https://sicher-bitcoin-verwahren.ch",
 "url": "https://sicher-bitcoin-verwahren.ch",
 "address": {
@@ -56,15 +57,37 @@
 }
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet">
+{{-- Fonts: preconnect + subset weights + display=swap --}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 
+{{-- Critical CSS first --}}
 <link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+{{-- Non-critical CSS deferred --}}
+<link rel="stylesheet" href="/css/slicknav.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/css/swiper-bundle.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/css/all.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/css/animate.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/css/magnific-popup.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/css/mousecursor.css" media="print" onload="this.media='all'">
+<noscript>
 <link rel="stylesheet" href="/css/slicknav.min.css">
 <link rel="stylesheet" href="/css/swiper-bundle.min.css">
 <link rel="stylesheet" href="/css/all.min.css">
 <link rel="stylesheet" href="/css/animate.css">
 <link rel="stylesheet" href="/css/magnific-popup.css">
-<link rel="stylesheet" href="/css/mousecursor.css">
-<link rel="stylesheet" href="/css/style.css">
+</noscript>
+
+<style>
+  /* Reduce layout shift for common media */
+  img, video { max-width: 100%; height: auto; }
+  .hero { content-visibility: auto; }
+  @media (max-width: 991px) {
+    .cb-cursor { display: none !important; }
+  }
+</style>

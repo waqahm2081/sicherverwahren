@@ -7,9 +7,13 @@ use App\Models\BlogCategory;
 use App\Models\Lead;
 use App\Mail\LeadChecklistMail;
 use App\Mail\LeadAdminNotification;
+use App\Rules\DeliverableEmail;
+use App\Services\TurnstileService;
+use App\Support\LeadGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 
 class BlogController extends Controller
 {
@@ -43,30 +47,77 @@ class BlogController extends Controller
         return view('blog.show', compact('blog', 'related'));
     }
 
-    public function submitLead(Request $request)
+    public function submitLead(Request $request, TurnstileService $turnstile)
     {
-        if ($request->filled('website')) {
+        // Honeypot: bots that fill hidden fields are silently ignored (no DB row, no mail)
+        if ($request->filled('website') || $request->filled('company_url')) {
             return response()->json(['success' => true]);
         }
 
-        $key = 'lead-submit:' . $request->ip();
-        if (RateLimiter::tooManyAttempts($key, 5)) {
+        // Form opened timestamp — reject instant bot posts (< 2s)
+        $openedAt = (int) $request->input('_form_opened_at', 0);
+        if ($openedAt > 0 && (time() - $openedAt) < 2) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bitte warten Sie einen Moment und versuchen Sie es erneut.',
+            ], 422);
+        }
+
+        $ipKey    = 'lead-submit:ip:' . $request->ip();
+        $emailKey = 'lead-submit:email:' . strtolower((string) $request->input('email'));
+
+        if (RateLimiter::tooManyAttempts($ipKey, 3) || RateLimiter::tooManyAttempts($emailKey, 2)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
             ], 429);
         }
-        RateLimiter::hit($key, 3600);
 
-        $data = $request->validate([
-            'name'   => 'required|string|max:255',
-            'email'  => 'required|email|max:255',
-            'source' => 'nullable|in:checklist,training',
-        ]);
+        $turnstileResult = $turnstile->verify($request);
+        if ($turnstileResult === false) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sicherheitsprüfung fehlgeschlagen. Bitte laden Sie die Seite neu und versuchen Sie es erneut.',
+            ], 422);
+        }
 
+        try {
+            $data = $request->validate([
+                'name'   => ['required', 'string', 'min:2', 'max:120'],
+                'email'  => ['required', 'string', 'max:255', new DeliverableEmail],
+                'source' => ['nullable', 'in:checklist,training'],
+            ], [
+                'name.required' => 'Bitte geben Sie Ihren Namen ein.',
+                'name.min'      => 'Bitte geben Sie einen gültigen Namen ein.',
+                'email.required'=> 'Bitte geben Sie Ihre E-Mail-Adresse ein.',
+            ]);
+        } catch (ValidationException $e) {
+            $msg = collect($e->errors())->flatten()->first()
+                ?: 'Bitte prüfen Sie Ihre Angaben.';
+
+            return response()->json([
+                'success' => false,
+                'message' => $msg,
+                'errors'  => $e->errors(),
+            ], 422);
+        }
+
+        if (LeadGuard::looksLikeSpamName($data['name'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bitte geben Sie einen gültigen Namen ein.',
+            ], 422);
+        }
+
+        RateLimiter::hit($ipKey, 3600);
+        RateLimiter::hit($emailKey, 86400);
+
+        $data['email']  = strtolower(trim($data['email']));
+        $data['name']   = trim($data['name']);
         $data['source'] = $data['source'] ?? 'checklist';
         $data['status'] = Lead::STATUS_NEW;
 
+        // Same email within 24h → no duplicate lead / no extra emails
         $existing = Lead::where('email', $data['email'])
             ->where('created_at', '>=', now()->subHours(24))
             ->first();
@@ -77,8 +128,13 @@ class BlogController extends Controller
 
         $lead = Lead::create($data);
 
-        Mail::to(config('mail.from.address'))->send(new LeadAdminNotification($lead));
-        Mail::to($lead->email)->send(new LeadChecklistMail($lead->name));
+        try {
+            Mail::to(config('mail.from.address'))->send(new LeadAdminNotification($lead));
+            Mail::to($lead->email)->send(new LeadChecklistMail($lead->name));
+        } catch (\Throwable $e) {
+            report($e);
+            // Lead is stored; mail failure should not look like a validation success hang
+        }
 
         return response()->json(['success' => true]);
     }
