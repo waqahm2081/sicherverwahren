@@ -39,7 +39,7 @@ class OnsitePaymentController extends Controller
             'alreadyPaid'  => false,
             'option'       => $option,
             'amountChf'    => $amountChf,
-            'stripeKey'    => env('STRIPE_PUBLISHABLEKEY'),
+            'stripeKey'    => config('services.stripe.key'),
         ]);
     }
 
@@ -62,7 +62,7 @@ class OnsitePaymentController extends Controller
 
         abort_if(! $amountChf, 422, 'Kein Betrag hinterlegt.');
 
-        Stripe::setApiKey(env('STRIPE_SECRETKEY'));
+        Stripe::setApiKey(config('services.stripe.secret'));
 
         try {
             $intent = PaymentIntent::create([
@@ -91,7 +91,7 @@ class OnsitePaymentController extends Controller
 
         abort_if($user->payment_completed, 409, 'Already paid.');
 
-        Stripe::setApiKey(env('STRIPE_SECRETKEY'));
+        Stripe::setApiKey(config('services.stripe.secret'));
 
         try {
             $intent = PaymentIntent::retrieve($request->payment_intent_id);

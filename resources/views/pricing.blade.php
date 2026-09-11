@@ -270,8 +270,9 @@
     (function () {
         'use strict';
 
-        /* ── Stripe init ── */
-        const stripe = Stripe('{{ env("STRIPE_PUBLISHABLEKEY") }}');
+        /* ── Stripe init (must not throw — otherwise tabs/CTA never register) ── */
+        const stripeKey = @json(config('services.stripe.key'));
+        const stripe = (stripeKey && typeof Stripe !== 'undefined') ? Stripe(stripeKey) : null;
         let stripeElements = null;
         let cardElement    = null;
 
@@ -518,25 +519,29 @@
 
             // Mount Stripe CardElement only for digital packages
             if (! isOnsite) {
-                stripeElements = stripe.elements();
-                cardElement = stripeElements.create('card', {
-                    style: {
-                        base: {
-                            fontFamily: 'inherit',
-                            fontSize: '15px',
-                            color: '#2d2d2d',
-                            '::placeholder': { color: '#aaa' },
+                const errEl = document.getElementById('stripe-error');
+                if (! stripe) {
+                    if (errEl) errEl.textContent = 'Zahlungen sind derzeit nicht verfügbar. Bitte kontaktieren Sie uns.';
+                } else {
+                    stripeElements = stripe.elements();
+                    cardElement = stripeElements.create('card', {
+                        style: {
+                            base: {
+                                fontFamily: 'inherit',
+                                fontSize: '15px',
+                                color: '#2d2d2d',
+                                '::placeholder': { color: '#aaa' },
+                            },
+                            invalid: { color: '#e53e3e' },
                         },
-                        invalid: { color: '#e53e3e' },
-                    },
-                    hidePostalCode: true,
-                });
-                cardElement.mount('#stripe-card-element');
+                        hidePostalCode: true,
+                    });
+                    cardElement.mount('#stripe-card-element');
 
-                cardElement.on('change', function (event) {
-                    const errEl = document.getElementById('stripe-error');
-                    if (errEl) errEl.textContent = event.error ? event.error.message : '';
-                });
+                    cardElement.on('change', function (event) {
+                        if (errEl) errEl.textContent = event.error ? event.error.message : '';
+                    });
+                }
             }
 
             document.getElementById('pkgModalOverlay').classList.add('active');
@@ -647,6 +652,11 @@
             // ────────────────────────────────────────────────────
             // DIGITAL: Full Stripe payment flow, then register
             // ────────────────────────────────────────────────────
+            if (! stripe || ! cardElement) {
+                setError('err_general', 'Zahlungen sind derzeit nicht verfügbar. Bitte kontaktieren Sie uns.');
+                return;
+            }
+
             if (btn) { btn.disabled = true; btn.textContent = 'Zahlung wird verarbeitet…'; }
 
             try {

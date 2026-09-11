@@ -67,7 +67,7 @@ class PricingController extends Controller
             'coupon_code'          => ['nullable', 'string', 'max:50'],
         ]);
 
-        Stripe::setApiKey(env('STRIPE_SECRETKEY'));
+        Stripe::setApiKey(config('services.stripe.secret'));
 
         try {
             $option = PricingPackageOption::findOrFail($request->option_id);
@@ -148,7 +148,7 @@ class PricingController extends Controller
         $grant = null;
 
         if (! $isOnsite) {
-            Stripe::setApiKey(env('STRIPE_SECRETKEY'));
+            Stripe::setApiKey(config('services.stripe.secret'));
 
             try {
                 $intent = PaymentIntent::retrieve($validated['payment_intent_id']);
