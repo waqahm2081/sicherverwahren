@@ -594,6 +594,7 @@
                         @if($blog->featured_image)
                             <a href="{{ route('blog.show', $blog->slug) }}" style="display:block;border-radius:12px;overflow:hidden;margin-bottom:18px;aspect-ratio:16/9;">
                                 <img src="{{ asset('storage/'.$blog->featured_image) }}" alt="{{ $blog->title }}"
+                                     width="640" height="360"
                                      style="width:100%;height:100%;object-fit:cover;transition:transform .4s;" loading="lazy"
                                      onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                             </a>

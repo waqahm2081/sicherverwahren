@@ -31,7 +31,6 @@
 
 @if(request()->is('/'))
 <link rel="canonical" href="https://sicher-bitcoin-verwahren.ch">
-{{-- Responsive LCP preload: small image on phones, full on desktop --}}
 <link rel="preload" as="image" href="/images/hero-bg-mobile.webp" type="image/webp" media="(max-width: 991px)" fetchpriority="high">
 <link rel="preload" as="image" href="/images/hero-bg.webp" type="image/webp" media="(min-width: 992px)" fetchpriority="high">
 @endif
@@ -65,57 +64,12 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+{{-- display=optional avoids font-swap CLS on body; falls back to system if font is late --}}
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=optional" rel="stylesheet">
 
-{{-- Critical above-the-fold CSS so hero paints before large stylesheets --}}
-<style>
-*,*::before,*::after{box-sizing:border-box}
-body{margin:0;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;color:#1a1625;background:#fff}
-img,video{max-width:100%;height:auto}
-.preloader{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:linear-gradient(90.15deg,#6f54a4 1.15%,#c086c0 98.84%)}
-@media (max-width:991px){.preloader{display:none!important}}
-.topbar{background:#6f54a4;color:#fff;font-size:13px}
-.topbar a{color:#fff;text-decoration:none}
-.main-header{position:relative;z-index:100;background:#fff}
-.navbar{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
-.navbar-brand img{width:80px;height:auto}
-.hero{position:relative;min-height:420px;padding:100px 0 80px;background-color:#010535;background-repeat:no-repeat;background-position:center;background-size:cover;color:#fff;
-  background-image:url('/images/hero-bg-mobile.jpg');
-  background-image:image-set(url('/images/hero-bg-mobile.webp') type('image/webp'),url('/images/hero-bg-mobile.jpg') type('image/jpeg'))}
-@media (min-width:992px){.hero{min-height:520px;padding:140px 0;
-  background-image:url('/images/hero-bg.jpg');
-  background-image:image-set(url('/images/hero-bg.webp') type('image/webp'),url('/images/hero-bg.jpg') type('image/jpeg'))}}
-.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(270deg,rgba(1,5,53,.28) 43.57%,rgba(1,5,53,.8) 100%);z-index:1}
-.hero .container,.hero-content,.section-title{position:relative;z-index:2}
-.hero h1,.hero h3,.hero li,.hero p{color:#fff}
-.hero h1{font-size:clamp(1.6rem,5vw,2.8rem);line-height:1.2;margin:0 0 1rem;font-weight:800}
-.hero h3{font-size:clamp(.85rem,2.5vw,1.1rem);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin:0 0 .75rem}
-.hero ul{padding-left:1.1rem;margin:1rem 0 1.5rem}
-.hero li{margin-top:12px}
-.btn-default{display:inline-block;padding:12px 22px;border-radius:100px;background:#6f54a4;color:#fff!important;text-decoration:none;font-weight:700}
-.btn-highlighted{background:linear-gradient(135deg,#6f54a4,#c086c0)}
-.container{width:100%;max-width:1140px;margin:0 auto;padding:0 15px}
-.teaservidsection{padding:40px 0}
-.teaservidsection video{width:100%;aspect-ratio:16/9;background:#0f0a1e;border-radius:20px;display:block}
-@media (max-width:991px){.cb-cursor{display:none!important}}
-</style>
-
-@if(request()->is('/'))
-{{-- Homepage: load large CSS without blocking first paint --}}
-<link rel="stylesheet" href="/css/bootstrap.min.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="/css/style.css" media="print" onload="this.media='all'">
-<noscript>
+{{-- MUST stay blocking: async CSS caused body CLS ~0.295 on mobile PSI --}}
 <link rel="stylesheet" href="/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/style.css">
-</noscript>
-@else
-<link rel="preload" href="/css/bootstrap.min.css" as="style">
-<link rel="preload" href="/css/style.css" as="style">
-<link rel="stylesheet" href="/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/style.css">
-@endif
 
 {{-- Non-critical CSS deferred --}}
 <link rel="stylesheet" href="/css/slicknav.min.css" media="print" onload="this.media='all'">
@@ -131,3 +85,42 @@ img,video{max-width:100%;height:auto}
 <link rel="stylesheet" href="/css/animate.css">
 <link rel="stylesheet" href="/css/magnific-popup.css">
 </noscript>
+
+<style>
+  /* Mobile CLS guards */
+  img, video { max-width: 100%; height: auto; }
+  .hero { min-height: 420px; }
+  .teaservidsection video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0f0a1e;
+    display: block;
+  }
+  /* Reserve space for GTranslate float (stops flag img + widget CLS) */
+  .gtranslate_wrapper,
+  #gt_float_wrapper,
+  .gt_float_switcher {
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 99990 !important;
+    width: 62px !important;
+    min-height: 40px !important;
+    contain: layout style;
+  }
+  #gt_float_wrapper img,
+  .gt_float_switcher img,
+  .gtranslate_wrapper img {
+    width: 24px !important;
+    height: 24px !important;
+    max-width: 24px !important;
+  }
+  @media (max-width: 991px) {
+    .cb-cursor { display: none !important; }
+    .preloader { display: none !important; }
+    .hero { min-height: 420px; }
+  }
+  @media (min-width: 992px) {
+    .hero { min-height: 520px; }
+  }
+</style>
