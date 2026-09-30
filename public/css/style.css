@@ -168,7 +168,7 @@ body{
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
     display: inline-flex;
-    visibility: hidden;
+    /* visibility: hidden; */
     overflow: hidden;
 }
 
