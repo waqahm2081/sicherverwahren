@@ -1,10 +1,14 @@
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CFVSPGM8J4"></script>
+<!-- Google Analytics: deferred so it does not compete with LCP -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-CFVSPGM8J4');
+  window.addEventListener('load', function () {
+    var s = document.createElement('script');
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-CFVSPGM8J4';
+    s.async = true;
+    s.onload = function () { gtag('js', new Date()); gtag('config', 'G-CFVSPGM8J4'); };
+    document.head.appendChild(s);
+  });
 </script>
 
 <!-- Meta -->
@@ -13,6 +17,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
 
+<link rel="icon" href="/images/loader.webp" type="image/webp">
 <link rel="icon" href="/images/loader.jpg" type="image/jpeg">
 <link rel="shortcut icon" href="/images/loader.jpg" type="image/jpeg">
 <link rel="apple-touch-icon" href="/images/loader.jpg">
@@ -27,6 +32,8 @@
 <!-- Canonical URL (page-specific views may override) -->
 @if(request()->is('/'))
 <link rel="canonical" href="https://sicher-bitcoin-verwahren.ch">
+{{-- LCP: hero background must be discoverable in HTML --}}
+<link rel="preload" as="image" href="/images/hero-bg.webp" type="image/webp" fetchpriority="high">
 @endif
 
 <!-- Structured Data for Local Business -->
@@ -64,7 +71,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 
-{{-- Critical CSS first --}}
+{{-- Preload critical CSS, then apply (keeps cascade order) --}}
+<link rel="preload" href="/css/bootstrap.min.css" as="style">
+<link rel="preload" href="/css/style.css" as="style">
 <link rel="stylesheet" href="/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/style.css">
 
@@ -84,10 +93,17 @@
 </noscript>
 
 <style>
-  /* Reduce layout shift for common media */
+  /* CLS / LCP helpers — do not change visual design */
   img, video { max-width: 100%; height: auto; }
-  .hero { content-visibility: auto; }
+  .hero { min-height: 520px; }
+  .teaservidsection video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0f0a1e;
+    display: block;
+  }
   @media (max-width: 991px) {
     .cb-cursor { display: none !important; }
+    .hero { min-height: 420px; }
   }
 </style>

@@ -18,7 +18,12 @@
     <div class="preloader">
 		<div class="loading-container">
 			<div class="loading"></div>
-			<div id="loading-icon"><img src="/images/loader.jpg" width="80" height="80" alt="Sicher Bitcoin Verwahren wird geladen"></div>
+			<div id="loading-icon">
+				<picture>
+					<source srcset="/images/loader.webp" type="image/webp">
+					<img src="/images/loader.jpg" width="80" height="80" alt="Sicher Bitcoin Verwahren wird geladen">
+				</picture>
+			</div>
 		</div>
 	</div>
 
@@ -201,7 +206,10 @@
                         <!-- CTA Box Image Start -->
                         <div class="cta-box-image">
                             <figure class="image-anime reveal">
-                                <img src="/images/cta-box-image.jpg" width="600" height="400" loading="lazy" alt="Kostenlose Bitcoin Sicherheitsberatung">
+                                <picture>
+                                    <source srcset="/images/cta-box-image.webp" type="image/webp">
+                                    <img src="/images/cta-box-image.jpg" width="600" height="400" loading="lazy" decoding="async" alt="Kostenlose Bitcoin Sicherheitsberatung">
+                                </picture>
                             </figure>
                         </div>
                         <!-- CTA Box Image End -->
@@ -221,7 +229,10 @@
                         <!-- About Image Box Start -->
                         <div class="about-image-box about-img-1">
                             <figure class="image-anime reveal">
-                                <img src="/images/about-image-1.jpg" width="560" height="420" loading="lazy" alt="Über Sicher Bitcoin Verwahren">
+                                <picture>
+                                    <source srcset="/images/about-image-1.webp" type="image/webp">
+                                    <img src="/images/about-image-1.jpg" width="560" height="420" loading="lazy" decoding="async" alt="Über Sicher Bitcoin Verwahren">
+                                </picture>
                             </figure>
                         </div>
                         <!-- About Image Box End -->
@@ -230,13 +241,19 @@
                         <div class="about-image-box">
                             <div class="about-img-2">
                                 <figure class="image-anime reveal">
-                                    <img src="/images/about-image-2.jpg" width="280" height="210" loading="lazy" alt="Persönliche Bitcoin Beratung">
+                                    <picture>
+                                        <source srcset="/images/about-image-2.webp" type="image/webp">
+                                        <img src="/images/about-image-2.jpg" width="280" height="210" loading="lazy" decoding="async" alt="Persönliche Bitcoin Beratung">
+                                    </picture>
                                 </figure>
                             </div>
 
                             <div class="about-img-3">
                                 <figure class="image-anime reveal">
-                                    <img src="/images/about-image-3.jpg" width="280" height="210" loading="lazy" alt="Sichere Bitcoin Verwahrung">
+                                    <picture>
+                                        <source srcset="/images/about-image-3.webp" type="image/webp">
+                                        <img src="/images/about-image-3.jpg" width="280" height="210" loading="lazy" decoding="async" alt="Sichere Bitcoin Verwahrung">
+                                    </picture>
                                 </figure>
                             </div>
                         </div>
@@ -269,7 +286,10 @@
                             <!-- About Us Body Image Start -->
                             <div class="about-us-body-img">
                                 <figure class="image-anime">
-                                    <img src="/images/about-body-img.png" width="540" height="360" loading="lazy" alt="Bitcoin Self-Custody Prozess">
+                                    <picture>
+                                        <source srcset="/images/about-body-img.webp" type="image/webp">
+                                        <img src="/images/about-body-img.png" width="540" height="360" loading="lazy" decoding="async" alt="Bitcoin Self-Custody Prozess">
+                                    </picture>
                                 </figure>
                             </div>
                             <!-- About Us Body Image End -->
@@ -332,7 +352,10 @@
                     <!-- Why Choose Image Start -->
                     <div class="why-choose-image">
                         <figure class="image-anime reveal">
-                            <img src="/images/why-choose-image.jpg" width="560" height="420" loading="lazy" alt="Warum Sicher Bitcoin Verwahren">
+                            <picture>
+                                <source srcset="/images/why-choose-image.webp" type="image/webp">
+                                <img src="/images/why-choose-image.jpg" width="560" height="420" loading="lazy" decoding="async" alt="Warum Sicher Bitcoin Verwahren">
+                            </picture>
                         </figure>
                     </div>
                     <!-- Why Choose Image End -->

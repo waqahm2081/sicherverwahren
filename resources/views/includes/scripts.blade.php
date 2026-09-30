@@ -1,4 +1,4 @@
-<script src="/js/jquery-3.7.1.min.js"></script>
+<script src="/js/jquery-3.7.1.min.js" defer></script>
     <script src="/js/bootstrap.min.js" defer></script>
     <script src="/js/jquery.slicknav.js" defer></script>
     <script src="/js/swiper-bundle.min.js" defer></script>

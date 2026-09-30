@@ -827,11 +827,20 @@ header.main-header .header-sticky.active{
 
 .hero{
 	position: relative;
-	background: url('../images/hero-bg.jpg');
+	background-image: url('../images/hero-bg.jpg');
+	background-image: -webkit-image-set(
+		url('../images/hero-bg.webp') type('image/webp'),
+		url('../images/hero-bg.jpg') type('image/jpeg')
+	);
+	background-image: image-set(
+		url('../images/hero-bg.webp') type('image/webp'),
+		url('../images/hero-bg.jpg') type('image/jpeg')
+	);
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
 	padding: 140px 0;
+	min-height: 520px;
 }
 
 .hero::before{
@@ -2090,6 +2099,15 @@ header.main-header .header-sticky.active{
 .testimonial-box{
 	position: relative;
 	background: url(../images/testimonial-bg.jpg) no-repeat;
+	background-image: -webkit-image-set(
+		url('../images/testimonial-bg.webp') type('image/webp'),
+		url('../images/testimonial-bg.jpg') type('image/jpeg')
+	);
+	background-image: image-set(
+		url('../images/testimonial-bg.webp') type('image/webp'),
+		url('../images/testimonial-bg.jpg') type('image/jpeg')
+	);
+	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center center;
 	border-radius: 30px;
@@ -2874,6 +2892,14 @@ header.main-header .header-sticky.active{
 
 .main-footer{
 	background: url(../images/footer-bg.png), linear-gradient(90.15deg, var(--accent-color) 1.15%, var(--accent-secondary-color) 98.84%);
+	background-image: -webkit-image-set(
+		url('../images/footer-bg.webp') type('image/webp'),
+		url('../images/footer-bg.png') type('image/png')
+	), linear-gradient(90.15deg, var(--accent-color) 1.15%, var(--accent-secondary-color) 98.84%);
+	background-image: image-set(
+		url('../images/footer-bg.webp') type('image/webp'),
+		url('../images/footer-bg.png') type('image/png')
+	), linear-gradient(90.15deg, var(--accent-color) 1.15%, var(--accent-secondary-color) 98.84%);
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: 100% auto;
@@ -7512,7 +7538,15 @@ header.main-header .header-sticky.active{
 	padding: 60px 0;
 }
 
+.teaservidsection .container {
+	max-width: 1140px;
+}
+
 .teaservidsection video {
 	width: 100%;
+	height: auto;
+	aspect-ratio: 16 / 9;
 	border-radius: 20px;
+	background: #0f0a1e;
+	display: block;
 }
