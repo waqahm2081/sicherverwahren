@@ -4,7 +4,7 @@
     <script src="/js/swiper-bundle.min.js" defer></script>
     <script src="/js/jquery.waypoints.min.js" defer></script>
     <script src="/js/jquery.counterup.min.js" defer></script>
-    <script src="/js/wow.min.js" defer></script>
+    <!-- <script src="/js/wow.min.js" defer></script> -->
     <script src="/js/function.js" defer></script>
 
     {{-- Heavy / non-critical libs — load after idle so they don't block LCP --}}
