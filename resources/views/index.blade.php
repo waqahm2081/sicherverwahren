@@ -15,7 +15,8 @@
     @include('includes.header')
 
 
-    <div class="preloader">
+    {{-- Skip purple splash on mobile (was delaying FCP/LCP in Lighthouse) --}}
+    <div class="preloader" aria-hidden="true">
 		<div class="loading-container">
 			<div class="loading"></div>
 			<div id="loading-icon">

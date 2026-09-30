@@ -827,6 +827,7 @@ header.main-header .header-sticky.active{
 
 .hero{
 	position: relative;
+	background-color: #010535;
 	background-image: url('../images/hero-bg.jpg');
 	background-image: -webkit-image-set(
 		url('../images/hero-bg.webp') type('image/webp'),
@@ -841,6 +842,25 @@ header.main-header .header-sticky.active{
 	background-size: cover;
 	padding: 140px 0;
 	min-height: 520px;
+}
+
+@media (max-width: 991px) {
+	.hero{
+		min-height: 420px;
+		padding: 100px 0 80px;
+		background-image: url('../images/hero-bg-mobile.jpg');
+		background-image: -webkit-image-set(
+			url('../images/hero-bg-mobile.webp') type('image/webp'),
+			url('../images/hero-bg-mobile.jpg') type('image/jpeg')
+		);
+		background-image: image-set(
+			url('../images/hero-bg-mobile.webp') type('image/webp'),
+			url('../images/hero-bg-mobile.jpg') type('image/jpeg')
+		);
+	}
+	.preloader{
+		display: none !important;
+	}
 }
 
 .hero::before{

@@ -4,10 +4,15 @@
 	var $window = $(window); 
 	var $body = $('body'); 
 
-	/* Preloader Effect */
-	$window.on('load', function(){
-		$(".preloader").fadeOut(600);
-	});
+	/* Preloader Effect — hide ASAP (do not wait for all assets) */
+	function hidePreloader() {
+		var $p = $(".preloader");
+		if (!$p.length || $p.data('hidden')) return;
+		$p.data('hidden', true).fadeOut(300);
+	}
+	$(function () { hidePreloader(); });
+	$window.on('load', hidePreloader);
+	setTimeout(hidePreloader, 1200);
 
 	/* Sticky Header */	
 	if($('.active-sticky-header').length){
@@ -238,7 +243,7 @@
 	/* Contact form validation end */
 
 	/* Animated Wow Js */	
-	new WOW().init();
+	// new WOW().init();
 
 	/* Popup Video */
 	if ($('.popup-video').length) {
