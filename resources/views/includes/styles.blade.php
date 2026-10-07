@@ -126,7 +126,7 @@
       top: auto !important;
       right: auto !important;
       bottom: 16px !important;
-      left: 16px !important;
+      left: 6px !important;
     }
   }
   @media (min-width: 992px) {
