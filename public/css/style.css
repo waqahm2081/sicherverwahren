@@ -7550,6 +7550,9 @@ header.main-header .header-sticky.active{
 		bottom: 16px !important;
 		left: 6px !important;
 	}
+	.gtranslate_wrapper, #gt_float_wrapper, .gt_float_switcher {
+		min-width: 120px;
+	  }
 }
 
 .hero-content li {

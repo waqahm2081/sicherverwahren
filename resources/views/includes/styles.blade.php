@@ -128,6 +128,9 @@
       bottom: 16px !important;
       left: 6px !important;
     }
+    .gtranslate_wrapper, #gt_float_wrapper, .gt_float_switcher {
+      min-width: 120px;
+    }
   }
   @media (min-width: 992px) {
     .hero { min-height: 520px; }
