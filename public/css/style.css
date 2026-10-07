@@ -7545,8 +7545,10 @@ header.main-header .header-sticky.active{
 @media only screen and (max-width: 991px) {
 	#gt_float_wrapper,
 	.gt_float_switcher {
-		top: 16px !important;
-		right: 64px !important; /* clear mobile menu button */
+		top: auto !important;
+		right: auto !important;
+		bottom: 16px !important;
+		left: 16px !important;
 	}
 }
 

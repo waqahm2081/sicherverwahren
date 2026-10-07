@@ -119,12 +119,14 @@
     .cb-cursor { display: none !important; }
     .preloader { display: none !important; }
     .hero { min-height: 420px; }
-    /* Sit left of the 38px hamburger so the menu stays tappable */
+    /* Bottom-left on mobile — clear of header/menu */
     .gtranslate_wrapper,
     #gt_float_wrapper,
     .gt_float_switcher {
-      top: 16px !important;
-      right: 64px !important;
+      top: auto !important;
+      right: auto !important;
+      bottom: 16px !important;
+      left: 16px !important;
     }
   }
   @media (min-width: 992px) {

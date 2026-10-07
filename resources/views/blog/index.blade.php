@@ -63,7 +63,12 @@
         html.blog-page, body.blog-page { overflow-x: hidden; }
         body.blog-page .cb-cursor { display: none !important; }
         @media (max-width: 768px) {
-            body.blog-page .gt_float_switcher { top: 72px !important; right: 8px !important; }
+            body.blog-page .gt_float_switcher {
+                top: auto !important;
+                right: auto !important;
+                bottom: 16px !important;
+                left: 16px !important;
+            }
         }
     </style>
 </head>
