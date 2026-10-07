@@ -104,7 +104,7 @@
     top: 10px !important;
     right: 10px !important;
     z-index: 99990 !important;
-    width: 62px !important;
+    min-width: 62px;
     min-height: 40px !important;
     contain: layout style;
   }
@@ -119,6 +119,13 @@
     .cb-cursor { display: none !important; }
     .preloader { display: none !important; }
     .hero { min-height: 420px; }
+    /* Sit left of the 38px hamburger so the menu stays tappable */
+    .gtranslate_wrapper,
+    #gt_float_wrapper,
+    .gt_float_switcher {
+      top: 16px !important;
+      right: 64px !important;
+    }
   }
   @media (min-width: 992px) {
     .hero { min-height: 520px; }
